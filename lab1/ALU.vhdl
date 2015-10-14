@@ -1,22 +1,24 @@
 library ieee;
 use ieee.std_logic_1164.all;
-USE ieee.numeric_std.ALL;
+use ieee.numeric_std.all;
 
 entity ALU is 
     port (
-        a, b: in std_login_vector(15 downto 0);
-        op: in std_login_vector(3 downto 0);
-        y: out std_login_vector(15 downto 0)
+        a, b: in std_logic_vector(15 downto 0);
+        op: in std_logic_vector(3 downto 0);
+        y: out std_logic_vector(15 downto 0)
     );
 end ALU;
 
 architecture beh of ALU is
 begin
+    process (a, b)
+	 begin
     case op is
         when "0000" => -- ADD
-            y <= a + b;
+            y <= std_logic_vector(unsigned(a) + unsigned(b));
         when "0001" => -- SUB
-            y <= a - b;
+            y <= std_logic_vector(unsigned(a) - unsigned(b));
         when "0010" => -- AND
             y <= a and b;
         when "0011" => -- OR
@@ -26,14 +28,15 @@ begin
         when "0101" => -- NOT
             y <= not a;
         when "0110" => -- SLL
-            y <= a sll to_integer(unsigned(b));
+            y <= std_logic_vector(unsigned(a) sll to_integer(unsigned(b)));
         when "0111" => -- SRL
-            y <= a srl to_integer(unsigned(b));
+            y <= std_logic_vector(unsigned(a) srl to_integer(unsigned(b)));
         when "1000" => -- SRA
-            y <= a sra to_integer(unsigned(b));
+            y <= to_stdlogicvector(to_bitvector(a) sra to_integer(unsigned(b)));
         when "1001" => -- ROL
-            y <= a rol to_integer(unsigned(b));
-        others => 
+            y <= std_logic_vector(unsigned(a) rol to_integer(unsigned(b)));
+        when others => 
             y <= (others => '0');
     end case;
+	 end process;
 end beh;
