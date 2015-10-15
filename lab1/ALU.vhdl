@@ -17,12 +17,12 @@ begin
 	 begin
     case op is
         when "0000" => -- ADD
-            --y <= std_logic_vector(unsigned(a) + unsigned(b));
-				y <= a+b ;
+            y <= std_logic_vector(unsigned(a) + unsigned(b));
+				--y <= a+b ;
 				flag <= '0';
         when "0001" => -- SUB
-            --y <= std_logic_vector(unsigned(a) - unsigned(b));
-				y <= a-b ;
+            y <= std_logic_vector(unsigned(a) - unsigned(b));
+				--y <= a-b ;
 				flag <= '0';
         when "0010" => -- AND
             y <= a and b;

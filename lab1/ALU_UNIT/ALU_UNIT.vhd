@@ -33,21 +33,21 @@ entity ALU_UNIT is
     Port ( CLK : in  STD_LOGIC;
            RST : in  STD_LOGIC;
            SW : in  STD_LOGIC_VECTOR (15 downto 0);
-           Fout : in  STD_LOGIC_VECTOR (15 downto 0);
-           flag : in  STD_LOGIC);
+           Fout : out  STD_LOGIC_VECTOR (15 downto 0);
+           flag : out  STD_LOGIC);
 end ALU_UNIT;
 
 architecture Behavioral of ALU_UNIT is
 --SIGNAL FOR PROCESS
-SIGNAL state £ºSTD_LOGIC_VECTOR (1 downto 0)£»
+SIGNAL state :STD_LOGIC_VECTOR (1 downto 0);
 --SIGNAL FOR PROCESS
 
 --SIGNAL FOR ALU U0
-SIGNAL a £ºSTD_LOGIC_VECTOR (15 downto 0)£»
-SIGNAL b £ºSTD_LOGIC_VECTOR (15 downto 0)£»
-SIGNAL y £ºSTD_LOGIC_VECTOR (15 downto 0)£»
-SIGNAL op £ºSTD_LOGIC_VECTOR (3 downto 0)£»
-SIGNAL flag_temp £ºSTD_LOGIC £»
+SIGNAL a :STD_LOGIC_VECTOR (15 downto 0);
+SIGNAL b :STD_LOGIC_VECTOR (15 downto 0);
+SIGNAL y :STD_LOGIC_VECTOR (15 downto 0);
+SIGNAL op :STD_LOGIC_VECTOR (3 downto 0);
+SIGNAL flag_temp :STD_LOGIC :='0';
 --SIGNAL FOR ALU U0
 COMPONENT ALU
     port (
@@ -60,27 +60,27 @@ end COMPONENT;
 begin
 U0: ALU PORT MAP(a=>a,b=>b,y=>y,op=>op,flag=>flag_temp);
 process(CLK,RST)
-if(RST = '0') then
-	state<="00";
-	flag<='0';
-else
-	if(CLK'evnet and CLK='1') then
-		if(state = "00") then
-			a <= SW;
-			state <= state +"01";
-		else if(state = "01") then
-			b <= SW;
-			state <= state +"01";
-		else if(state = "10") then
-			op <= SW;
-			Fout <= y;
-			state <= state +"01";
-		else if(state = "11") then
-			flag <= flag_temp;
-			state <= state +"01";
+begin
+	if(RST = '0') then
+		state<="00";
+	else
+		if(CLK'event and CLK='1') then
+			if(state = "00") then
+				a <= SW;
+				state <= "01";
+			else if(state = "01") then
+				b <= SW;
+				state <= "10";
+			else if(state = "10") then
+				op <= SW(3 downto 0);
+				Fout <= y;
+				state <= "11";
+			else if(state = "11") then
+				flag <= flag_temp;
+				state <= "00";
+			end if;
 		end if;
 	end if;
-end if;
 end process;
 
 end Behavioral;

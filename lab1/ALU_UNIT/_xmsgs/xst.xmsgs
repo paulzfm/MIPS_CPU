@@ -5,10 +5,13 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
-<msg type="error" file="HDLParsers" num="808" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl</arg>&quot; Line <arg fmt="%d" index="2">21</arg>. <arg fmt="%s" index="3">+</arg> can not have such operands in this context.
+<msg type="warning" file="HDLParsers" num="3516" delta="old" >Found error in file &quot;<arg fmt="%s" index="1">C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd</arg>&quot;. 
 </msg>
 
-<msg type="error" file="HDLParsers" num="808" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl</arg>&quot; Line <arg fmt="%d" index="2">25</arg>. <arg fmt="%s" index="3">-</arg> can not have such operands in this context.
+<msg type="warning" file="HDLParsers" num="3458" delta="old" >Because of erroneous VHDL file(s), automatic determination of correct order of compilation of files in project file &quot;<arg fmt="%s" index="1">C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT_vhdl.prj</arg>&quot; may be inaccurate. Please put the files in the project file in correct order with keyword &apos;nosort&apos; at end of the project file, or compile your vhdl file(s) individually to find and fix the error(s) in your vhdl file(s). 
+</msg>
+
+<msg type="error" file="HDLParsers" num="164" delta="new" >&quot;<arg fmt="%s" index="1">C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd</arg>&quot; Line <arg fmt="%d" index="2">84</arg>. <arg fmt="%s" index="3">parse error, unexpected PROCESS, expecting IF</arg>
 </msg>
 
 </messages>

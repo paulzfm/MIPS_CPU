@@ -12,7 +12,7 @@ Total CPU time to Xst completion: 0.13 secs
 Total REAL time to Xst completion: 0.00 secs
 Total CPU time to Xst completion: 0.13 secs
  
---> Reading design: ALU.prj
+--> Reading design: ALU_UNIT.prj
 
 TABLE OF CONTENTS
   1) Synthesis Options Summary
@@ -35,17 +35,17 @@ TABLE OF CONTENTS
 *                      Synthesis Options Summary                        *
 =========================================================================
 ---- Source Parameters
-Input File Name                    : "ALU.prj"
+Input File Name                    : "ALU_UNIT.prj"
 Input Format                       : mixed
 Ignore Synthesis Constraint File   : NO
 
 ---- Target Parameters
-Output File Name                   : "ALU"
+Output File Name                   : "ALU_UNIT"
 Output Format                      : NGC
 Target Device                      : xc3s1600e-4-fg320
 
 ---- Source Options
-Top Module Name                    : ALU
+Top Module Name                    : ALU_UNIT
 Automatic FSM Extraction           : YES
 FSM Encoding Algorithm             : Auto
 Safe Implementation                : No
@@ -104,15 +104,18 @@ Slice Utilization Ratio Delta      : 5
 =========================================================================
 *                          HDL Compilation                              *
 =========================================================================
+WARNING:HDLParsers:3516 - Found error in file "C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd". 
+WARNING:HDLParsers:3458 - Because of erroneous VHDL file(s), automatic determination of correct order of compilation of files in project file "C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT_vhdl.prj" may be inaccurate. Please put the files in the project file in correct order with keyword 'nosort' at end of the project file, or compile your vhdl file(s) individually to find and fix the error(s) in your vhdl file(s). 
 Compiling vhdl file "C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl" in Library work.
-ERROR:HDLParsers:808 - "C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl" Line 21. + can not have such operands in this context.
-ERROR:HDLParsers:800 - "C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl" Line 22. Type of flag is incompatible with type of a.
-ERROR:HDLParsers:808 - "C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl" Line 25. - can not have such operands in this context.
+Architecture beh of Entity alu is up to date.
+Compiling vhdl file "C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd" in Library work.
+Entity <alu_unit> compiled.
+ERROR:HDLParsers:164 - "C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd" Line 84. parse error, unexpected PROCESS, expecting IF
 --> 
 
-Total memory usage is 283660 kilobytes
+Total memory usage is 283640 kilobytes
 
-Number of errors   :    3 (   0 filtered)
-Number of warnings :    0 (   0 filtered)
+Number of errors   :    1 (   0 filtered)
+Number of warnings :    2 (   0 filtered)
 Number of infos    :    0 (   0 filtered)
 
