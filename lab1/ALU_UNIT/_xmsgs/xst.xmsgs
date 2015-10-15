@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="error" file="HDLParsers" num="808" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl</arg>&quot; Line <arg fmt="%d" index="2">21</arg>. <arg fmt="%s" index="3">+</arg> can not have such operands in this context.
+</msg>
+
+<msg type="error" file="HDLParsers" num="808" delta="old" >&quot;<arg fmt="%s" index="1">C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl</arg>&quot; Line <arg fmt="%d" index="2">25</arg>. <arg fmt="%s" index="3">-</arg> can not have such operands in this context.
+</msg>
+
+</messages>
+
