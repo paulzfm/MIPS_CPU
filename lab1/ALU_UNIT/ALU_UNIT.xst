@@ -5,7 +5,7 @@ run
 -ifmt mixed
 -ofn ALU_UNIT
 -ofmt NGC
--p xc3s1600e-4-fg320
+-p xc3s1200e-4-fg320
 -top ALU_UNIT
 -opt_mode Speed
 -opt_level 1

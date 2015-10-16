@@ -34,7 +34,7 @@ entity ALU_UNIT is
            RST : in  STD_LOGIC;
            SW : in  STD_LOGIC_VECTOR (15 downto 0);
            Fout : out  STD_LOGIC_VECTOR (15 downto 0);
-           flag : out  STD_LOGIC);
+           flag : out  std_logic_vector(3 downto 0));
 end ALU_UNIT;
 
 architecture Behavioral of ALU_UNIT is
@@ -47,14 +47,14 @@ SIGNAL a :STD_LOGIC_VECTOR (15 downto 0);
 SIGNAL b :STD_LOGIC_VECTOR (15 downto 0);
 SIGNAL y :STD_LOGIC_VECTOR (15 downto 0);
 SIGNAL op :STD_LOGIC_VECTOR (3 downto 0);
-SIGNAL flag_temp :STD_LOGIC :='0';
+SIGNAL flag_temp :std_logic_vector(3 downto 0) :="0000";
 --SIGNAL FOR ALU U0
 COMPONENT ALU
     port (
         a, b: in std_logic_vector(15 downto 0);
         op: in std_logic_vector(3 downto 0);
         y: out std_logic_vector(15 downto 0);
-		  flag: out std_logic
+		  flag: out std_logic_vector(3 downto 0)
     );
 end COMPONENT;
 begin
@@ -68,19 +68,24 @@ begin
 			if(state = "00") then
 				a <= SW;
 				state <= "01";
-			else if(state = "01") then
+			elsif(state = "01") then
 				b <= SW;
 				state <= "10";
-			else if(state = "10") then
+			elsif(state = "10") then
 				op <= SW(3 downto 0);
-				Fout <= y;
 				state <= "11";
-			else if(state = "11") then
-				flag <= flag_temp;
+			elsif(state = "11") then
+				--flag <= flag_temp;
 				state <= "00";
 			end if;
 		end if;
 	end if;
+end process;
+
+process(flag_temp,y)
+begin
+Fout <= y;
+flag<=flag_temp;
 end process;
 
 end Behavioral;

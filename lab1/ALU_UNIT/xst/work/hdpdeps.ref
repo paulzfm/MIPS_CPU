@@ -1,13 +1,14 @@
 V3 7
-FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl 2015/10/15.20:38:45 P.20131013
-EN work/ALU 1444913434 FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl \
-      PB ieee/std_logic_1164 1381692176 PB ieee/NUMERIC_STD 1381692181
-AR work/ALU/beh 1444913435 \
-      FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl EN work/ALU 1444913434
-FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd 2015/10/15.20:35:43 P.20131013
-EN work/ALU_UNIT 0 \
+FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl 2015/10/16.00:25:19 P.20131013
+EN work/ALU 1444957386 FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl \
+      PB ieee/std_logic_1164 1381692176 PB ieee/NUMERIC_STD 1381692181 \
+      PB ieee/std_logic_arith 1381692177 PB ieee/STD_LOGIC_UNSIGNED 1381692179
+AR work/ALU/beh 1444957387 \
+      FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl EN work/ALU 1444957386
+FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd 2015/10/16.09:03:04 P.20131013
+EN work/ALU_UNIT 1444957388 \
       FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd \
       PB ieee/std_logic_1164 1381692176
-AR work/ALU_UNIT/Behavioral 0 \
+AR work/ALU_UNIT/Behavioral 1444957389 \
       FL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd \
-      EN work/ALU_UNIT 0 CP ALU
+      EN work/ALU_UNIT 1444957388 CP ALU

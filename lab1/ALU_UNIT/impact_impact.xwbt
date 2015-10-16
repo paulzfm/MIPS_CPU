@@ -1,0 +1,8 @@
+INTSTYLE=impact
+INFILE=C:\Users\pc\Documents\GitHub\MIPS_CPU\lab1\ALU_UNIT\impact.xsl
+OUTFILE=C:\Users\pc\Documents\GitHub\MIPS_CPU\lab1\ALU_UNIT\impact.xsl
+FAMILY=Single
+PART=Single
+WORKINGDIR=C:\Users\pc\Documents\GitHub\MIPS_CPU\lab1\ALU_UNIT
+LICENSE=iMPACT
+USER_INFO=iMPACT
