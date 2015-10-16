@@ -1,4 +1,4 @@
-AR alu_unit behavioral E:/XProjects/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd sub00/vhpl03 1444968734
-AR alu beh E:/XProjects/MIPS_CPU/lab1/ALU.vhdl sub00/vhpl01 1444968732
-EN alu_unit NULL E:/XProjects/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd sub00/vhpl02 1444968733
-EN alu NULL E:/XProjects/MIPS_CPU/lab1/ALU.vhdl sub00/vhpl00 1444968731
+AR alu_unit behavioral E:/XProjects/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd sub00/vhpl03 1444969658
+AR alu beh E:/XProjects/MIPS_CPU/lab1/ALU.vhdl sub00/vhpl01 1444969656
+EN alu_unit NULL E:/XProjects/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd sub00/vhpl02 1444969657
+EN alu NULL E:/XProjects/MIPS_CPU/lab1/ALU.vhdl sub00/vhpl00 1444969655

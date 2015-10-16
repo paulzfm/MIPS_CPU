@@ -14,9 +14,10 @@ end ALU;
 architecture beh of ALU is
 --SIGNAL FOR PROCESS
 SIGNAL y_temp :STD_LOGIC_VECTOR (16 downto 0) := (others => '0');
+signal b_temp:STD_LOGIC_VECTOR (15 downto 0) := (others => '0');
 --SIGNAL FOR PROCESS
 begin
-    process (y_temp, a, b)
+    process (y_temp, a, b, op, b_temp)
 	 begin
 	     y<=y_temp(15 downto 0);
 	     		-- carry
@@ -30,9 +31,9 @@ begin
 				end if;
 
 				-- overflow
-				if ((a(15 downto 15) = "0") and (b(15 downto 15) = "0") and (y_temp(15 downto 15) = "1")) then
+				if ((a(15 downto 15) = "0") and (b_temp(15 downto 15) = "0") and (y_temp(15 downto 15) = "1")) then
 					flag(2) <= '1';
-				elsif ((a(15 downto 15) = "1") and (b(15 downto 15) = "1") and (y_temp(15 downto 15) = "0")) then
+				elsif ((a(15 downto 15) = "1") and (b_temp(15 downto 15) = "1") and (y_temp(15 downto 15) = "0")) then
 					flag(2) <= '1';
 				else
 					flag(2) <= '0';
@@ -46,8 +47,10 @@ begin
     case op is
         when "0000" => -- ADD
             y_temp <= std_logic_vector(unsigned("0" & a) + unsigned("0" & b));
+				b_temp <= b;
         when "0001" => -- SUB
             y_temp <= std_logic_vector(unsigned("0" & a) - unsigned("0" & b));
+				b_temp <= std_logic_vector(unsigned(not b) + "0000000000000001");
         when "0010" => -- AND
             y_temp(15 downto 0) <= a and b;
         when "0011" => -- OR

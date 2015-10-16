@@ -4,7 +4,7 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.36 secs
+Total CPU time to Xst completion: 0.34 secs
  
 --> Parameter xsthdpdir set to xst
 
@@ -136,32 +136,36 @@ Performing bidirectional port resolution...
 
 Synthesizing Unit <ALU>.
     Related source file is "E:/XProjects/MIPS_CPU/lab1/ALU.vhdl".
+WARNING:Xst:646 - Signal <b_temp<14:0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:737 - Found 16-bit latch for signal <b_temp>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
 WARNING:Xst:737 - Found 1-bit latch for signal <y_temp_16>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
 INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
-    Found 1-bit xor2 for signal <y_temp_0$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_1$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_10$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_11$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_12$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_13$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_14$xor0000> created at line 56.
-    Found 17-bit adder for signal <y_temp_15$add0000> created at line 48.
-    Found 17-bit subtractor for signal <y_temp_15$sub0000> created at line 50.
-    Found 1-bit xor2 for signal <y_temp_15$xor0000> created at line 56.
-    Found 16-bit shifter rotate left for signal <y_temp_15_0$shift0003> created at line 66.
-    Found 16-bit shifter logical left for signal <y_temp_15_0$shift0004> created at line 60.
-    Found 16-bit shifter logical right for signal <y_temp_15_0$shift0005> created at line 62.
-    Found 16-bit shifter arithmetic right for signal <y_temp_15_0$shift0006> created at line 64.
-    Found 1-bit xor2 for signal <y_temp_2$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_3$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_4$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_5$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_6$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_7$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_8$xor0000> created at line 56.
-    Found 1-bit xor2 for signal <y_temp_9$xor0000> created at line 56.
+    Found 16-bit adder for signal <b_temp$addsub0000> created at line 53.
+    Found 1-bit xor2 for signal <y_temp_0$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_1$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_10$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_11$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_12$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_13$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_14$xor0000> created at line 59.
+    Found 17-bit adder for signal <y_temp_15$add0000> created at line 49.
+    Found 17-bit subtractor for signal <y_temp_15$sub0000> created at line 52.
+    Found 1-bit xor2 for signal <y_temp_15$xor0000> created at line 59.
+    Found 16-bit shifter rotate left for signal <y_temp_15_0$shift0003> created at line 69.
+    Found 16-bit shifter logical left for signal <y_temp_15_0$shift0004> created at line 63.
+    Found 16-bit shifter logical right for signal <y_temp_15_0$shift0005> created at line 65.
+    Found 16-bit shifter arithmetic right for signal <y_temp_15_0$shift0006> created at line 67.
+    Found 1-bit xor2 for signal <y_temp_2$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_3$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_4$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_5$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_6$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_7$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_8$xor0000> created at line 59.
+    Found 1-bit xor2 for signal <y_temp_9$xor0000> created at line 59.
     Summary:
-	inferred   2 Adder/Subtractor(s).
+	inferred   3 Adder/Subtractor(s).
 	inferred   4 Combinational logic shifter(s).
 Unit <ALU> synthesized.
 
@@ -194,14 +198,16 @@ Unit <ALU_UNIT> synthesized.
 HDL Synthesis Report
 
 Macro Statistics
-# Adders/Subtractors                                   : 2
+# Adders/Subtractors                                   : 3
+ 16-bit adder                                          : 1
  17-bit adder                                          : 1
  17-bit subtractor                                     : 1
 # Registers                                            : 3
  16-bit register                                       : 2
  4-bit register                                        : 1
-# Latches                                              : 1
+# Latches                                              : 2
  1-bit latch                                           : 1
+ 16-bit latch                                          : 1
 # Logic shifters                                       : 4
  16-bit shifter arithmetic right                       : 1
  16-bit shifter logical left                           : 1
@@ -232,13 +238,15 @@ Advanced HDL Synthesis Report
 
 Macro Statistics
 # FSMs                                                 : 1
-# Adders/Subtractors                                   : 2
+# Adders/Subtractors                                   : 3
+ 16-bit adder                                          : 1
  17-bit adder                                          : 1
  17-bit subtractor                                     : 1
 # Registers                                            : 36
  Flip-Flops                                            : 36
-# Latches                                              : 1
+# Latches                                              : 2
  1-bit latch                                           : 1
+ 16-bit latch                                          : 1
 # Logic shifters                                       : 4
  16-bit shifter arithmetic right                       : 1
  16-bit shifter logical left                           : 1
@@ -252,6 +260,21 @@ Macro Statistics
 =========================================================================
 *                         Low Level Synthesis                           *
 =========================================================================
+WARNING:Xst:2677 - Node <b_temp_0> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_1> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_2> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_3> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_4> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_5> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_6> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_7> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_8> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_9> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_10> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_11> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_12> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_13> of sequential type is unconnected in block <ALU>.
+WARNING:Xst:2677 - Node <b_temp_14> of sequential type is unconnected in block <ALU>.
 WARNING:Xst:2170 - Unit ALU : the following signal(s) form a combinatorial loop: y_temp_15_0_shift0002<15>.
 
 Optimizing unit <ALU_UNIT> ...
@@ -298,21 +321,23 @@ Design Statistics
 # IOs                              : 38
 
 Cell Usage :
-# BELS                             : 467
+# BELS                             : 505
 #      GND                         : 1
-#      INV                         : 1
-#      LUT2                        : 43
-#      LUT3                        : 107
-#      LUT4                        : 215
-#      MUXCY                       : 32
-#      MUXF5                       : 34
+#      INV                         : 17
+#      LUT1                        : 1
+#      LUT2                        : 44
+#      LUT3                        : 97
+#      LUT4                        : 226
+#      MUXCY                       : 47
+#      MUXF5                       : 37
 #      VCC                         : 1
-#      XORCY                       : 33
-# FlipFlops/Latches                : 41
+#      XORCY                       : 34
+# FlipFlops/Latches                : 42
 #      FDC                         : 3
 #      FDE                         : 36
 #      FDP                         : 1
 #      LD                          : 1
+#      LDE_1                       : 1
 # Clock Buffers                    : 1
 #      BUFGP                       : 1
 # IO Buffers                       : 37
@@ -325,9 +350,9 @@ Device utilization summary:
 
 Selected Device : 3s1200efg320-4 
 
- Number of Slices:                      203  out of   8672     2%  
- Number of Slice Flip Flops:             40  out of  17344     0%  
- Number of 4 input LUTs:                366  out of  17344     2%  
+ Number of Slices:                      212  out of   8672     2%  
+ Number of Slice Flip Flops:             41  out of  17344     0%  
+ Number of 4 input LUTs:                385  out of  17344     2%  
  Number of IOs:                          38
  Number of bonded IOBs:                  38  out of    250    15%  
     IOB Flip Flops:                       1
@@ -355,9 +380,10 @@ Clock Information:
 Clock Signal                                 | Clock buffer(FF name)  | Load  |
 ---------------------------------------------+------------------------+-------+
 CLK                                          | BUFGP                  | 40    |
-U0/y_temp_16_not0001(U0/y_temp_16_not00011:O)| NONE(*)(U0/y_temp_16)  | 1     |
+U0/b_temp_not0002(U0/b_temp_not00021:O)      | NONE(*)(U0/b_temp_15)  | 1     |
+U0/y_temp_16_not0001(U0/y_temp_16_not00012:O)| NONE(*)(U0/y_temp_16)  | 1     |
 ---------------------------------------------+------------------------+-------+
-(*) This 1 clock signal(s) are generated by combinatorial logic,
+(*) These 2 clock signal(s) are generated by combinatorial logic,
 and XST is not able to identify which are the primary clock signals.
 Please use the CLOCK_SIGNAL constraint to specify the clock signal(s) generated by combinatorial logic.
 INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
@@ -376,7 +402,7 @@ Speed Grade: -4
 
    Minimum period: 3.410ns (Maximum Frequency: 293.255MHz)
    Minimum input arrival time before clock: 4.273ns
-   Maximum output required time after clock: 18.662ns
+   Maximum output required time after clock: 18.072ns
    Maximum combinational path delay: No path found
 
 Timing Detail:
@@ -427,9 +453,9 @@ Offset:              4.273ns (Levels of Logic = 2)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'CLK'
-  Total number of paths / destination ports: 8398 / 19
+  Total number of paths / destination ports: 9565 / 19
 -------------------------------------------------------------------------
-Offset:              18.662ns (Levels of Logic = 11)
+Offset:              18.072ns (Levels of Logic = 11)
   Source:            b_13 (FF)
   Destination:       flag<1> (PAD)
   Source Clock:      CLK rising
@@ -438,21 +464,41 @@ Offset:              18.662ns (Levels of Logic = 11)
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FDE:C->Q              6   0.591   0.844  b_13 (b_13)
+     FDE:C->Q              7   0.591   0.883  b_13 (b_13)
      LUT4:I0->O            2   0.704   0.622  U0/y_temp_15_0_or00004 (U0/y_temp_15_0_or00004)
-     LUT3:I0->O           18   0.704   1.243  U0/y_temp_15_0_or000023 (U0/y_temp_15_0_or0000)
-     LUT3:I0->O            7   0.704   0.787  U0/y_temp_15_0_shift0002<15>1 (U0/y_temp_15_0_shift0002<15>)
-     LUT3:I1->O           11   0.704   1.108  U0/y_temp_2_mux000011 (U0/N13)
-     LUT3:I0->O            1   0.704   0.595  U0/y_temp_14_mux000020 (U0/y_temp_14_mux000020)
-     LUT4:I0->O            2   0.704   0.622  U0/y_temp_14_mux0000139 (Fout_14_OBUF)
-     LUT4:I0->O            1   0.704   0.499  U0/flag_1_cmp_eq000012 (U0/flag_1_cmp_eq000012)
-     LUT4:I1->O            1   0.704   0.424  U0/flag_1_cmp_eq000042_SW0 (N103)
-     LUT4:I3->O            1   0.704   0.595  U0/flag_1_cmp_eq000042 (U0/flag_1_cmp_eq000042)
-     LUT4:I0->O            1   0.704   0.420  U0/flag_1_cmp_eq000089 (flag_1_OBUF)
+     LUT3:I0->O           21   0.704   1.163  U0/y_temp_15_0_or000023 (U0/y_temp_15_0_or0000)
+     LUT3:I2->O           14   0.704   1.035  U0/y_temp_2_mux000061 (U0/N73)
+     LUT4:I2->O            2   0.704   0.622  U0/y_temp_10_mux0000129 (U0/y_temp_10_mux0000129)
+     LUT4:I0->O            1   0.704   0.424  U0/y_temp_14_mux000075_SW0 (N139)
+     LUT4:I3->O            1   0.704   0.455  U0/y_temp_14_mux000075 (U0/y_temp_14_mux000075)
+     LUT4:I2->O            2   0.704   0.622  U0/y_temp_14_mux0000141 (Fout_14_OBUF)
+     LUT4:I0->O            1   0.704   0.424  U0/flag_1_cmp_eq000022_SW0 (N95)
+     LUT4:I3->O            1   0.704   0.499  U0/flag_1_cmp_eq000022 (U0/flag_1_cmp_eq000022)
+     LUT4:I1->O            1   0.704   0.420  U0/flag_1_cmp_eq000085 (flag_1_OBUF)
      OBUF:I->O                 3.272          flag_1_OBUF (flag<1>)
     ----------------------------------------
-    Total                     18.662ns (10.903ns logic, 7.759ns route)
-                                       (58.4% logic, 41.6% route)
+    Total                     18.072ns (10.903ns logic, 7.169ns route)
+                                       (60.3% logic, 39.7% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'U0/b_temp_not0002'
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Offset:              5.571ns (Levels of Logic = 2)
+  Source:            U0/b_temp_15 (LATCH)
+  Destination:       flag<2> (PAD)
+  Source Clock:      U0/b_temp_not0002 rising
+
+  Data Path: U0/b_temp_15 to flag<2>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     LDE_1:G->Q            1   0.676   0.499  U0/b_temp_15 (U0/b_temp_15)
+     LUT3:I1->O            1   0.704   0.420  U0/flag_2_mux00011 (flag_2_OBUF)
+     OBUF:I->O                 3.272          flag_2_OBUF (flag<2>)
+    ----------------------------------------
+    Total                      5.571ns (4.652ns logic, 0.919ns route)
+                                       (83.5% logic, 16.5% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'U0/y_temp_16_not0001'
@@ -476,14 +522,14 @@ Offset:              4.368ns (Levels of Logic = 1)
 =========================================================================
 
 
-Total REAL time to Xst completion: 33.00 secs
-Total CPU time to Xst completion: 33.02 secs
+Total REAL time to Xst completion: 32.00 secs
+Total CPU time to Xst completion: 32.57 secs
  
 --> 
 
-Total memory usage is 390292 kilobytes
+Total memory usage is 390296 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :    2 (   0 filtered)
-Number of infos    :    2 (   0 filtered)
+Number of warnings :   19 (   0 filtered)
+Number of infos    :    3 (   0 filtered)
 
