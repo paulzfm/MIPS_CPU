@@ -1,4 +1,4 @@
-AR alu_unit behavioral C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd sub00/vhpl03 1444957389
-AR alu beh C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl sub00/vhpl01 1444957387
-EN alu_unit NULL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd sub00/vhpl02 1444957388
-EN alu NULL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl sub00/vhpl00 1444957386
+AR alu_unit behavioral C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd sub00/vhpl03 1444959437
+AR alu beh C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl sub00/vhpl01 1444959435
+EN alu_unit NULL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd sub00/vhpl02 1444959436
+EN alu NULL C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU.vhdl sub00/vhpl00 1444959823
