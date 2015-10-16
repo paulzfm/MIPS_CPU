@@ -16,7 +16,7 @@ architecture beh of ALU is
 SIGNAL y_temp :STD_LOGIC_VECTOR (16 downto 0) := (others => '0');
 --SIGNAL FOR PROCESS
 begin
-    process (y_temp)
+    process (y_temp, a, b)
 	 begin
 	     y<=y_temp(15 downto 0);
 	     		-- carry

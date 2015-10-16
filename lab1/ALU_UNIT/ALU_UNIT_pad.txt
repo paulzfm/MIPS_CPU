@@ -1,7 +1,7 @@
 Release 14.7 - par P.20131013 (nt64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
-Fri Oct 16 09:37:45 2015
+Fri Oct 16 12:13:47 2015
 
 
 INFO: The IO information is provided in three file formats as part of the Place and Route (PAR) process.  These formats are:
@@ -118,7 +118,7 @@ Pinout by Pin Number:
 |F6        |           |         |VCCINT                   |         |           |              |          |         |           |         |1.2      |          |           |                |
 |F7        |           |DIFFM    |IO_L19P_0                |UNUSED   |           |0             |          |         |           |         |         |          |           |                |
 |F8        |           |DIFFS    |IO_L17N_0                |UNUSED   |           |0             |          |         |           |         |         |          |           |                |
-|F9        |flag<0>    |IOB      |IO_L15N_0                |OUTPUT   |LVCMOS25*  |0             |12        |SLOW     |NONE**     |         |         |LOCATED   |NO         |NONE            |
+|F9        |flag<0>    |IOB      |IO_L15N_0                |OUTPUT   |LVCMOS25*  |0             |12        |SLOW     |NONE**     |         |         |LOCATED   |YES        |NONE            |
 |F10       |           |DIFFMI   |IP_L10P_0                |UNUSED   |           |0             |          |         |           |         |         |          |           |                |
 |F11       |Fout<7>    |IOB      |IO_L08N_0                |OUTPUT   |LVCMOS25*  |0             |12        |SLOW     |NONE**     |         |         |LOCATED   |NO         |NONE            |
 |F12       |Fout<10>   |IOB      |IO_L06P_0                |OUTPUT   |LVCMOS25*  |0             |12        |SLOW     |NONE**     |         |         |LOCATED   |NO         |NONE            |
