@@ -7,7 +7,7 @@ entity RAMController is
     port (
         clk: in std_logic;
         rst: in std_logic;
-        inputs: in std_logic_vector(15 downto 0);
+        inputs: in std_logic_vector(15 downto 0); -- addr & data
 
         addr1: out std_logic_vector(17 downto 0) := (others => '0');
         data1: inout std_logic_vector(15 downto 0);
@@ -29,11 +29,11 @@ entity RAMController is
 end RAMController;
 
 architecture arch of RAMController is
-    type state is (s_init, s_addr, s_write1, s_read1, s_write2, s_read2, s_end);
-    signal current_state, next_state: state;
-    signal counter: integer range 0 to 9;
+    type state is (s_init, s_ready, s_write1, s_read1, s_write2, s_read2, s_end);
+    signal current_state, next_state: state := s_init;
+    signal counter: std_logic_vector(3 downto 0) := (others => '0');
     signal addr: std_logic_vector(17 downto 0) := (others => '0');
-    signal data: std_logic_vector(15 downto 0);
+    signal data: std_logic_vector(15 downto 0) := (others => '0');
 begin
     -- state machine
     process(current_state, inputs)
@@ -47,37 +47,31 @@ begin
                 oe2 <= '1';
                 we2 <= '1';
                 en2 <= '0';
-            when s_addr =>
-                next_state <= s_write1;
                 counter <= 0;
-                addr1 <= "00" & inputs;
-                addr <= "00" & inputs;
+            when s_ready =>
+                next_state <= s_write1;
+                counter <= 1;
+                addr <= "0000000000" & inputs(15 downto 8);
+                data <= "00000000" & inputs(7 downto 0);
+                addr1 <= addr;
+                data1 <= data;
+                we1 <= '0';
             when s_write1 =>
-                if counter = 0 then
+                if counter < 9 then
                     next_state <= s_write1;
                     counter <= counter + 1;
-                    data1 <= inputs;
-                    data <= inputs;
-                    we1 <= '0';
-                elsif counter < 3 then
-                    next_state <= s_write1;
-                    counter <= counter + 1;
-                    data1 <= data + "1";
-                    data <= data + "1";
+                    addr1 <= addr + counter - "1";
+                    data1 <= data + counter - "1";
                 else
-                    next_state <= s_end;
+                    next_state <= s_read1;
                     counter <= 0;
                     we1 <= '1';
                 end if;
             when s_read1 =>
-                if counter = 0 then
-                    next_state <= s_write1;
-                    counter <= counter + 1;
-                    data <= data1;
-                    we1 <= '0';
-                elsif counter < 3 then
+                if counter < 9 then
                     next_state <= s_read1;
                     counter <= counter + 1;
+                    addr1 <= addr + counter - "1";
                 else
                     next_state <= s_end;
                     counter <= 0;
@@ -103,7 +97,7 @@ begin
     begin
         case current_state is
             when s_init => display1 <= "1111110";
-            when s_addr => display1 <= "0110000";
+            when s_ready => display1 <= "0110000";
             when s_write1 => display1 <= "1101101";
             when s_read1 => display1 <= "1111001";
             when s_write2 => display1 <= "0110011";
@@ -117,16 +111,16 @@ begin
     process(counter)
     begin
         case counter is
-            when 0 => display2 <= "1111110";
-            when 1 => display2 <= "0110000";
-            when 2 => display2 <= "1101101";
-            when 3 => display2 <= "1111001";
-            when 4 => display2 <= "0110011";
-            when 5 => display2 <= "1011011";
-            when 6 => display2 <= "0011111";
-            when 7 => display2 <= "1110000";
-            when 8 => display2 <= "1111111";
-            when 9 => display2 <= "1110011";
+            when "0000" => display2 <= "1111110";
+            when "0001" => display2 <= "0110000";
+            when "0010" => display2 <= "1101101";
+            when "0011" => display2 <= "1111001";
+            when "0100" => display2 <= "0110011";
+            when "0101" => display2 <= "1011011";
+            when "0110" => display2 <= "0011111";
+            when "0111" => display2 <= "1110000";
+            when "1000" => display2 <= "1111111";
+            when "1001" => display2 <= "1110011";
             --when 10 => display2 <= "1110111";
             when others => display2 <= "0000000";
         end case;
