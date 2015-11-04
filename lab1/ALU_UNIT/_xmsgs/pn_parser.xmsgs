@@ -11,5 +11,8 @@
 <msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;E:/XProjects/MIPS_CPU/lab1/ALU.vhdl&quot; into library work</arg>
 </msg>
 
+<msg type="info" file="ProjectMgmt" num="1061" ><arg fmt="%s" index="1">Parsing VHDL file &quot;E:/XProjects/MIPS_CPU/lab1/ALU_UNIT/ALU_UNIT.vhd&quot; into library work</arg>
+</msg>
+
 </messages>
 

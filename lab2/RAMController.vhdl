@@ -40,42 +40,46 @@ begin
     begin
         case current_state is
             when s_init =>
-                next_state <= s_addr;
+                next_state <= s_ready;
                 oe1 <= '1';
                 we1 <= '1';
                 en1 <= '1';
                 oe2 <= '1';
                 we2 <= '1';
                 en2 <= '0';
-                counter <= 0;
+                counter <= (others => '0');
             when s_ready =>
                 next_state <= s_write1;
-                counter <= 1;
+                counter <= "0001";
                 addr <= "0000000000" & inputs(15 downto 8);
                 data <= "00000000" & inputs(7 downto 0);
                 addr1 <= addr;
                 data1 <= data;
                 we1 <= '0';
             when s_write1 =>
-                if counter < 9 then
+                if counter /= "1001" then
                     next_state <= s_write1;
-                    counter <= counter + 1;
+                    counter <= counter + "1";
                     addr1 <= addr + counter - "1";
                     data1 <= data + counter - "1";
                 else
                     next_state <= s_read1;
-                    counter <= 0;
+                    counter <= (others => '0');
                     we1 <= '1';
+                    oe1 <= '0';
+                    data1 <= (others => 'Z');
                 end if;
             when s_read1 =>
-                if counter < 9 then
+                if counter /= "1001" then
                     next_state <= s_read1;
-                    counter <= counter + 1;
+                    counter <= counter + "1";
                     addr1 <= addr + counter - "1";
+                    data <= data1;
+                    data1 <= (others => 'Z');
                 else
                     next_state <= s_end;
-                    counter <= 0;
-                    we1 <= '1';
+                    counter <= (others => '0');
+                    oe1 <= '0';
                 end if;
             when others =>
                 next_state <= s_end;
@@ -127,6 +131,6 @@ begin
     end process;
 
     -- address and data display
-    outputs(15 downto 8) <= addr(7 downto 0);
+    outputs(15 downto 8) <= addr(7 downto 0) + counter - "1";
     outputs(7 downto 0) <= data(7 downto 0);
 end arch;

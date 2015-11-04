@@ -20,6 +20,23 @@ NET "inputs[2]" LOC = K2;
 NET "inputs[1]" LOC = J7;
 NET "inputs[0]" LOC = J6;
 
+NET "outputs[15]" LOC = D10;
+NET "outputs[14]" LOC = E10;
+NET "outputs[13]" LOC = A11;
+NET "outputs[12]" LOC = B11;
+NET "outputs[11]" LOC = C11;
+NET "outputs[10]" LOC = D11;
+NET "outputs[9]" LOC = E11;
+NET "outputs[8]" LOC = F11;
+NET "outputs[7]" LOC = A12;
+NET "outputs[6]" LOC = E12;
+NET "outputs[5]" LOC = F12;
+NET "outputs[4]" LOC = A13;
+NET "outputs[3]" LOC = B13;
+NET "outputs[2]" LOC = D13;
+NET "outputs[1]" LOC = E13;
+NET "outputs[0]" LOC = A14;
+
 NET "addr1[0]" LOC = C17;
 NET "addr1[1]" LOC = C18;
 NET "addr1[2]" LOC = D16;
