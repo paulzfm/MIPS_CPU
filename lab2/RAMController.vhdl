@@ -31,6 +31,7 @@ entity RAMController is
 end RAMController;
 
 architecture arch of RAMController is
+<<<<<<< HEAD
     -- 0: init (A-)
     -- 1: ready (B-)
     -- 2~11: write to ram1 (C1..0)
@@ -59,6 +60,64 @@ architecture arch of RAMController is
             data_in: in std_logic_vector(15 downto 0);
             en: in std_logic;
             rd: in std_logic;
+=======
+    type state is (s_init, s_ready, s_write1, s_read1, s_write2, s_read2, s_end);
+    signal current_state, next_state: state := s_init;
+    signal counter: std_logic_vector(3 downto 0) := (others => '0');
+    signal addr: std_logic_vector(17 downto 0) := (others => '0');
+    signal data: std_logic_vector(15 downto 0) := (others => '0');
+begin
+    -- state machine
+    process(current_state, inputs)
+    begin
+        case current_state is
+            when s_init =>
+                next_state <= s_ready;
+                oe1 <= '1';
+                we1 <= '1';
+                en1 <= '1';
+                oe2 <= '1';
+                we2 <= '1';
+                en2 <= '0';
+                counter <= (others => '0');
+            when s_ready =>
+                next_state <= s_write1;
+                counter <= "0001";
+                addr <= "0000000000" & inputs(15 downto 8);
+                data <= "00000000" & inputs(7 downto 0);
+                addr1 <= addr;
+                data1 <= data;
+                we1 <= '0';
+            when s_write1 =>
+                if counter /= "1001" then
+                    next_state <= s_write1;
+                    counter <= counter + "1";
+                    addr1 <= addr + counter - "1";
+                    data1 <= data + counter - "1";
+                else
+                    next_state <= s_read1;
+                    counter <= (others => '0');
+                    we1 <= '1';
+                    oe1 <= '0';
+                    data1 <= (others => 'Z');
+                end if;
+            when s_read1 =>
+                if counter /= "1001" then
+                    next_state <= s_read1;
+                    counter <= counter + "1";
+                    addr1 <= addr + counter - "1";
+                    data <= data1;
+                    data1 <= (others => 'Z');
+                else
+                    next_state <= s_end;
+                    counter <= (others => '0');
+                    oe1 <= '0';
+                end if;
+            when others =>
+                next_state <= s_end;
+        end case;
+    end process;
+>>>>>>> 8a2f748c8579e61e459cac2e8a0dbc3ffb0cc72c
 
             data_out: out std_logic_vector(15 downto 0) := (others => '0');
 
@@ -112,6 +171,7 @@ begin
     end process;
 
     -- address and data display
+<<<<<<< HEAD
     outputs(15 downto 8) <= addr1(7 downto 0);
     outputs(7 downto 0) <= out1(7 downto 0);
 
@@ -134,4 +194,8 @@ begin
         display1 => display1,
         display2 => display2
     );
+=======
+    outputs(15 downto 8) <= addr(7 downto 0) + counter - "1";
+    outputs(7 downto 0) <= data(7 downto 0);
+>>>>>>> 8a2f748c8579e61e459cac2e8a0dbc3ffb0cc72c
 end arch;
