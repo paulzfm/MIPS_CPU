@@ -82,6 +82,7 @@
   <transforms xmlns="http://www.xilinx.com/XMLSchema">
     <transform xil_pn:end_ts="1446623907" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1446623906">
       <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
     </transform>
     <transform xil_pn:end_ts="1446623907" xil_pn:name="TRAN_schematicsToHdl" xil_pn:prop_ck="-3516056416263203190" xil_pn:start_ts="1446623907">
       <status xil_pn:value="SuccessfullyRun"/>
@@ -107,12 +108,10 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1446647476" xil_pn:in_ck="5925982127480963787" xil_pn:name="TRANEXT_xstsynthesize_spartan3e" xil_pn:prop_ck="-5097972270320048657" xil_pn:start_ts="1446647443">
+    <transform xil_pn:end_ts="1446715491" xil_pn:in_ck="5925982127480963787" xil_pn:name="TRANEXT_xstsynthesize_spartan3e" xil_pn:prop_ck="-540631993113209093" xil_pn:start_ts="1446715456">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
-      <status xil_pn:value="OutOfDateForOutputs"/>
-      <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="RAMController.lso"/>
       <outfile xil_pn:name="RAMController.ngc"/>
       <outfile xil_pn:name="RAMController.ngr"/>
@@ -130,8 +129,9 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1446647583" xil_pn:in_ck="-5056034359058512678" xil_pn:name="TRANEXT_ngdbuild_FPGA" xil_pn:prop_ck="-766048194542497685" xil_pn:start_ts="1446647569">
-      <status xil_pn:value="SuccessfullyRun"/>
+    <transform xil_pn:end_ts="1446715512" xil_pn:in_ck="-5056034359058512678" xil_pn:name="TRANEXT_ngdbuild_FPGA" xil_pn:prop_ck="-766048194542497685" xil_pn:start_ts="1446715497">
+      <status xil_pn:value="FailedRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name="RAMController.bld"/>
       <outfile xil_pn:name="RAMController.ngd"/>
@@ -143,6 +143,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="RAMController.pcf"/>
       <outfile xil_pn:name="RAMController_map.map"/>
       <outfile xil_pn:name="RAMController_map.mrp"/>
@@ -157,6 +158,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="RAMController.ncd"/>
       <outfile xil_pn:name="RAMController.pad"/>
       <outfile xil_pn:name="RAMController.par"/>
@@ -172,6 +174,10 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForProperties"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
+      <status xil_pn:value="OutOfDateForOutputs"/>
+      <status xil_pn:value="OutputChanged"/>
       <outfile xil_pn:name="RAMController.ut"/>
       <outfile xil_pn:name="_xmsgs/bitgen.xmsgs"/>
       <outfile xil_pn:name="ramcontroller.bgn"/>
@@ -184,10 +190,12 @@
     <transform xil_pn:end_ts="1446647762" xil_pn:in_ck="7522847921779723505" xil_pn:name="TRAN_configureTargetDevice" xil_pn:prop_ck="5582947192412673156" xil_pn:start_ts="1446647758">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
     </transform>
     <transform xil_pn:end_ts="1446647643" xil_pn:in_ck="3558954203824147959" xil_pn:name="TRAN_postRouteTrce" xil_pn:prop_ck="445577401284416186" xil_pn:start_ts="1446647635">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <outfile xil_pn:name="RAMController.twr"/>
       <outfile xil_pn:name="RAMController.twx"/>
       <outfile xil_pn:name="_xmsgs/trce.xmsgs"/>
@@ -196,6 +204,7 @@
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
       <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="OutOfDateForPredecessor"/>
       <status xil_pn:value="OutOfDateForOutputs"/>
       <status xil_pn:value="InputAdded"/>
       <status xil_pn:value="InputChanged"/>

@@ -34,7 +34,10 @@ architecture arch of RAMController is
     type state is (s_init, s_read_addr, s_read_data, s_write1, s_ready1, s_read1, s_end);
     signal curr_state, next_state: state;
     signal count: std_logic_vector(3 downto 0) := (others => '0');
-
+    signal start_addr: std_logic_vector(17 downto 0);
+    signal start_data: std_logic_vector(15 downto 0);
+    signal curr_addr: std_logic_vector(17 downto 0);
+    signal curr_data: std_logic_vector(15 downto 0);
 begin
     machine : process(curr_state)
     begin
@@ -50,6 +53,10 @@ begin
                 start_data <= inputs;
                 ram1_oe <= '1';
                 ram1_we <= '1';
+                ram1_data <= start_data;
+                ram1_addr <= start_addr;
+                curr_data <= start_data;
+                curr_addr <= start_addr;
                 next_state <= s_write1;
             when s_write1 =>
                 ram1_we <= '0';
@@ -66,11 +73,15 @@ begin
                 else
                     ram1_data <= start_data + count;
                     ram1_addr <= start_addr + count;
+                    ram1_data <= curr_data + count;
+                    ram1_addr <= curr_addr + count;
                     next_state <= s_write1;
                 end if;
             when s_read1 =>
                 ram1_data <= (others => 'Z');
                 ram1_addr <= start_addr + count;
+                curr_addr <= start_addr + count;
+                curr_data <= ram1_data;
                 if count = "1010" then -- read ram1 done
                     next_state <= s_end;
                 else
@@ -97,9 +108,9 @@ begin
             when s_init => display1 <= "1011011"; display2 <= "0000001"; -- S-
             when s_read_addr => display1 <= "1011011"; display2 <= "1110111"; -- SA
             when s_read_data => display1 <= "1011011"; display2 <= "0111110"; -- Sd
-            when s_write1 => display1 <= "0110000";
+            when s_write1 => display1 <= "0110000"; -- 1.
             when s_ready1 => display1 <= "0000001"; display2 <= "0000001"; -- --
-            when s_read1 => display1 <= "0110000";
+            when s_read1 => display1 <= "0110000"; -- 1.
             when s_end => display1 <= "1001111"; display2 <= "0000001"; -- E-
             when others => display1 <= "0000000"; display2 <= "0000000"; --
         end case;
@@ -121,6 +132,6 @@ begin
         end if;
     end process;
 
-    outputs(15 downto 8) <= ram1_addr(7 downto 0);
-    outputs(7 downto 0) <= ram1_data(7 downto 0);
+    outputs(15 downto 8) <= curr_addr(7 downto 0);
+    outputs(7 downto 0) <= curr_data(7 downto 0);
 end arch;
