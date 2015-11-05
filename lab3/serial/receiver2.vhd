@@ -46,24 +46,22 @@ begin
 
 	process(clk, rst)
 	begin
-		if (rst = '0')
+		if (rev_next_epoch = '1')
+		then
+			status = 0;
+		elsif (rst = '0')
 		then
 			status = 0;
 		else
 			if (clk`event and clk = 1)
 			then
-				if (rev_next_epoch = '1')
-				then
-					status = 0;
-				end if;
-				
 				case status is
 					when 0 => -- init status
-						data_read <= '0';
+						rev_data_ready <= '0';
 						status <= '1';
 					when 1 => -- start read
 						rdn <= '1';
-						data_read <= '0';
+						rev_data_ready <= '0';
 						status <= status + 1;
 						data <= (others => 'Z');
 					when 2 => -- check data_ready
@@ -76,7 +74,7 @@ begin
 						end if;
 					when 3 => -- read successful
 						status <= status + 1;
-						data_read <= '1';
+						rev_data_ready <= '1';
 					when 4 =>
 						status <= 4;
 					when others =>
