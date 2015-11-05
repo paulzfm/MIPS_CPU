@@ -31,171 +31,96 @@ entity RAMController is
 end RAMController;
 
 architecture arch of RAMController is
-<<<<<<< HEAD
-    -- 0: init (A-)
-    -- 1: ready (B-)
-    -- 2~11: write to ram1 (C1..0)
-    -- 12~21: read from ram1 (D1..0)
-    -- 22~31: write to ram2 (E1..0)
-    -- 32~41: read from ram2 (F1..0)
-    -- 42: end (--)
-    signal state: integer range 0 to 42 := 0;
+    type state is (s_init, s_read_addr, s_read_data, s_write1, s_ready1, s_read1, s_end);
+    signal curr_state, next_state: state;
+    signal count: std_logic_vector(3 downto 0) := (others => '0');
 
-    -- inputs
-    signal start_addr: std_logic_vector(17 downto 0);
-    signal start_data: std_logic_vector(15 downto 0);
-
-    -- ram1 adaptor
-    signal en1: std_logic;
-    signal rd1: std_logic;
-    signal addr1: std_logic_vector(17 downto 0);
-    signal in1: std_logic_vector(15 downto 0);
-    signal out1: std_logic_vector(15 downto 0);
-
-    component RAMAdaptor
-        port (
-            clk: in std_logic;
-
-            addr: in std_logic_vector(17 downto 0);
-            data_in: in std_logic_vector(15 downto 0);
-            en: in std_logic;
-            rd: in std_logic;
-=======
-    type state is (s_init, s_ready, s_write1, s_read1, s_write2, s_read2, s_end);
-    signal current_state, next_state: state := s_init;
-    signal counter: std_logic_vector(3 downto 0) := (others => '0');
-    signal addr: std_logic_vector(17 downto 0) := (others => '0');
-    signal data: std_logic_vector(15 downto 0) := (others => '0');
 begin
-    -- state machine
-    process(current_state, inputs)
+    machine : process(curr_state)
     begin
-        case current_state is
+        case curr_state is
             when s_init =>
-                next_state <= s_ready;
-                oe1 <= '1';
-                we1 <= '1';
-                en1 <= '1';
-                oe2 <= '1';
-                we2 <= '1';
-                en2 <= '0';
-                counter <= (others => '0');
-            when s_ready =>
+                ram1_en <= '1';
+                ram2_en <= '0';
+                next_state <= s_read_addr;
+            when s_read_addr =>
+                start_addr <= "00" & inputs;
+                next_state <= s_read_data;
+            when s_read_data =>
+                start_data <= inputs;
+                ram1_oe <= '1';
+                ram1_we <= '1';
                 next_state <= s_write1;
-                counter <= "0001";
-                addr <= "0000000000" & inputs(15 downto 8);
-                data <= "00000000" & inputs(7 downto 0);
-                addr1 <= addr;
-                data1 <= data;
-                we1 <= '0';
             when s_write1 =>
-                if counter /= "1001" then
-                    next_state <= s_write1;
-                    counter <= counter + "1";
-                    addr1 <= addr + counter - "1";
-                    data1 <= data + counter - "1";
-                else
+                ram1_we <= '0';
+                count <= count + "1";
+                next_state <= s_ready1;
+            when s_ready1 =>
+                ram1_we <= '1';
+                if count = "1010" then -- write ram1 done
+                    ram1_oe <= '0';
+                    ram1_data <= (others => 'Z');
+                    ram1_addr <= start_addr;
+                    count <= "0000";
                     next_state <= s_read1;
-                    counter <= (others => '0');
-                    we1 <= '1';
-                    oe1 <= '0';
-                    data1 <= (others => 'Z');
+                else
+                    ram1_data <= start_data + count;
+                    ram1_addr <= start_addr + count;
+                    next_state <= s_write1;
                 end if;
             when s_read1 =>
-                if counter /= "1001" then
-                    next_state <= s_read1;
-                    counter <= counter + "1";
-                    addr1 <= addr + counter - "1";
-                    data <= data1;
-                    data1 <= (others => 'Z');
-                else
+                ram1_data <= (others => 'Z');
+                ram1_addr <= start_addr + count;
+                if count = "1010" then -- read ram1 done
                     next_state <= s_end;
-                    counter <= (others => '0');
-                    oe1 <= '0';
+                else
+                    count <= count + "1";
+                    next_state <= s_read1;
                 end if;
             when others =>
                 next_state <= s_end;
         end case;
     end process;
->>>>>>> 8a2f748c8579e61e459cac2e8a0dbc3ffb0cc72c
 
-            data_out: out std_logic_vector(15 downto 0) := (others => '0');
-
-            -- ram ports
-            ram_addr: out std_logic_vector(17 downto 0);
-            ram_data: inout std_logic_vector(15 downto 0);
-            ram_oe: out std_logic; -- output enabled
-            ram_we: out std_logic; -- write enabled
-            ram_en: out std_logic := '0' -- enabled
-        );
-    end component;
-
-    component Display
-        port (
-            state: in integer range 0 to 42 := 0;
-            display1: out std_logic_vector(0 to 6);
-            display2: out std_logic_vector(0 to 6)
-        );
-    end component;
-begin
-    transaction: process(clk, rst)
+    transaction : process(clk, rst)
     begin
         if rst = '0' then
-            state <= 0;
+            curr_state <= s_init;
         elsif falling_edge(clk) then
-            state <= state + 1;
+            curr_state <= next_state;
         end if;
     end process;
 
-    ctrl: process(state)
+    display : process(curr_state, count)
     begin
-        if state = 0 then
-            -- en2 <= '0';
-            en1 <= '1';
-            rd1 <= '0'; -- ready to write ram1
-        elsif state = 1 then
-            addr1 <= "00" & inputs(15 downto 0);
-            start_addr <= "00" & inputs(15 downto 0);
-        elsif state = 2 then
-            data1 <= inputs;
-            start_data <= inputs;
-        elsif state > 2 and state <= 11 then
-            addr1 <= start_addr + conv_std_logic_vector(state - 2, 18);
-            data1 <= start_data + conv_std_logic_vector(state - 2, 16);
-        elsif state = 12 then
-            addr1 <= start_addr;
-            rd1 <= '1';
-        elsif state > 12 and state <= 21 then
-            addr1 <= start_addr + conv_std_logic_vector(state - 2, 18);
+        case curr_state is
+            when s_init => display1 <= "1011011"; display2 <= "0000001"; -- S-
+            when s_read_addr => display1 <= "1011011"; display2 <= "1110111"; -- SA
+            when s_read_data => display1 <= "1011011"; display2 <= "0111110"; -- Sd
+            when s_write1 => display1 <= "0110000";
+            when s_ready1 => display1 <= "0000001"; display2 <= "0000001"; -- --
+            when s_read1 => display1 <= "0110000";
+            when s_end => display1 <= "1001111"; display2 <= "0000001"; -- E-
+            when others => display1 <= "0000000"; display2 <= "0000000"; --
+        end case;
+        if curr_state = s_write1 or curr_state = s_read1 then
+            case count is
+                when "0000" => display2 <= "1111110";
+                when "0001" => display2 <= "0110000";
+                when "0010" => display2 <= "1101101";
+                when "0011" => display2 <= "1111001";
+                when "0100" => display2 <= "0110011";
+                when "0101" => display2 <= "1011011";
+                when "0110" => display2 <= "0011111";
+                when "0111" => display2 <= "1110000";
+                when "1000" => display2 <= "1111111";
+                when "1001" => display2 <= "1110011";
+                when "1010" => display2 <= "1110111";
+                when others => display2 <= "0000000";
+            end case;
         end if;
     end process;
 
-    -- address and data display
-<<<<<<< HEAD
-    outputs(15 downto 8) <= addr1(7 downto 0);
-    outputs(7 downto 0) <= out1(7 downto 0);
-
-    r1: RAMAdaptor port map (
-        clk => clk,
-        addr => addr1,
-        data_in => in1,
-        en => en1,
-        rd => rd1,
-        data_out => out1,
-        ram_addr => ram1_addr,
-        ram_data => ram1_data,
-        ram_oe => ram1_oe,
-        ram_we => ram1_we,
-        ram_en => ram1_en
-    );
-
-    disp: Display port map (
-        state => state,
-        display1 => display1,
-        display2 => display2
-    );
-=======
-    outputs(15 downto 8) <= addr(7 downto 0) + counter - "1";
-    outputs(7 downto 0) <= data(7 downto 0);
->>>>>>> 8a2f748c8579e61e459cac2e8a0dbc3ffb0cc72c
+    outputs(15 downto 8) <= ram1_addr(7 downto 0);
+    outputs(7 downto 0) <= ram1_data(7 downto 0);
 end arch;
