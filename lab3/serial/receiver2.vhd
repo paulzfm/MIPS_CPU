@@ -29,7 +29,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity receiver is
+entity receiver2 is
     Port ( clk : in STD_LOGIC;
 		     rst :¡¡in STD_LOGIC;
 			  rdn : out  STD_LOGIC;
@@ -38,7 +38,7 @@ entity receiver is
 			  data_ready : in STD_LOGIC);
 end receiver;
 
-architecture Behavioral of receiver is
+architecture Behavioral of receiver2 is
 signal status : integer(0 to 10);
 
 begin
