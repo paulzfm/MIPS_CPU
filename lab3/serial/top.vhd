@@ -33,7 +33,7 @@ entity top is
     Port ( clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
            sw : in  STD_LOGIC_VECTOR (7 downto 0);
-           l : in  STD_LOGIC_VECTOR (7 downto 0);
+           l : out  STD_LOGIC_VECTOR (7 downto 0);
            ram1data : inout  STD_LOGIC_VECTOR (7 downto 0);
            ram1re : out  STD_LOGIC;
            ram1oe : out  STD_LOGIC;
@@ -49,12 +49,12 @@ architecture Behavioral of top is
 
 component receiver is port(
 	clk : in STD_LOGIC;
-	rst :¡¡in STD_LOGIC;
-	rdn : out  STD_LOGIC;
+	rst : in STD_LOGIC;
+	rdn : out STD_LOGIC;
 	data_ready : in  STD_LOGIC;
-	data : inout  STD_LOGIC_VECTOR (7 downto 0)
-	rev_data_ready : in STD_LOGIC
-)
+	data : inout  STD_LOGIC_VECTOR (7 downto 0);
+	rev_data_ready : out STD_LOGIC
+);
 end component;
 
 signal rev_data_ready : STD_LOGIC := '0';
@@ -67,7 +67,7 @@ begin
 	-- receiver QDC --------------------------
 	rev : receiver port map(
 		clk => clk,
-		rst => reset,
+		rst => rst,
 		rdn => rdn, 
 		data_ready => data_ready,
 		data => ram1data,
@@ -76,10 +76,12 @@ begin
 	
 	process (rev_data_ready)
 	begin
-		if (rev_data_ready`event and rev_data_ready = '1')
+		if (rev_data_ready'event and rev_data_ready = '1')
+		then
 			l <= ram1data;
+		end if;
 	end process;
 	-- receiver end ---------------------------- 
-
+	
 end Behavioral;
 

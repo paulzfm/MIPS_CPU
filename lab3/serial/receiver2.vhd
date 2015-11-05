@@ -35,7 +35,8 @@ entity receiver2 is
 			  rdn : out  STD_LOGIC;
            data_ready : in  STD_LOGIC;
            data : inout  STD_LOGIC_VECTOR (7 downto 0)
-			  data_ready : in STD_LOGIC);
+			  rev_data_ready : out STD_LOGIC, 
+			  rev_next_epoch : in STD_LOGIC);
 end receiver;
 
 architecture Behavioral of receiver2 is
@@ -51,6 +52,11 @@ begin
 		else
 			if (clk`event and clk = 1)
 			then
+				if (rev_next_epoch = '1')
+				then
+					status = 0;
+				end if;
+				
 				case status is
 					when 0 => -- init status
 						data_read <= '0';
@@ -69,8 +75,10 @@ begin
 							
 						end if;
 					when 3 => -- read successful
-						status <= 1;
+						status <= status + 1;
 						data_read <= '1';
+					when 4 =>
+						status <= 4;
 					when others =>
 						status <= 0;
 				end case;
