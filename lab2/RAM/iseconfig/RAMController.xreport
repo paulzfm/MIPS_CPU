@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2015-11-04T16:11:19</DateModified>
+  <DateModified>2015-11-05T18:39:35</DateModified>
   <ModuleName>RAMController</ModuleName>
-  <SummaryTimeStamp>2015-11-04T16:06:51</SummaryTimeStamp>
+  <SummaryTimeStamp>2015-11-05T16:05:58</SummaryTimeStamp>
   <SavedFilePath>E:/XProjects/MIPS_CPU/lab2/RAM/iseconfig/RAMController.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>E:/XProjects/MIPS_CPU/lab2/RAM</ImplementationReportsDirectory>
+  <ImplementationReportsDirectory>E:/XProjects/MIPS_CPU/lab2/RAM\</ImplementationReportsDirectory>
   <DateInitialized>2015-11-04T15:36:00</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

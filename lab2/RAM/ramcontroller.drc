@@ -1,27 +1,30 @@
 Release 14.7 Drc P.20131013 (nt64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
-Wed Nov 04 22:35:23 2015
+Thu Nov 05 22:53:20 2015
 
 drc -z RAMController.ncd RAMController.pcf
 
-WARNING:PhysDesignRules:372 - Gated clock. Clock net Mtrien_data1_not0001 is
+WARNING:PhysDesignRules:372 - Gated clock. Clock net Mtrien_ram1_data_not0001 is
    sourced by a combinatorial pin. This is not good design practice. Use the CE
    pin to control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net data_not0001 is sourced by
-   a combinatorial pin. This is not good design practice. Use the CE pin to
-   control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net display1_0_OBUF is sourced
+WARNING:PhysDesignRules:372 - Gated clock. Clock net Mtrien_ram2_data_not0001 is
+   sourced by a combinatorial pin. This is not good design practice. Use the CE
+   pin to control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net curr_addr_or0000 is sourced
    by a combinatorial pin. This is not good design practice. Use the CE pin to
    control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net we1_not0001 is sourced by a
-   combinatorial pin. This is not good design practice. Use the CE pin to
-   control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net display1_1_OBUF is sourced
+WARNING:PhysDesignRules:372 - Gated clock. Clock net ram2_en_not0001 is sourced
    by a combinatorial pin. This is not good design practice. Use the CE pin to
    control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net addr1_not0001 is sourced by
-   a combinatorial pin. This is not good design practice. Use the CE pin to
+WARNING:PhysDesignRules:372 - Gated clock. Clock net ram1_we_or0000 is sourced
+   by a combinatorial pin. This is not good design practice. Use the CE pin to
    control the loading of data into the flip-flop.
-DRC detected 0 errors and 6 warnings.  Please see the previously displayed
+WARNING:PhysDesignRules:372 - Gated clock. Clock net ram2_oe_or0000 is sourced
+   by a combinatorial pin. This is not good design practice. Use the CE pin to
+   control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net curr_data_or0000 is sourced
+   by a combinatorial pin. This is not good design practice. Use the CE pin to
+   control the loading of data into the flip-flop.
+DRC detected 0 errors and 7 warnings.  Please see the previously displayed
 individual error or warning messages for more details.
