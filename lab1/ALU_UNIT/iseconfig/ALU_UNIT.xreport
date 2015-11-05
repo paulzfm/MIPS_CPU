@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2015-10-16T12:04:58</DateModified>
+  <DateModified>2015-11-05T19:56:36</DateModified>
   <ModuleName>ALU_UNIT</ModuleName>
   <SummaryTimeStamp>2015-10-16T08:17:30</SummaryTimeStamp>
-  <SavedFilePath>E:/XProjects/MIPS_CPU/lab1/ALU_UNIT/iseconfig/ALU_UNIT.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>E:/XProjects/MIPS_CPU/lab1/ALU_UNIT\</ImplementationReportsDirectory>
+  <SavedFilePath>C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT/iseconfig/ALU_UNIT.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>C:/Users/pc/Documents/GitHub/MIPS_CPU/lab1/ALU_UNIT\</ImplementationReportsDirectory>
   <DateInitialized>2015-10-15T20:38:00</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

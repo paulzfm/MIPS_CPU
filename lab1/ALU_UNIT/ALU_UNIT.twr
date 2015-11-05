@@ -2,7 +2,7 @@
 Release 14.7 Trace  (nt64)
 Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
-C:\Xilinx\14.7\ISE_DS\ISE\bin\nt64\unwrapped\trce.exe -intstyle ise -v 3 -s 4
+D:\Xilinx\14.7\ISE_DS\ISE\bin\nt64\unwrapped\trce.exe -intstyle ise -v 3 -s 4
 -n 3 -fastpaths -xml ALU_UNIT.twx ALU_UNIT.ncd -o ALU_UNIT.twr ALU_UNIT.pcf
 -ucf ALU_UNIT.ucf
 
@@ -99,14 +99,14 @@ CLK            |    3.767|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 
-Analysis completed Fri Oct 16 12:29:27 2015 
+Analysis completed Fri Oct 16 15:45:14 2015 
 --------------------------------------------------------------------------------
 
 Trace Settings:
 -------------------------
 Trace Settings 
 
-Peak Memory Usage: 255 MB
+Peak Memory Usage: 198 MB
 
 
 
