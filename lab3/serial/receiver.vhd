@@ -35,7 +35,7 @@ entity receiver is
 			  rdn : out  STD_LOGIC;
            data_ready : in  STD_LOGIC;
            data : inout  STD_LOGIC_VECTOR (7 downto 0)
-			  data_read : in STD_LOGIC);
+			  data_ready : in STD_LOGIC);
 end receiver;
 
 architecture Behavioral of receiver is
