@@ -1,0 +1,282 @@
+Release 14.7 - xst P.20131013 (nt64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.38 secs
+ 
+--> Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.38 secs
+ 
+--> Reading design: RAMController.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+	9.1) Device utilization summary
+	9.2) Partition Resource Summary
+	9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "RAMController.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "RAMController"
+Output Format                      : NGC
+Target Device                      : xc3s1200e-4-fg320
+
+---- Source Options
+Top Module Name                    : RAMController
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : LUT
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Mux Style                          : Auto
+Decoder Extraction                 : YES
+Priority Encoder Extraction        : Yes
+Shift Register Extraction          : YES
+Logical Shifter Extraction         : YES
+XOR Collapsing                     : YES
+ROM Style                          : Auto
+Mux Extraction                     : Yes
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Multiplier Style                   : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 100000
+Add Generic Clock Buffer(BUFG)     : 24
+Register Duplication               : YES
+Slice Packing                      : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Yes
+Use Synchronous Set                : Yes
+Use Synchronous Reset              : Yes
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+Verilog 2001                       : YES
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "E:/XProjects/MIPS_CPU/lab2/RAMController.vhdl" in Library work.
+Architecture arch of Entity ramcontroller is up to date.
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <RAMController> in library <work> (architecture <arch>).
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing Entity <RAMController> in library <work> (Architecture <arch>).
+WARNING:Xst:819 - "E:/XProjects/MIPS_CPU/lab2/RAMController.vhdl" line 42: One or more signals are missing in the process sensitivity list. To enable synthesis of FPGA/CPLD hardware, XST will assume that all necessary signals are present in the sensitivity list. Please note that the result of the synthesis may differ from the initial design specification. The missing signals are:
+   <inputs>
+INFO:Xst:2679 - Register <ram2_en> in unit <RAMController> has a constant value of 0 during circuit operation. The register is replaced by logic.
+Entity <RAMController> analyzed. Unit <RAMController> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <RAMController>.
+    Related source file is "E:/XProjects/MIPS_CPU/lab2/RAMController.vhdl".
+WARNING:Xst:2565 - Inout <ram2_data<12>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<13>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<14>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<15>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<0>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<1>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<2>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<3>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<4>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<5>> is never assigned.
+WARNING:Xst:1306 - Output <ram2_oe> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<6>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<7>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<8>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<9>> is never assigned.
+WARNING:Xst:1306 - Output <ram2_addr> is never assigned.
+WARNING:Xst:1306 - Output <ram2_we> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<10>> is never assigned.
+WARNING:Xst:2565 - Inout <ram2_data<11>> is never assigned.
+    Found finite state machine <FSM_0> for signal <curr_state>.
+    -----------------------------------------------------------------------
+    | States             | 7                                              |
+    | Transitions        | 9                                              |
+    | Inputs             | 1                                              |
+    | Outputs            | 13                                             |
+    | Clock              | clk                       (falling_edge)       |
+    | Reset              | rst                       (negative)           |
+    | Reset type         | asynchronous                                   |
+    | Reset State        | s_init                                         |
+    | Power Up State     | s_init                                         |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+WARNING:Xst:737 - Found 1-bit latch for signal <ram1_en>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:736 - Found 16-bit latch for signal <Mtridata_ram1_data> created at line 56. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 16-bit latch for signal <start_data>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 18-bit latch for signal <start_addr>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:736 - Found 1-bit latch for signal <Mtrien_ram1_data> created at line 56. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
+WARNING:Xst:737 - Found 18-bit latch for signal <curr_addr>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
+WARNING:Xst:737 - Found 16-bit latch for signal <curr_data>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
+WARNING:Xst:737 - Found 7-bit latch for signal <display2>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
+WARNING:Xst:737 - Found 1-bit latch for signal <ram1_we>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
+WARNING:Xst:737 - Found 1-bit latch for signal <ram1_oe>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
+WARNING:Xst:737 - Found 18-bit latch for signal <ram1_addr>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
+WARNING:Xst:737 - Found 4-bit latch for signal <count>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+INFO:Xst:2371 - HDL ADVISOR - Logic functions respectively driving the data and gate enable inputs of this latch share common terms. This situation will potentially lead to setup/hold violations and, as a result, to simulation problems. This situation may come from an incomplete case statement (all selector values are not covered). You should carefully review if it was in your intentions to describe such a latch.
+    Found 16-bit tristate buffer for signal <ram1_data>.
+    Found 4-bit adder for signal <count$share0000> created at line 44.
+    Found 18-bit adder for signal <curr_addr$add0000> created at line 83.
+    Found 16-bit adder for signal <mux0000$addsub0000> created at line 76.
+    Found 18-bit adder for signal <ram1_addr$addsub0000> created at line 77.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   4 Adder/Subtractor(s).
+	inferred  16 Tristate(s).
+Unit <RAMController> synthesized.
+
+INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 4
+ 16-bit adder                                          : 1
+ 18-bit adder                                          : 2
+ 4-bit adder                                           : 1
+# Latches                                              : 12
+ 1-bit latch                                           : 4
+ 16-bit latch                                          : 3
+ 18-bit latch                                          : 3
+ 4-bit latch                                           : 1
+ 7-bit latch                                           : 1
+# Tristates                                            : 1
+ 16-bit tristate buffer                                : 1
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <curr_state/FSM> on signal <curr_state[1:7]> with one-hot encoding.
+-------------------------
+ State       | Encoding
+-------------------------
+ s_init      | 0000001
+ s_read_addr | 0000010
+ s_read_data | 0000100
+ s_write1    | 0001000
+ s_ready1    | 0010000
+ s_read1     | 0100000
+ s_end       | 1000000
+-------------------------
+WARNING:Xst:1426 - The value init of the FF/Latch 0 hinder the constant cleaning in the block ram1_en.
+   You should achieve better results by setting this init to 1.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <16>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <17>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1294 - Latch <0> is equivalent to a wire in block <0>.
+WARNING:Xst:1294 - Latch <0> is equivalent to a wire in block <1>.
+WARNING:Xst:1294 - Latch <0> is equivalent to a wire in block <2>.
+WARNING:Xst:1294 - Latch <0> is equivalent to a wire in block <3>.
+WARNING:Xst:1294 - Latch <0> is equivalent to a wire in block <4>.
+WARNING:Xst:1294 - Latch <0> is equivalent to a wire in block <5>.
+WARNING:Xst:1294 - Latch <0> is equivalent to a wire in block <6>.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 1
+# Adders/Subtractors                                   : 4
+ 16-bit adder                                          : 1
+ 18-bit adder                                          : 2
+ 4-bit adder                                           : 1
+# Latches                                              : 12
+ 1-bit latch                                           : 4
+ 16-bit latch                                          : 3
+ 18-bit latch                                          : 3
+ 4-bit latch                                           : 1
+ 7-bit latch                                           : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1426 - The value init of the FF/Latch ram1_en hinder the constant cleaning in the block RAMController.
+   You should achieve better results by setting this init to 1.
+WARNING:Xst:1294 - Latch <display2_0> is equivalent to a wire in block <RAMController>.
+WARNING:Xst:1294 - Latch <display2_1> is equivalent to a wire in block <RAMController>.
+WARNING:Xst:1294 - Latch <display2_2> is equivalent to a wire in block <RAMController>.
+WARNING:Xst:1294 - Latch <display2_3> is equivalent to a wire in block <RAMController>.
+WARNING:Xst:1294 - Latch <display2_4> is equivalent to a wire in block <RAMController>.
+WARNING:Xst:1294 - Latch <display2_5> is equivalent to a wire in block <RAMController>.
+WARNING:Xst:1294 - Latch <display2_6> is equivalent to a wire in block <RAMController>.
+WARNING:Xst:1710 - FF/Latch <curr_addr_17> (without init value) has a constant value of 0 in block <RAMController>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <start_addr_16> (without init value) has a constant value of 0 in block <RAMController>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <start_addr_17> (without init value) has a constant value of 0 in block <RAMController>. This FF/Latch will be trimmed during the optimization process.
+
+Optimizing unit <RAMController> ...

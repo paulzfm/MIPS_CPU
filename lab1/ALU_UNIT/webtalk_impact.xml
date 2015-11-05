@@ -3,16 +3,22 @@
 <!--The data in this file is primarily intended for consumption by Xilinx tools.
 The structure and the elements are likely to change over the next few releases.
 This means code written to parse this file will need to be revisited each subsequent release.-->
+<<<<<<< HEAD
 <application name="impact" timeStamp="Fri Oct 16 16:06:31 2015">
 <section name="Project Information" visible="false">
 <property name="ProjectID" value="e1c5962d3a2e4073b01c986837251c05"/>
+=======
+<application name="impact" timeStamp="Wed Nov 04 22:37:27 2015">
+<section name="Project Information" visible="false">
+<property name="ProjectID" value="3f3402ca2d1042d1ae976a0c1219e5fb"/>
+>>>>>>> 260bde9d802736bddb0bcac4fcfaa5c6d4f85802
 <property name="ProjectIteration" value="1"/>
 </section>
 <section name="iMPACT Project Info" visible="true">
 <property name="Use Project File" value="No"/>
 <property name="Project Entry" value="ise"/>
-<property name="OS Name" value="Microsoft Windows NT (64 Bit)"/>
-<property name="User Lic. Info" value="__0_0_0"/>
+<property name="OS Name" value="Microsoft Windows 7 (64 Bit)"/>
+<property name="User Lic. Info" value="135256_15690819_173552794_661"/>
 </section>
 <section name="iMPACT One Step SVF File Mode" visible="true">
 <item name="Chain Summary">
@@ -25,6 +31,8 @@ This means code written to parse this file will need to be revisited each subseq
 <property name="Part1" value="xc3s1200e"/>
 </item>
 <item name="Boundary Scan Operations Statistics">
+<property name="BSCAN Operation" value="Program -p 0
+"/>
 <property name="BSCAN Operation" value="Program -p 0
 "/>
 </item>

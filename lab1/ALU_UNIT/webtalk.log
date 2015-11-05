@@ -3,7 +3,11 @@ Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
 
 Project Information
 --------------------
+<<<<<<< HEAD
 ProjectID=e1c5962d3a2e4073b01c986837251c05
+=======
+ProjectID=3f3402ca2d1042d1ae976a0c1219e5fb
+>>>>>>> 260bde9d802736bddb0bcac4fcfaa5c6d4f85802
 ProjectIteration=1
 
 WebTalk Summary
