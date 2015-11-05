@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    20:01:16 11/05/2015 
+-- Create Date:    20:09:20 11/05/2015 
 -- Design Name: 
--- Module Name:    top - Behavioral 
+-- Module Name:    receiver - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,23 +29,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity top is
-    Port ( click : in  STD_LOGIC;
-           reset : in  STD_LOGIC;
-           sw : in  STD_LOGIC_VECTOR (7 downto 0);
-           l : in  STD_LOGIC_VECTOR (7 downto 0);
-           ram1data : inout  STD_LOGIC_VECTOR (7 downto 0);
-           ram1re : out  STD_LOGIC;
-           ram1oe : out  STD_LOGIC;
-           ram1en : out  STD_LOGIC;
+entity receiver is
+    Port ( rdn : out  STD_LOGIC;
            data_ready : in  STD_LOGIC;
-           rdn : out  STD_LOGIC;
-           tbre : out  STD_LOGIC;
-           tsre : out  STD_LOGIC;
-           wrn : out  STD_LOGIC);
-end top;
+           data : inout  STD_LOGIC_VECTOR (7 downto 0));
+end receiver;
 
-architecture Behavioral of top is
+architecture Behavioral of receiver is
 
 begin
 
