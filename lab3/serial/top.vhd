@@ -30,8 +30,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity top is
-    Port ( click : in  STD_LOGIC;
-           reset : in  STD_LOGIC;
+    Port ( clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
            sw : in  STD_LOGIC_VECTOR (7 downto 0);
            l : in  STD_LOGIC_VECTOR (7 downto 0);
            ram1data : inout  STD_LOGIC_VECTOR (7 downto 0);
@@ -46,8 +46,45 @@ entity top is
 end top;
 
 architecture Behavioral of top is
+<<<<<<< HEAD
 SIGNAL state :STD_LOGIC_VECTOR (2 downto 0) := (others => '0');
 begin
 
+=======
+
+component receiver is port(
+	clk : in STD_LOGIC;
+	rst :¡¡in STD_LOGIC;
+	rdn : out  STD_LOGIC;
+	data_ready : in  STD_LOGIC;
+	data : inout  STD_LOGIC_VECTOR (7 downto 0)
+	data_ready : in STD_LOGIC
+)
+end component;
+
+signal rev_data_ready : STD_LOGIC := '0';
+
+begin
+	ram1re <= '1';
+	ram1oe <= '1';
+	ram1en <= '1';
+	
+	-- receiver QDC --------------------------
+	rev : receiver port map(
+		clk => clk,
+		rst => reset,
+		rdn => rdn, 
+		data_ready => data_ready,
+		data => ram1data,
+		data_ready => rev_data_ready
+	);
+	
+	process (rev_data_ready)
+	begin
+		l <= ram1data;
+	end process;
+	-- receiver end ---------------------------- 
+
+>>>>>>> 2110b398fba98132353b412080d196a7c840212f
 end Behavioral;
 
