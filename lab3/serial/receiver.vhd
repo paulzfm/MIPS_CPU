@@ -30,15 +30,52 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity receiver is
-    Port ( rdn : out  STD_LOGIC;
+    Port ( clk : in STD_LOGIC;
+		     rst :¡¡in STD_LOGIC;
+			  rdn : out  STD_LOGIC;
            data_ready : in  STD_LOGIC;
-           data : inout  STD_LOGIC_VECTOR (7 downto 0));
+           data : inout  STD_LOGIC_VECTOR (7 downto 0)
+			  data_read : in STD_LOGIC);
 end receiver;
 
 architecture Behavioral of receiver is
+signal status : integer(0 to 10);
 
 begin
 
-
+	process(clk, rst)
+	begin
+		if (rst = '0')
+		then
+			status = 0;
+		else
+			if (clk`event and clk = 1)
+			then
+				case status is
+					when 0 =>
+						data_read <= '0';
+						status <= '1';
+					when 1 =>
+						rdn <= '1';
+						data_read <= '0';
+						status <= status + 1;
+						data <= (others => 'Z');
+					when 2 =>
+						if (data_ready = '1')
+						then
+							status <= status + 1;
+							rdn <= '0';
+						else
+							
+						end if;
+					when 3 =>
+						status <= 1;
+						data_read <= '1';
+					when others =>
+						status <= 0;
+				end case;
+			end if;
+		end if;
+	end process;
 end Behavioral;
 
