@@ -58,7 +58,7 @@ component receiver is port(
 	rdn : out  STD_LOGIC;
 	data_ready : in  STD_LOGIC;
 	data : inout  STD_LOGIC_VECTOR (7 downto 0)
-	data_ready : in STD_LOGIC
+	rev_data_ready : in STD_LOGIC
 )
 end component;
 
@@ -76,12 +76,13 @@ begin
 		rdn => rdn, 
 		data_ready => data_ready,
 		data => ram1data,
-		data_ready => rev_data_ready
+		rev_data_ready => rev_data_ready
 	);
 	
 	process (rev_data_ready)
 	begin
-		l <= ram1data;
+		if (rev_data_ready`event and rev_data_ready = '1')
+			l <= ram1data;
 	end process;
 	-- receiver end ---------------------------- 
 
