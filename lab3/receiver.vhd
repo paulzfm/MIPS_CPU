@@ -35,7 +35,10 @@ entity receiver is
 			  rdn : out  STD_LOGIC;
            data_ready : in  STD_LOGIC;
            data : inout  STD_LOGIC_VECTOR (7 downto 0);
-			  rev_data_ready : out STD_LOGIC);
+			  rev_data_ready : out STD_LOGIC;
+			  ram1we : out  STD_LOGIC;
+           ram1oe : out  STD_LOGIC;
+			  ram1en : out  STD_LOGIC);
 end receiver;
 
 architecture Behavioral of receiver is
@@ -56,6 +59,9 @@ begin
 						rev_data_ready <= '0';
 						status <= 1;
 					when 1 => -- start read
+						ram1we <= '1';
+						ram1oe <= '1';
+						ram1en <= '1';
 						rdn <= '1';
 						rev_data_ready <= '0';
 						status <= status + 1;

@@ -35,7 +35,7 @@ entity top is
            sw : in  STD_LOGIC_VECTOR (7 downto 0);
            l : out  STD_LOGIC_VECTOR (7 downto 0);
            ram1data : inout  STD_LOGIC_VECTOR (7 downto 0);
-           ram1re : out  STD_LOGIC;
+           ram1we : out  STD_LOGIC;
            ram1oe : out  STD_LOGIC;
            ram1en : out  STD_LOGIC;
            data_ready : in  STD_LOGIC;
@@ -53,16 +53,17 @@ component receiver is port(
 	rdn : out STD_LOGIC;
 	data_ready : in  STD_LOGIC;
 	data : inout  STD_LOGIC_VECTOR (7 downto 0);
-	rev_data_ready : out STD_LOGIC
+	rev_data_ready : out STD_LOGIC;
+	ram1we : out  STD_LOGIC;
+   ram1oe : out  STD_LOGIC;
+   ram1en : out  STD_LOGIC
 );
 end component;
 
 signal rev_data_ready : STD_LOGIC := '0';
 
 begin
-	ram1re <= '1';
-	ram1oe <= '1';
-	ram1en <= '1';
+	
 	
 	-- receiver QDC --------------------------
 	rev : receiver port map(
@@ -71,7 +72,10 @@ begin
 		rdn => rdn, 
 		data_ready => data_ready,
 		data => ram1data,
-		rev_data_ready => rev_data_ready
+		rev_data_ready => rev_data_ready,
+		ram1we => ram1we,
+		ram1oe => ram1oe,
+		ram1en => ram1en
 	);
 	
 	process (rev_data_ready)
