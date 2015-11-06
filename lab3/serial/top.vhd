@@ -33,59 +33,67 @@ entity top is
     Port ( clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
            sw : in  STD_LOGIC_VECTOR (7 downto 0);
-           l : in  STD_LOGIC_VECTOR (7 downto 0);
+           l : out  STD_LOGIC_VECTOR (7 downto 0);
            ram1data : inout  STD_LOGIC_VECTOR (7 downto 0);
-           ram1re : out  STD_LOGIC;
+           ram1we : out  STD_LOGIC;
            ram1oe : out  STD_LOGIC;
            ram1en : out  STD_LOGIC;
            data_ready : in  STD_LOGIC;
            rdn : out  STD_LOGIC;
-           tbre : out  STD_LOGIC;
-           tsre : out  STD_LOGIC;
+           tbre : in  STD_LOGIC;
+           tsre : in  STD_LOGIC;
            wrn : out  STD_LOGIC);
 end top;
 
 architecture Behavioral of top is
-<<<<<<< HEAD
-SIGNAL state :STD_LOGIC_VECTOR (2 downto 0) := (others => '0');
-begin
 
-=======
 
-component receiver is port(
-	clk : in STD_LOGIC;
-	rst :¡¡in STD_LOGIC;
-	rdn : out  STD_LOGIC;
-	data_ready : in  STD_LOGIC;
-	data : inout  STD_LOGIC_VECTOR (7 downto 0)
-	rev_data_ready : in STD_LOGIC
-)
+--component receiver is port(
+--	clk : in STD_LOGIC;
+--	rst :¡¡in STD_LOGIC;
+--	rdn : out  STD_LOGIC;
+--	data_ready : in  STD_LOGIC;
+--	data : inout  STD_LOGIC_VECTOR (7 downto 0)
+--	rev_data_ready : in STD_LOGIC
+--)
+--end component;
+
+component sender is port(
+			  clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
+           sw : in  STD_LOGIC_VECTOR (7 downto 0);
+           ram1data : inout  STD_LOGIC_VECTOR (7 downto 0);
+           ram1we : out  STD_LOGIC;
+           ram1oe : out  STD_LOGIC;
+           ram1en : out  STD_LOGIC;
+           tbre : in  STD_LOGIC;
+           tsre : in  STD_LOGIC;
+           wrn : out  STD_LOGIC
+);
 end component;
 
 signal rev_data_ready : STD_LOGIC := '0';
 
 begin
-	ram1re <= '1';
-	ram1oe <= '1';
-	ram1en <= '1';
-	
-	-- receiver QDC --------------------------
-	rev : receiver port map(
-		clk => clk,
-		rst => reset,
-		rdn => rdn, 
-		data_ready => data_ready,
-		data => ram1data,
-		rev_data_ready => rev_data_ready
-	);
-	
-	process (rev_data_ready)
-	begin
-		if (rev_data_ready`event and rev_data_ready = '1')
-			l <= ram1data;
-	end process;
-	-- receiver end ---------------------------- 
 
->>>>>>> 2110b398fba98132353b412080d196a7c840212f
+	-- sender YZP --------------------------
+	snd : sender port map(
+		clk => clk,
+		rst => rst,
+		sw => sw,
+		ram1data => ram1data,
+		ram1we => ram1we,
+		ram1oe => ram1oe,
+		ram1en => ram1en,
+		tbre => tbre, 
+		tsre => tsre,
+		wrn => wrn
+	);
+	l <= "00000000";
+	rdn <= '0';
+	-- sender end ---------------------------- 
+	
+	
+
 end Behavioral;
 

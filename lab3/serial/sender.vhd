@@ -30,25 +30,22 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity sender is
-	Port ( click : in  STD_LOGIC;
-           reset : in  STD_LOGIC;
+	Port ( clk : in  STD_LOGIC;
+           rst : in  STD_LOGIC;
            sw : in  STD_LOGIC_VECTOR (7 downto 0);
-           l : in  STD_LOGIC_VECTOR (7 downto 0);
            ram1data : inout  STD_LOGIC_VECTOR (7 downto 0);
-           ram1re : out  STD_LOGIC;
+           ram1we : out  STD_LOGIC;
            ram1oe : out  STD_LOGIC;
            ram1en : out  STD_LOGIC;
-           data_ready : in  STD_LOGIC;
-           rdn : out  STD_LOGIC;
-           tbre : out  STD_LOGIC;
-           tsre : out  STD_LOGIC;
+           tbre : in  STD_LOGIC;
+           tsre : in  STD_LOGIC;
            wrn : out  STD_LOGIC);
 end sender;
 
 architecture Behavioral of sender is
-
+SIGNAL state :STD_LOGIC_VECTOR (2 downto 0) := (others => '0');
 begin
-process(click,rst,data_ready)
+process(clk,rst)
 begin
 	if(rst = '0') then
 		state <= "000";
@@ -57,9 +54,9 @@ begin
 			when "000" =>
 				state <= "001";
 				wrn <= '1';
-				ram1_en <= '1';
-				ram1_oe <= '1';
-				ram1_rw <= '1';
+				ram1en <= '1';
+				ram1oe <= '1';
+				ram1we <= '1';
 			when "001" =>
 				state <= "010";
 				ram1data <= sw;
