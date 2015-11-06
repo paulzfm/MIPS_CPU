@@ -48,6 +48,7 @@ end top;
 architecture Behavioral of top is
 
 
+
 --component receiver is port(
 --	clk : in STD_LOGIC;
 --	rst :¡¡in STD_LOGIC;
@@ -93,7 +94,9 @@ begin
 	rdn <= '0';
 	-- sender end ---------------------------- 
 	
+
 	
+
 
 end Behavioral;
 

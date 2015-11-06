@@ -9,30 +9,33 @@ Target Device  : xc3s1200e
 Target Package : fg320
 Target Speed   : -4
 Mapper Version : spartan3e -- $Revision: 1.55 $
-Mapped Date    : Wed Nov 04 22:33:06 2015
+Mapped Date    : Thu Nov 05 22:52:16 2015
 
 Mapping design into LUTs...
 Running directed packing...
 Running delay-based LUT packing...
 Running related packing...
 Updating timing models...
-WARNING:PhysDesignRules:372 - Gated clock. Clock net Mtrien_data1_not0001 is
+WARNING:PhysDesignRules:372 - Gated clock. Clock net Mtrien_ram1_data_not0001 is
    sourced by a combinatorial pin. This is not good design practice. Use the CE
    pin to control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net data_not0001 is sourced by
-   a combinatorial pin. This is not good design practice. Use the CE pin to
-   control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net display1_0_OBUF is sourced
+WARNING:PhysDesignRules:372 - Gated clock. Clock net Mtrien_ram2_data_not0001 is
+   sourced by a combinatorial pin. This is not good design practice. Use the CE
+   pin to control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net curr_addr_or0000 is sourced
    by a combinatorial pin. This is not good design practice. Use the CE pin to
    control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net we1_not0001 is sourced by a
-   combinatorial pin. This is not good design practice. Use the CE pin to
-   control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net display1_1_OBUF is sourced
+WARNING:PhysDesignRules:372 - Gated clock. Clock net ram2_en_not0001 is sourced
    by a combinatorial pin. This is not good design practice. Use the CE pin to
    control the loading of data into the flip-flop.
-WARNING:PhysDesignRules:372 - Gated clock. Clock net addr1_not0001 is sourced by
-   a combinatorial pin. This is not good design practice. Use the CE pin to
+WARNING:PhysDesignRules:372 - Gated clock. Clock net ram1_we_or0000 is sourced
+   by a combinatorial pin. This is not good design practice. Use the CE pin to
+   control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net ram2_oe_or0000 is sourced
+   by a combinatorial pin. This is not good design practice. Use the CE pin to
+   control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net curr_data_or0000 is sourced
+   by a combinatorial pin. This is not good design practice. Use the CE pin to
    control the loading of data into the flip-flop.
 
 Design Summary
@@ -40,31 +43,31 @@ Design Summary
 
 Design Summary:
 Number of errors:      0
-Number of warnings:    6
+Number of warnings:    7
 Logic Utilization:
-  Total Number Slice Registers:          41 out of  17,344    1%
-    Number used as Flip Flops:            5
-    Number used as Latches:              36
-  Number of 4 input LUTs:               187 out of  17,344    1%
+  Total Number Slice Registers:          81 out of  17,344    1%
+    Number used as Flip Flops:           16
+    Number used as Latches:              65
+  Number of 4 input LUTs:               238 out of  17,344    1%
 Logic Distribution:
-  Number of occupied Slices:            107 out of   8,672    1%
-    Number of Slices containing only related logic:     107 out of     107 100%
-    Number of Slices containing unrelated logic:          0 out of     107   0%
+  Number of occupied Slices:            144 out of   8,672    1%
+    Number of Slices containing only related logic:     144 out of     144 100%
+    Number of Slices containing unrelated logic:          0 out of     144   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:         209 out of  17,344    1%
-    Number used as logic:               187
-    Number used as a route-thru:         22
+  Total Number of 4 input LUTs:         251 out of  17,344    1%
+    Number used as logic:               238
+    Number used as a route-thru:         13
 
   The Slice Logic Distribution report is not meaningful if the design is
   over-mapped for a non-slice resource or if Placement fails.
 
-  Number of bonded IOBs:                 88 out of     250   35%
-    IOB Latches:                         53
+  Number of bonded IOBs:                123 out of     250   49%
+    IOB Latches:                        119
   Number of BUFGMUXs:                     1 out of      24    4%
 
-Average Fanout of Non-Clock Nets:                2.17
+Average Fanout of Non-Clock Nets:                2.44
 
-Peak Memory Usage:  364 MB
+Peak Memory Usage:  365 MB
 Total REAL time to MAP completion:  6 secs 
 Total CPU time to MAP completion:   6 secs 
 

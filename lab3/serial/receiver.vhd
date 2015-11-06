@@ -31,15 +31,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity receiver is
     Port ( clk : in STD_LOGIC;
-		     rst :¡¡in STD_LOGIC;
+		     rst : in STD_LOGIC;
 			  rdn : out  STD_LOGIC;
            data_ready : in  STD_LOGIC;
-           data : inout  STD_LOGIC_VECTOR (7 downto 0)
-			  data_ready : in STD_LOGIC);
+           data : inout  STD_LOGIC_VECTOR (7 downto 0);
+			  rev_data_ready : out STD_LOGIC);
 end receiver;
 
 architecture Behavioral of receiver is
-signal status : integer(0 to 10);
+signal status : integer range 0 to 10;
 
 begin
 
@@ -47,17 +47,17 @@ begin
 	begin
 		if (rst = '0')
 		then
-			status = 0;
+			status <= 0;
 		else
-			if (clk`event and clk = 1)
+			if (clk'event and clk = '1')
 			then
 				case status is
 					when 0 => -- init status
-						data_read <= '0';
-						status <= '1';
+						rev_data_ready <= '0';
+						status <= 1;
 					when 1 => -- start read
 						rdn <= '1';
-						data_read <= '0';
+						rev_data_ready <= '0';
 						status <= status + 1;
 						data <= (others => 'Z');
 					when 2 => -- check data_ready
@@ -70,7 +70,7 @@ begin
 						end if;
 					when 3 => -- read successful
 						status <= 1;
-						data_read <= '1';
+						rev_data_ready <= '1';
 					when others =>
 						status <= 0;
 				end case;
