@@ -1,8 +1,0 @@
-INTSTYLE=impact
-INFILE=E:\XProjects\MIPS_CPU\lab1\ALU_UNIT\impact.xsl
-OUTFILE=E:\XProjects\MIPS_CPU\lab1\ALU_UNIT\impact.xsl
-FAMILY=Single
-PART=Single
-WORKINGDIR=E:\XProjects\MIPS_CPU\lab1\ALU_UNIT
-LICENSE=iMPACT
-USER_INFO=iMPACT

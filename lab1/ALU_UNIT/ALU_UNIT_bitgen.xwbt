@@ -1,8 +1,0 @@
-INTSTYLE=ise
-INFILE=C:\Users\pc\Documents\GitHub\MIPS_CPU\lab1\ALU_UNIT\ALU_UNIT.ncd
-OUTFILE=C:\Users\pc\Documents\GitHub\MIPS_CPU\lab1\ALU_UNIT\ALU_UNIT.bit
-FAMILY=Spartan3E
-PART=xc3s1200e-4fg320
-WORKINGDIR=C:\Users\pc\Documents\GitHub\MIPS_CPU\lab1\ALU_UNIT
-LICENSE=WebPack
-USER_INFO=__0_0_0

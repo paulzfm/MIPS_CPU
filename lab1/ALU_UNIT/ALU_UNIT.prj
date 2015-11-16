@@ -1,2 +1,0 @@
-vhdl work "../ALU.vhdl"
-vhdl work "ALU_UNIT.vhd"
