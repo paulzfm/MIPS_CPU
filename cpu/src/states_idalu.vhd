@@ -56,8 +56,10 @@ entity states_idalu is
            out_imm : out  STD_LOGIC_VECTOR (15 downto 0);
 			  in_wr_reg : in  STD_LOGIC;
            in_wr_mem : in  STD_LOGIC;
+			  in_rd_mem : in  STD_LOGIC;
            out_wr_reg : out  STD_LOGIC;
-           out_wr_mem : out  STD_LOGIC);
+           out_wr_mem : out  STD_LOGIC;
+			  out_rd_mem : out  STD_LOGIC);
 end states_idalu;
 
 architecture Behavioral of states_idalu is

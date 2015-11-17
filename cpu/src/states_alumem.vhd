@@ -44,8 +44,10 @@ entity states_alumem is
            out_alu_t : out  STD_LOGIC;
            in_wr_reg : in  STD_LOGIC;
            in_wr_mem : in  STD_LOGIC;
+			  in_rd_mem : in  STD_LOGIC;
            out_wr_reg : out  STD_LOGIC;
-           out_wr_mem : out  STD_LOGIC);
+           out_wr_mem : out  STD_LOGIC;
+			  out_rd_mem : out  STD_LOGIC);
 end states_alumem;
 
 architecture Behavioral of states_alumem is
