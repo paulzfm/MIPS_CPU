@@ -32,9 +32,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity registers is
     Port ( clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
-			  addr_x : in  STD_LOGIC_VECTOR (2 downto 0);
-           addr_y : in  STD_LOGIC_VECTOR (2 downto 0);
-           addr_z : in  STD_LOGIC_VECTOR (2 downto 0);
+			  addr_x : in  STD_LOGIC_VECTOR (3 downto 0);
+           addr_y : in  STD_LOGIC_VECTOR (3 downto 0);
+           addr_z : in  STD_LOGIC_VECTOR (3 downto 0);
            data_A : out  STD_LOGIC_VECTOR (15 downto 0);
            data_B : out  STD_LOGIC_VECTOR (15 downto 0);
            data_C : in  STD_LOGIC_VECTOR (15 downto 0));
