@@ -14,7 +14,7 @@
 --        1000 - SP
 --        1001 - IH
 --        1010 - T
---    Illegal address will be IGNORED!
+--    Illegal address will be IGNORED: always output 0 if read!
 --    @rising_edge write if wr='1'
 --    @falling_edge read
 -- Dependencies:
@@ -103,7 +103,7 @@ begin
                 when "1000" => data_A <= reg_sp;
                 when "1001" => data_A <= reg_ih;
                 when "1010" => data_A <= reg_t;
-                when others => ;
+                when others => data_A <= (others => '0');
             end case;
             case addr_y is -- read y
                 when "0000" => data_B <= reg_r0;
@@ -117,7 +117,7 @@ begin
                 when "1000" => data_B <= reg_sp;
                 when "1001" => data_B <= reg_ih;
                 when "1010" => data_B <= reg_t;
-                when others => ;
+                when others => data_B <= (others => '0');
             end case;
         end if;
     end process;
