@@ -41,7 +41,21 @@ end mux4;
 architecture Behavioral of mux4 is
 
 begin
-
+    process (input0, input1, input2, input3, addr)
+    begin
+        case addr is
+            when "00" =>
+                output <= input0;
+            when "01" =>
+                output <= input1;
+            when "10" =>
+                output <= input2;
+            when "11" =>
+                output <= input3;
+            when others =>
+                output <= (others => '0');
+        end case;
+    end process;
 
 end Behavioral;
 

@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    20:41:14 11/17/2015 
+-- Create Date:    20:17:55 11/17/2015 
 -- Design Name: 
--- Module Name:    mux2 - Behavioral 
+-- Module Name:    alu - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -29,27 +29,26 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity mux2 is
-    Port ( input0 : in  STD_LOGIC_VECTOR (15 downto 0);
-           input1 : in  STD_LOGIC_VECTOR (15 downto 0);
-           addr : in  STD_LOGIC;
-           output : out  STD_LOGIC_VECTOR (15 downto 0));
-end mux2;
+entity complement is
+    Port ( in_data : in  STD_LOGIC_VECTOR (15 downto 0);
+           out_data : out  STD_LOGIC_VECTOR (15 downto 0);
+           );
+end complement;
 
-architecture Behavioral of mux2 is
+architecture Behavioral of complement is
+
+component add16_component is
+    Port ( in_data_a : in  STD_LOGIC_VECTOR (15 downto 0);
+           in_data_b : in  STD_LOGIC_VECTOR (15 downto 0);
+           out_output : out  STD_LOGIC_VECTOR (15 downto 0);
+           out_t : out STD_LOGIC);
+end component;
+
+signal add16_res, sub16_res : STD_LOGIC_VECTOR(15 downto 0);
+signal add16_t, sub16_t : STD_LOGIC;
 
 begin
+    
 
-    process (input0, input1, addr)
-    begin
-        case addr is
-            when '0' =>
-                output <= input0;
-            when '1' =>
-                output <= input1;
-				when others =>
-				    output <= (others => '0');
-        end case;
-    end process;
 end Behavioral;
 
