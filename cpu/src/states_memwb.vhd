@@ -51,6 +51,32 @@ end states_memwb;
 architecture Behavioral of states_memwb is
 
 begin
+--process
+process(clk,rst,ctl_bubble)
+begin
+	--clk up work
+	if(clk'event and clk='1') then
+		if(ctl_bubble = '0') then
+			out_pc <= in_pc;
+			out_alu_res <= in_alu_res;
+			out_rc <= in_rc;
+			out_wr_reg <= in_wr_reg;
+			out_mem_res <= in_mem_res;
+		end if;
+	end if;
+	
+	--clk down work
+	if(clk'event and clk='0') then
+		if(rst = '1') then
+			out_pc <= (others=> '0');
+			out_alu_res <= (others=> '0');
+			out_rc <= (others=> '0');
+			out_wr_reg <= '0';
+			out_mem_res <= '0';
+		end if;
+	end if;
+	
+end process;
 
 
 end Behavioral;
