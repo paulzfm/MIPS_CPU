@@ -42,6 +42,8 @@ entity states_idalu is
            out_data_b : out  STD_LOGIC_VECTOR (15 downto 0);
            in_op : in  STD_LOGIC_VECTOR (3 downto 0);
            out_op : out  STD_LOGIC_VECTOR (3 downto 0);
+			  in_instruction5 : in  STD_LOGIC_VECTOR (4 downto 0);
+			  out_instruction5 : out  STD_LOGIC_VECTOR (4 downto 0);
            in_is_branch : in  STD_LOGIC;
            out_is_branch : out  STD_LOGIC;
            ctl_bubble : in  STD_LOGIC;

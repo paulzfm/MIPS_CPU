@@ -40,6 +40,8 @@ entity states_alumem is
            out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
            in_rc : in  STD_LOGIC_VECTOR (3 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
+			  in_instruction5 : in  STD_LOGIC_VECTOR (4 downto 0);
+			  out_instruction5 : out  STD_LOGIC_VECTOR (4 downto 0);
            in_alu_t : in  STD_LOGIC;
            out_alu_t : out  STD_LOGIC;
            in_wr_reg : in  STD_LOGIC;
