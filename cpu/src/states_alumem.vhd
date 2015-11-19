@@ -40,8 +40,10 @@ entity states_alumem is
            out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
            in_rc : in  STD_LOGIC_VECTOR (3 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
-           in_alu_t : in  STD_LOGIC;
-           out_alu_t : out  STD_LOGIC;
+			  in_instruction5 : in  STD_LOGIC_VECTOR (4 downto 0);
+			  out_instruction5 : out  STD_LOGIC_VECTOR (4 downto 0);
+           --in_alu_t : in  STD_LOGIC;
+           --out_alu_t : out  STD_LOGIC;
            in_wr_reg : in  STD_LOGIC;
            in_wr_mem : in  STD_LOGIC;
 			  in_rd_mem : in  STD_LOGIC;
@@ -51,9 +53,44 @@ entity states_alumem is
 end states_alumem;
 
 architecture Behavioral of states_alumem is
-
+--signal s_pc : STD_LOGIC_VECTOR (15 downto 0);
+--signal s_alu_res : STD_LOGIC_VECTOR (15 downto 0);
+--signal s_rc : STD_LOGIC_VECTOR (3 downto 0);
+--signal s_instruction5 : STD_LOGIC_VECTOR (4 downto 0);
+--signal s_wr_reg : STD_LOGIC := '0';
+--signal s_wr_mem : STD_LOGIC := '0';
+--signal s_rd_mem : STD_LOGIC := '0';
 begin
-
+--process
+process(clk,rst,ctl_bubble)
+begin
+	--clk up work
+	if(clk'event and clk='1') then
+		if(ctl_bubble = '0') then
+			out_pc <= in_pc;
+			out_alu_res <= in_alu_res;
+			out_rc <= in_rc;
+			out_instruction5 <= in_instruction5;
+			out_wr_reg <= in_wr_reg;
+			out_wr_mem <= in_wr_mem;
+			out_rd_mem <= in_rd_mem;
+		end if;
+	end if;
+	
+	--clk down work
+	if(clk'event and clk='0') then
+		if(rst = '1') then
+			out_pc <= (others=> '0');
+			out_alu_res <= (others=> '0');
+			out_rc <= (others=> '0');
+			out_instruction5 <= (others=> '0');
+			out_wr_reg <= '0';
+			out_wr_mem <= '0';
+			out_rd_mem <= '0';
+		end if;
+	end if;
+	
+end process;
 
 end Behavioral;
 
