@@ -30,10 +30,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity BUS_control is
-    Port ( bus1_addr : in  STD_LOGIC_VECTOR (17 downto 0);
+    Port ( bus1_addr : in  STD_LOGIC_VECTOR (15 downto 0);
            bus1_data_cpu : inout  STD_LOGIC_VECTOR (15 downto 0);
+			  bus1_data_ram : inout  STD_LOGIC_VECTOR (15 downto 0);
            bus1_data_serial : inout  STD_LOGIC_VECTOR (15 downto 0);
-           bus1_data_key : in  STD_LOGIC_VECTOR (15 downto 0);
+           bus1_data_keyboard : in  STD_LOGIC_VECTOR (15 downto 0);
            bus1_data_vga : out  STD_LOGIC_VECTOR (15 downto 0));
 end BUS_control;
 

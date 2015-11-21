@@ -34,8 +34,8 @@ entity CPU is
            rst : in  STD_LOGIC;
 			  rdn : out  STD_LOGIC;
            wrn : out  STD_LOGIC;
-           bus1_addr : out  STD_LOGIC_VECTOR (17 downto 0);
-           bus2_addr : out  STD_LOGIC_VECTOR (17 downto 0);
+           bus1_addr : out  STD_LOGIC_VECTOR (15 downto 0);
+           bus2_addr : out  STD_LOGIC_VECTOR (15 downto 0);
            bus1_data : inout  STD_LOGIC_VECTOR (15 downto 0);
            bus2_data : inout  STD_LOGIC_VECTOR (15 downto 0));
 end CPU;
