@@ -14,6 +14,7 @@
 --        1000 - SP
 --        1001 - IH
 --        1010 - T
+--        1100 - RA
 --    Illegal address will be IGNORED: always output 0 if read!
 --    @falling_edge write if wr='1'
 --    reset if rst='0'
@@ -60,6 +61,7 @@ architecture Behavioral of registers is
     signal reg_sp: STD_LOGIC_VECTOR (15 downto 0);
     signal reg_ih: STD_LOGIC_VECTOR (15 downto 0);
     signal reg_t: STD_LOGIC_VECTOR (15 downto 0);
+    signal reg_ra: STD_LOGIC_VECTOR (15 downto 0);
 begin
     rd: process(addr_x, addr_y)
     begin
@@ -75,6 +77,7 @@ begin
             when "1000" => data_A <= reg_sp;
             when "1001" => data_A <= reg_ih;
             when "1010" => data_A <= reg_t;
+            when "1100" => data_A <= reg_ra;
             when others => data_A <= (others => '0');
         end case;
         
@@ -90,6 +93,7 @@ begin
             when "1000" => data_B <= reg_sp;
             when "1001" => data_B <= reg_ih;
             when "1010" => data_B <= reg_t;
+            when "1100" => data_B <= reg_ra;
             when others => data_B <= (others => '0');
         end case;
     end process;
@@ -108,6 +112,7 @@ begin
             reg_sp <= (others => '0');
             reg_ih <= (others => '0');
             reg_t <= (others => '0');
+            reg_ra <= (others => '0');
         elsif falling_edge(clk) and wr = '1' then -- write
             case addr_z is
                 when "0000" => reg_r0 <= data_C;
@@ -121,6 +126,7 @@ begin
                 when "1000" => reg_sp <= data_C;
                 when "1001" => reg_ih <= data_C;
                 when "1010" => reg_t <= data_C;
+                when "1100" => reg_ra <= data_C;
                 when others => null;
             end case;
         end if;
