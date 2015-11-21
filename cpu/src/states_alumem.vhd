@@ -66,20 +66,8 @@ process(clk,rst,ctl_bubble)
 begin
 	--clk up work
 	if(clk'event and clk='1') then
-		if(ctl_bubble = '0') then
-			out_pc <= in_pc;
-			out_alu_res <= in_alu_res;
-			out_rc <= in_rc;
-			out_instruction5 <= in_instruction5;
-			out_wr_reg <= in_wr_reg;
-			out_wr_mem <= in_wr_mem;
-			out_rd_mem <= in_rd_mem;
-		end if;
-	end if;
-	
-	--clk down work
-	if(clk'event and clk='0') then
 		if(rst = '1') then
+		--output all '0'
 			out_pc <= (others=> '0');
 			out_alu_res <= (others=> '0');
 			out_rc <= (others=> '0');
@@ -87,6 +75,14 @@ begin
 			out_wr_reg <= '0';
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
+		elsif(ctl_bubble = '0') then
+			out_pc <= in_pc;
+			out_alu_res <= in_alu_res;
+			out_rc <= in_rc;
+			out_instruction5 <= in_instruction5;
+			out_wr_reg <= in_wr_reg;
+			out_wr_mem <= in_wr_mem;
+			out_rd_mem <= in_rd_mem;
 		end if;
 	end if;
 	

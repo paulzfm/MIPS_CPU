@@ -50,21 +50,18 @@ process(clk,rst,ctl_bubble)
 begin
 	--clk up work
 	if(clk'event and clk='1') then
-		if(ctl_bubble = '0') then
+		if(rst = '1') then
+			out_pc <= (others=> '0');
+			out_pc_inc <= (others=> '0');
+			out_instruction <= (others=> '0');
+		elsif(ctl_bubble = '0') then
 			out_pc <= in_pc;
 			out_pc_inc <= in_pc_inc;
 			out_instruction <= in_instruction;
 		end if;
 	end if;
 	
-	--clk down work
-	if(clk'event and clk='0') then
-		if(rst = '1') then
-			out_pc <= (others=> '0');
-			out_pc_inc <= (others=> '0');
-			out_instruction <= (others=> '0');
-		end if;
-	end if;
+	
 end process;
 
 end Behavioral;
