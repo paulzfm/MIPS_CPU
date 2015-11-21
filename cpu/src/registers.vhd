@@ -15,8 +15,8 @@
 --        1001 - IH
 --        1010 - T
 --    Illegal address will be IGNORED: always output 0 if read!
---    @rising_edge write if wr='1'
---    @falling_edge read
+--    @falling_edge write if wr='1'
+--    reset if rst='0'
 -- Dependencies:
 --
 -- Revision:
@@ -61,7 +61,40 @@ architecture Behavioral of registers is
     signal reg_ih: STD_LOGIC_VECTOR (15 downto 0);
     signal reg_t: STD_LOGIC_VECTOR (15 downto 0);
 begin
-    rd_or_wr : process(clk, rst)
+    rd: process(addr_x, addr_y)
+    begin
+        case addr_x is -- read x
+            when "0000" => data_A <= reg_r0;
+            when "0001" => data_A <= reg_r1;
+            when "0010" => data_A <= reg_r2;
+            when "0011" => data_A <= reg_r3;
+            when "0100" => data_A <= reg_r4;
+            when "0101" => data_A <= reg_r5;
+            when "0110" => data_A <= reg_r6;
+            when "0111" => data_A <= reg_r7;
+            when "1000" => data_A <= reg_sp;
+            when "1001" => data_A <= reg_ih;
+            when "1010" => data_A <= reg_t;
+            when others => data_A <= (others => '0');
+        end case;
+        
+        case addr_y is -- read y
+            when "0000" => data_B <= reg_r0;
+            when "0001" => data_B <= reg_r1;
+            when "0010" => data_B <= reg_r2;
+            when "0011" => data_B <= reg_r3;
+            when "0100" => data_B <= reg_r4;
+            when "0101" => data_B <= reg_r5;
+            when "0110" => data_B <= reg_r6;
+            when "0111" => data_B <= reg_r7;
+            when "1000" => data_B <= reg_sp;
+            when "1001" => data_B <= reg_ih;
+            when "1010" => data_B <= reg_t;
+            when others => data_B <= (others => '0');
+        end case;
+    end process;
+ 
+    wr_z : process(clk, rst)
     begin
         if rst = '0' then -- set all registers to 0
             reg_r0 <= (others => '0');
@@ -75,7 +108,7 @@ begin
             reg_sp <= (others => '0');
             reg_ih <= (others => '0');
             reg_t <= (others => '0');
-        elsif rising_edge(clk) and wr = '1' then -- write
+        elsif falling_edge(clk) and wr = '1' then -- write
             case addr_z is
                 when "0000" => reg_r0 <= data_C;
                 when "0001" => reg_r1 <= data_C;
@@ -88,36 +121,7 @@ begin
                 when "1000" => reg_sp <= data_C;
                 when "1001" => reg_ih <= data_C;
                 when "1010" => reg_t <= data_C;
-                when others => ;
-            end case;
-        elsif falling_edge(clk) then -- read
-            case addr_x is -- read x
-                when "0000" => data_A <= reg_r0;
-                when "0001" => data_A <= reg_r1;
-                when "0010" => data_A <= reg_r2;
-                when "0011" => data_A <= reg_r3;
-                when "0100" => data_A <= reg_r4;
-                when "0101" => data_A <= reg_r5;
-                when "0110" => data_A <= reg_r6;
-                when "0111" => data_A <= reg_r7;
-                when "1000" => data_A <= reg_sp;
-                when "1001" => data_A <= reg_ih;
-                when "1010" => data_A <= reg_t;
-                when others => data_A <= (others => '0');
-            end case;
-            case addr_y is -- read y
-                when "0000" => data_B <= reg_r0;
-                when "0001" => data_B <= reg_r1;
-                when "0010" => data_B <= reg_r2;
-                when "0011" => data_B <= reg_r3;
-                when "0100" => data_B <= reg_r4;
-                when "0101" => data_B <= reg_r5;
-                when "0110" => data_B <= reg_r6;
-                when "0111" => data_B <= reg_r7;
-                when "1000" => data_B <= reg_sp;
-                when "1001" => data_B <= reg_ih;
-                when "1010" => data_B <= reg_t;
-                when others => data_B <= (others => '0');
+                when others => null;
             end case;
         end if;
     end process;
