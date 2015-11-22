@@ -84,22 +84,32 @@ begin
 		case state is
 			when "0000" =>
 				if(device = '0' and wr_rd = '0') then
-					state <= "0001";
-					wrn <= '0';
-					ramdata <= "000000000000"&data;
+					state <= "0010";
 				elsif(device = '0' and wr_rd = '1') then
-					state <= "0101";
+					state <= "0100";
+					--rdn <= '1';
+					--ramdata <= (others=>'Z');
 				elsif(device = '1' and wr_rd = '0') then
-					state <= "1001";
-					WE <= '1';
-					OE <= '1';
-					ramdata <= "000000000000"&data;
+					state <= "1010";
 				else
 					state <= "1101";
 					WE <= '1';
 					OE <= '0';
 					ramdata <= (others=>'Z');
 				end if;
+			when "0010"=>
+				state <= "0001";
+				wrn <= '0';
+				ramdata <= "000000000000"&data;
+			when "1010"=>
+				state <= "1001";
+				WE <= '1';
+				OE <= '1';
+				ramdata <= "000000000000"&data;
+			when "0100"=>
+				state <= "0101";
+				rdn <= '1';
+				ramdata <= (others=>'Z');
 			when "0001" =>
 				wrn <= '1';
 				state <= "0011";
@@ -110,9 +120,11 @@ begin
 			when "0101" =>
 				if(data_ready = '1')then
 					state <= "0111";
+					rdn <= '0';
 				end if;
 			when "0111" =>
 				output_data <= ramdata(7 downto 0);
+				rdn <= '1';
 				state <= "0000";
 			when "1001" =>
 				WE <='0';
