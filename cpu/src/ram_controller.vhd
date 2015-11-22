@@ -99,8 +99,8 @@ begin
                                 serial_rdn <= '1';
                                 serial_wrn <= '1';
                                 ram1_serial_data <= (others => 'Z');
-    					    when "001" => -- write ram1
-        						state <= s_wr_ram;
+                            when "001" => -- write ram1
+                                state <= s_wr_ram;
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
                                 serial_rdn <= '1';
@@ -114,13 +114,13 @@ begin
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
                             when "011" => -- write serial
-        						state <= s_wr_serial;
+                                state <= s_wr_serial;
                                 serial_rdn <= '1';
-        						serial_wrn <= '0';
-        						ram1_serial_data <= in_data;
+                                serial_wrn <= '0';
+                                ram1_serial_data <= in_data;
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
-    					    when others => null;
+                            when others => null;
                         end case;
                     when s_rd_serial_ctl =>
                         state <= s_init;
