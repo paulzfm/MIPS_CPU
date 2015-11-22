@@ -39,7 +39,8 @@ entity states_ifid is
            clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
            ctl_bubble : in  STD_LOGIC;
-           ctl_copy : in  STD_LOGIC);
+           ctl_copy : in  STD_LOGIC;
+           ctl_rst : in  STD_LOGIC);
 end states_ifid;
 
 architecture Behavioral of states_ifid is

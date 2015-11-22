@@ -35,7 +35,7 @@ entity decode is
            out_rb : out STD_LOGIC_VECTOR(3 downto 0);
            out_rc : out STD_LOGIC_VECTOR(3 downto 0);
            out_imm : out STD_LOGIC_VECTOR(15 downto 0);
-           out_op : out STD_LOGIC_VECTOR(4 downto 0);
+           out_instruction_op : out STD_LOGIC_VECTOR(4 downto 0);
            out_ctl_write_reg : out STD_LOGIC;
            out_ctl_write_mem : out STD_LOGIC;
            out_ctl_read_mem : out STD_LOGIC;
@@ -44,7 +44,8 @@ entity decode is
            out_ctl_imm_extend_type : out STD_LOGIC;
            out_ctl_is_jump : out STD_LOGIC;
            out_ctl_is_branch : out STD_LOGIC;
-           out_ctl_jump_reg : out STD_LOGIC_VECTOR(3 downto 0)           
+           out_is_jump_ra : out STD_LOGIC;
+           out_use_imm : out STD_LOGIC
         );
 end decode;
 
@@ -54,7 +55,7 @@ begin
     ra <= in_instruction(10 downto 8);
     rb <= in_instruction(7 downto 5);
     rc <= in_instruction(4 downto 2);
-    out_op <= in_instruction(15 downto 11);
+    out_instruction_op <= in_instruction(15 downto 11);
 
     process (in_instruction, ra, rb, rc, in_pc, in_pc_inc)
     begin
@@ -73,7 +74,6 @@ begin
                 out_ctl_imm_extend_type <= '0';
                 out_ctl_is_jump <= '0';
                 out_ctl_is_branch <= '0';
-                out_ctl_jump_reg <= "0000";
             when INSTRUCTION_ADDIU3 =>
                 -- addiu3 rx ry imm
                 out_ra <= ra;
@@ -87,7 +87,6 @@ begin
                 out_ctl_imm_extend_type <= '0';
                 out_ctl_is_jump <= '0';
                 out_ctl_is_branch <= '0';
-                out_ctl_jump_reg <= "0000";
             when "00010" =>
                 -- B
         end case;

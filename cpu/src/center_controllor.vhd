@@ -165,7 +165,7 @@ begin
             end if;
             if (in_alumem_instruction_op = INSTRUCTION_LW)
             then
-                alumem := '1';
+                alumem_lw := '1';
             end if;
 
             if (in_alumem_rz = in_idalu_rx or in_alumem_rz = in_idalu_ry)

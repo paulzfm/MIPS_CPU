@@ -41,12 +41,12 @@ entity registers is
     Port ( clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
            wr : in  STD_LOGIC; -- write enable
-           addr_x : in  STD_LOGIC_VECTOR (3 downto 0);
-           addr_y : in  STD_LOGIC_VECTOR (3 downto 0);
-           addr_z : in  STD_LOGIC_VECTOR (3 downto 0);
-           data_A : out  STD_LOGIC_VECTOR (15 downto 0);
-           data_B : out  STD_LOGIC_VECTOR (15 downto 0);
-           data_C : in  STD_LOGIC_VECTOR (15 downto 0));
+           addr_a : in  STD_LOGIC_VECTOR (3 downto 0);
+           addr_b : in  STD_LOGIC_VECTOR (3 downto 0);
+           addr_c : in  STD_LOGIC_VECTOR (3 downto 0);
+           data_a : out  STD_LOGIC_VECTOR (15 downto 0);
+           data_b : out  STD_LOGIC_VECTOR (15 downto 0);
+           data_c : in  STD_LOGIC_VECTOR (15 downto 0));
 end registers;
 
 architecture Behavioral of registers is
@@ -63,38 +63,38 @@ architecture Behavioral of registers is
     signal reg_t: STD_LOGIC_VECTOR (15 downto 0);
     signal reg_ra: STD_LOGIC_VECTOR (15 downto 0);
 begin
-    rd: process(addr_x, addr_y)
+    rd: process(addr_a, addr_b)
     begin
-        case addr_x is -- read x
-            when "0000" => data_A <= reg_r0;
-            when "0001" => data_A <= reg_r1;
-            when "0010" => data_A <= reg_r2;
-            when "0011" => data_A <= reg_r3;
-            when "0100" => data_A <= reg_r4;
-            when "0101" => data_A <= reg_r5;
-            when "0110" => data_A <= reg_r6;
-            when "0111" => data_A <= reg_r7;
-            when "1000" => data_A <= reg_sp;
-            when "1001" => data_A <= reg_ih;
-            when "1010" => data_A <= reg_t;
-            when "1100" => data_A <= reg_ra;
-            when others => data_A <= (others => '0');
+        case addr_a is -- read x
+            when "0000" => data_a <= reg_r0;
+            when "0001" => data_a <= reg_r1;
+            when "0010" => data_a <= reg_r2;
+            when "0011" => data_a <= reg_r3;
+            when "0100" => data_a <= reg_r4;
+            when "0101" => data_a <= reg_r5;
+            when "0110" => data_a <= reg_r6;
+            when "0111" => data_a <= reg_r7;
+            when "1000" => data_a <= reg_sp;
+            when "1001" => data_a <= reg_ih;
+            when "1010" => data_a <= reg_t;
+            when "1100" => data_a <= reg_ra;
+            when others => data_a <= (others => '0');
         end case;
         
-        case addr_y is -- read y
-            when "0000" => data_B <= reg_r0;
-            when "0001" => data_B <= reg_r1;
-            when "0010" => data_B <= reg_r2;
-            when "0011" => data_B <= reg_r3;
-            when "0100" => data_B <= reg_r4;
-            when "0101" => data_B <= reg_r5;
-            when "0110" => data_B <= reg_r6;
-            when "0111" => data_B <= reg_r7;
-            when "1000" => data_B <= reg_sp;
-            when "1001" => data_B <= reg_ih;
-            when "1010" => data_B <= reg_t;
-            when "1100" => data_B <= reg_ra;
-            when others => data_B <= (others => '0');
+        case addr_b is -- read y
+            when "0000" => data_b <= reg_r0;
+            when "0001" => data_b <= reg_r1;
+            when "0010" => data_b <= reg_r2;
+            when "0011" => data_b <= reg_r3;
+            when "0100" => data_b <= reg_r4;
+            when "0101" => data_b <= reg_r5;
+            when "0110" => data_b <= reg_r6;
+            when "0111" => data_b <= reg_r7;
+            when "1000" => data_b <= reg_sp;
+            when "1001" => data_b <= reg_ih;
+            when "1010" => data_b <= reg_t;
+            when "1100" => data_b <= reg_ra;
+            when others => data_b <= (others => '0');
         end case;
     end process;
  
@@ -114,19 +114,19 @@ begin
             reg_t <= (others => '0');
             reg_ra <= (others => '0');
         elsif falling_edge(clk) and wr = '1' then -- write
-            case addr_z is
-                when "0000" => reg_r0 <= data_C;
-                when "0001" => reg_r1 <= data_C;
-                when "0010" => reg_r2 <= data_C;
-                when "0011" => reg_r3 <= data_C;
-                when "0100" => reg_r4 <= data_C;
-                when "0101" => reg_r5 <= data_C;
-                when "0110" => reg_r6 <= data_C;
-                when "0111" => reg_r7 <= data_C;
-                when "1000" => reg_sp <= data_C;
-                when "1001" => reg_ih <= data_C;
-                when "1010" => reg_t <= data_C;
-                when "1100" => reg_ra <= data_C;
+            case addr_c is
+                when "0000" => reg_r0 <= data_c;
+                when "0001" => reg_r1 <= data_c;
+                when "0010" => reg_r2 <= data_c;
+                when "0011" => reg_r3 <= data_c;
+                when "0100" => reg_r4 <= data_c;
+                when "0101" => reg_r5 <= data_c;
+                when "0110" => reg_r6 <= data_c;
+                when "0111" => reg_r7 <= data_c;
+                when "1000" => reg_sp <= data_c;
+                when "1001" => reg_ih <= data_c;
+                when "1010" => reg_t <= data_c;
+                when "1100" => reg_ra <= data_c;
                 when others => null;
             end case;
         end if;

@@ -35,21 +35,21 @@ entity states_alumem is
            ctl_bubble : in  STD_LOGIC;
            ctl_copy : in  STD_LOGIC;
            in_pc : in  STD_LOGIC_VECTOR (15 downto 0);
-           out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
+           in_pc_inc : in  STD_LOGIC_VECTOR (15 downto 0);
            in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
-           out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
            in_rc : in  STD_LOGIC_VECTOR (3 downto 0);
-           out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
-			  in_instruction5 : in  STD_LOGIC_VECTOR (4 downto 0);
-			  out_instruction5 : out  STD_LOGIC_VECTOR (4 downto 0);
-           --in_alu_t : in  STD_LOGIC;
-           --out_alu_t : out  STD_LOGIC;
+           in_instruction_op : in  STD_LOGIC_VECTOR (4 downto 0);
            in_wr_reg : in  STD_LOGIC;
            in_wr_mem : in  STD_LOGIC;
-			  in_rd_mem : in  STD_LOGIC;
+           in_rd_mem : in  STD_LOGIC;
+           out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
+           out_pc_inc : out  STD_LOGIC_VECTOR (15 downto 0);
+           out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
+           out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
+           out_instruction_op : out  STD_LOGIC_VECTOR (4 downto 0);
            out_wr_reg : out  STD_LOGIC;
            out_wr_mem : out  STD_LOGIC;
-			  out_rd_mem : out  STD_LOGIC);
+           out_rd_mem : out  STD_LOGIC);
 end states_alumem;
 
 architecture Behavioral of states_alumem is

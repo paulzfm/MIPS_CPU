@@ -35,16 +35,14 @@ entity states_memwb is
            ctl_bubble : in  STD_LOGIC;
            ctl_copy : in  STD_LOGIC;
            in_pc : in  STD_LOGIC_VECTOR (15 downto 0);
-           out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
            in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
-           out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
            in_rc : in  STD_LOGIC_VECTOR (3 downto 0);
-           out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
-           --in_alu_t : in  STD_LOGIC;
-           --out_alu_t : out  STD_LOGIC;
            in_wr_reg : in  STD_LOGIC;
-           out_wr_reg : out  STD_LOGIC;
            in_mem_res : in  STD_LOGIC_VECTOR (15 downto 0);
+           out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
+           out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
+           out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
+           out_wr_reg : out  STD_LOGIC;
            out_mem_res : out  STD_LOGIC_VECTOR (15 downto 0));
 end states_memwb;
 
