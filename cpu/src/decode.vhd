@@ -19,7 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
+use work.constants.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -58,40 +58,38 @@ begin
 
     process (in_instruction, ra, rb, rc, in_pc, in_pc_inc)
     begin
-        case (in_instruction(15 downto 11))
-            when "01001" =>
+        case (in_instruction(15 downto 11)) is
+            when INSTRUCTION_ADDIU =>
                 -- addiu rx
                 out_ra <= ra;
                 out_rb <= "0000";
                 out_rc <= ra;
-                out_ctl_write_reg <= '1';
-                out_ctl_write_mem <= '0';
-                out_ctl_alu_op <= "0000";
                 out_imm <= (others => '0');
+                out_ctl_write_reg <= '1';
+                out_ctl_write_mem <= '0';
+                out_ctl_read_mem <= '0';
+                out_ctl_alu_op <= "0000";
                 out_ctl_imm_extend_size <= "000";
                 out_ctl_imm_extend_type <= '0';
-            when "01000" =>
+                out_ctl_is_jump <= '0';
+                out_ctl_is_branch <= '0';
+                out_ctl_jump_reg <= "0000";
+            when INSTRUCTION_ADDIU3 =>
                 -- addiu3 rx ry imm
                 out_ra <= ra;
                 out_rb <= "0000";
                 out_rc <= rb;
+                out_imm <= in_instruction(3 downto 0);
                 out_ctl_write_reg <= '1';
                 out_ctl_write_mem <= '0';
                 out_ctl_alu_op <= "0000";
-                out_imm <= in_instruction(3 downto 0);
                 out_ctl_imm_extend_size <= "000";
                 out_ctl_imm_extend_type <= '0';
-            when "01000" =>
-                -- addiu3 rx ry imm
-                out_ra <= ra;
-                out_rb <= "0000";
-                out_rc <= rb;
-                out_ctl_write_reg <= '1';
-                out_ctl_write_mem <= '0';
-                out_ctl_alu_op <= "0000";
-                out_imm <= in_instruction(3 downto 0);
-                out_ctl_imm_extend_size <= "000";
-                out_ctl_imm_extend_type <= '0';
+                out_ctl_is_jump <= '0';
+                out_ctl_is_branch <= '0';
+                out_ctl_jump_reg <= "0000";
+            when "00010" =>
+                -- B
         end case;
     end process;
 
