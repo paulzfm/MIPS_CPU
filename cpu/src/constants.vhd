@@ -2,12 +2,9 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 package constants is
-    constant TEST: std_logic := '1';
-
-    -- unchecked
+    -- instruction op codes
     constant INSTRUCTION_ADDIU : STD_LOGIC_VECTOR(4 downto 0) := "01001";
     constant INSTRUCTION_ADDIU3 : STD_LOGIC_VECTOR(4 downto 0) := "01000";
-    constant INSTRUCTION_ADDSP3 : STD_LOGIC_VECTOR(4 downto 0) := "00000";
     constant INSTRUCTION_ADDSP : STD_LOGIC_VECTOR(4 downto 0) := "01100";
     constant INSTRUCTION_ADDU : STD_LOGIC_VECTOR(4 downto 0) := "11100";
     constant INSTRUCTION_AND : STD_LOGIC_VECTOR(4 downto 0) := "11101";
@@ -17,8 +14,6 @@ package constants is
     constant INSTRUCTION_BTEQZ : STD_LOGIC_VECTOR(4 downto 0) := "01100";
     constant INSTRUCTION_BTNEZ : STD_LOGIC_VECTOR(4 downto 0) := "01100";
     constant INSTRUCTION_CMP : STD_LOGIC_VECTOR(4 downto 0) := "11101";
-    constant INSTRUCTION_CMPI : STD_LOGIC_VECTOR(4 downto 0) := "01110";
-    constant INSTRUCTION_INT : STD_LOGIC_VECTOR(4 downto 0) := "11111";
     constant INSTRUCTION_JALR : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_JR : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_JRRA : STD_LOGIC_VECTOR(4 downto 0) := "11101";
@@ -27,26 +22,15 @@ package constants is
     constant INSTRUCTION_LWSP : STD_LOGIC_VECTOR(4 downto 0) := "10010";
     constant INSTRUCTION_MFIH : STD_LOGIC_VECTOR(4 downto 0) := "11110";
     constant INSTRUCTION_MFPC : STD_LOGIC_VECTOR(4 downto 0) := "11101";
-    constant INSTRUCTION_MOVE : STD_LOGIC_VECTOR(4 downto 0) := "01111";
     constant INSTRUCTION_MTIH : STD_LOGIC_VECTOR(4 downto 0) := "11110";
     constant INSTRUCTION_MTSP : STD_LOGIC_VECTOR(4 downto 0) := "01100";
-    constant INSTRUCTION_NEG : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_NOT : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_NOP : STD_LOGIC_VECTOR(4 downto 0) := "00001";
     constant INSTRUCTION_OR : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_SLL : STD_LOGIC_VECTOR(4 downto 0) := "00110";
-    constant INSTRUCTION_SLLV : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_SLT : STD_LOGIC_VECTOR(4 downto 0) := "11101";
-    constant INSTRUCTION_SLTI : STD_LOGIC_VECTOR(4 downto 0) := "01010";
-    constant INSTRUCTION_SLTU : STD_LOGIC_VECTOR(4 downto 0) := "11101";
-    constant INSTRUCTION_SLTUI : STD_LOGIC_VECTOR(4 downto 0) := "01011";
     constant INSTRUCTION_SRA : STD_LOGIC_VECTOR(4 downto 0) := "00110";
-    constant INSTRUCTION_SRAV : STD_LOGIC_VECTOR(4 downto 0) := "11101";
-    constant INSTRUCTION_SRL : STD_LOGIC_VECTOR(4 downto 0) := "00110";
-    constant INSTRUCTION_SRLV : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_SUBU : STD_LOGIC_VECTOR(4 downto 0) := "11100";
     constant INSTRUCTION_SW : STD_LOGIC_VECTOR(4 downto 0) := "11011";
-    constant INSTRUCTION_SWRS : STD_LOGIC_VECTOR(4 downto 0) := "01100";
     constant INSTRUCTION_SWSP : STD_LOGIC_VECTOR(4 downto 0) := "11010";
-    constant INSTRUCTION_XOR : STD_LOGIC_VECTOR(4 downto 0) := "11101";
 end constants;
