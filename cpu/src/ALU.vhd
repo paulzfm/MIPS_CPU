@@ -77,16 +77,16 @@ begin
     variable all_zero : STD_LOGIC;
     begin
         case in_op is
-            when "0000" => 
+            when ALU_ADD => 
                 -- ALU add 
                 -- ATTENTION! unsigned!
                 out_alu_res <= add16_res;
-            when "0001" => 
+            when ALU_SUB => 
                 -- ALU sub
                 -- ATTENTION! unsigned!
                 -- out_alu_res <= sub16_res;
                 out_alu_res <= sub16_res;
-            when "0010" => 
+            when ALU_SLL => 
                 -- ALU << data_a << data_b 
                 -- logic shift
                 if (in_data_b = 0)
@@ -95,7 +95,7 @@ begin
                 else
                     out_alu_res <= std_logic_vector(unsigned(in_data_a) sll to_integer(unsigned(in_data_b)));
                 end if;
-            when "0011" => 
+            when ALU_SLR => 
                 -- ALU >> data_a >> data_b 
                 -- logic shift
                 if (in_data_b = 0)
@@ -104,10 +104,10 @@ begin
                     else
                         out_alu_res <= std_logic_vector(unsigned(in_data_a) srl to_integer(unsigned(in_data_b)));
                     end if; 
-            when "0100" => 
+            when ALU_XOR => 
                 -- ALU data_a xor in_data_b
                 out_alu_res <= in_data_a xor in_data_b;
-            when "0101" => 
+            when ALU_CMP => 
                 -- ALU cmp 
                 -- data_a == data_b => 1 
                 -- data_a != data_b => 0
@@ -119,23 +119,26 @@ begin
                 end loop;
                 out_alu_res <= "000000000000000" & not(all_zero);
 
-            when "0110" => 
+            when ALU_SIGNED_CMP => 
                 -- ALU signed cmp 
                 -- data_a < data_b => 1  
                 -- data_a >= data_b => 0
                 out_alu_res <= "000000000000000" & ((in_data_a(15) and not(in_data_b(15))) or
                                                   ( not(in_data_a(15) xor in_data_b(15)) and sub16_t ));
-            when "0111" => 
+            when ALU_UNSIGNED_CMP => 
                 -- ALU unsigned cmp 
                 -- data_a < data_b => 1 
                 -- data_a >= data_b => 0
                 out_alu_res <= "000000000000000" & (sub16_t);
-            when "1000" => 
+            when ALU_DATA_A => 
                 -- output data_a
                 out_alu_res <= in_data_a;
-            when "1001" => 
+            when ALU_DATA_B => 
                 -- output data_b
                 out_alu_res <= in_data_b;
+            when ALU_NOT =>
+                -- not a
+                out_alu_res <= not(in_data_a);
             when others =>
                 out_alu_res <= (others => '0');
         end case;

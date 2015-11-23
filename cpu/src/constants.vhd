@@ -33,4 +33,32 @@ package constants is
     constant INSTRUCTION_SUBU : STD_LOGIC_VECTOR(4 downto 0) := "11100";
     constant INSTRUCTION_SW : STD_LOGIC_VECTOR(4 downto 0) := "11011";
     constant INSTRUCTION_SWSP : STD_LOGIC_VECTOR(4 downto 0) := "11010";
+
+
+    constant REG_SP : STD_LOGIC_VECTOR(4 downto 0) := "1000";
+    constant REG_IH : STD_LOGIC_VECTOR(4 downto 0) := "1001";
+    constant REG_T : STD_LOGIC_VECTOR(4 downto 0) := "1010";
+    constant REG_RA : STD_LOGIC_VECTOR(4 downto 0) := "1100";
+    constant REG_NULL : STD_LOGIC_VECTOR(4 downto 0) := "1111";
+
+    constant ALU_ADD : STD_LOGIC_VECTOR(4 downto 0) := "0000";
+    constant ALU_SUB : STD_LOGIC_VECTOR(4 downto 0) := "0001";
+    constant ALU_SLL : STD_LOGIC_VECTOR(4 downto 0) := "0010";
+    constant ALU_SLR : STD_LOGIC_VECTOR(4 downto 0) := "0011";
+    constant ALU_XOR : STD_LOGIC_VECTOR(4 downto 0) := "0100";
+    constant ALU_CMP : STD_LOGIC_VECTOR(4 downto 0) := "0101";
+    constant ALU_SIGNED_CMP : STD_LOGIC_VECTOR(4 downto 0) := "0110";
+    constant ALU_UNSIGNED_CMP : STD_LOGIC_VECTOR(4 downto 0) := "0111";
+    constant ALU_DATA_A : STD_LOGIC_VECTOR(4 downto 0) := "1000";
+    constant ALU_DATA_B : STD_LOGIC_VECTOR(4 downto 0) := "1001";
+    constant ALU_NOT : STD_LOGIC_VECTOR(4 downto 0) := "1010";
+
+    constant EXT_3 : STD_LOGIC_VECTOR(2 downto 0) := "000";
+    constant EXT_4 : STD_LOGIC_VECTOR(2 downto 0) := "001";
+    constant EXT_5 : STD_LOGIC_VECTOR(2 downto 0) := "010";
+    constant EXT_8 : STD_LOGIC_VECTOR(2 downto 0) := "011";
+    constant EXT_11 : STD_LOGIC_VECTOR(2 downto 0) := "100";
+    constant EXT_ZERO : STD_LOGIC := '0';
+    constant EXT_SIGNED : STD_LOGIC := '1';
+
 end constants;
