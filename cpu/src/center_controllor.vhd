@@ -214,7 +214,7 @@ begin
     process (rst, in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry, in_memwb_alu_res_equal_rz, in_alumem_alu_res_equal_rz,
         in_memwb_mem_res_equal_rz)
     begin
-        -- 00 select origin A
+        -- 00 select origin B
         -- 01 select alu/memory data
         -- 10 select memory/wb data
         -- 11 select imm
