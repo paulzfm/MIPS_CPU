@@ -6,6 +6,7 @@ package constants is
     constant INSTRUCTION_ADDIU : STD_LOGIC_VECTOR(4 downto 0) := "01001";
     constant INSTRUCTION_ADDIU3 : STD_LOGIC_VECTOR(4 downto 0) := "01000";
     constant INSTRUCTION_ADDSP : STD_LOGIC_VECTOR(4 downto 0) := "01100";
+    constant INSTRUCTION_RENAME_ADDSP : STD_LOGIC_VECTOR(4 downto 0) := "01010";
     constant INSTRUCTION_ADDU : STD_LOGIC_VECTOR(4 downto 0) := "11100";
     constant INSTRUCTION_AND : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_B : STD_LOGIC_VECTOR(4 downto 0) := "00010";
@@ -24,6 +25,7 @@ package constants is
     constant INSTRUCTION_MFPC : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_MTIH : STD_LOGIC_VECTOR(4 downto 0) := "11110";
     constant INSTRUCTION_MTSP : STD_LOGIC_VECTOR(4 downto 0) := "01100";
+    constant INSTRUCTION_RENAME_MTSP : STD_LOGIC_VECTOR(4 downto 0) := "01011";
     constant INSTRUCTION_NOT : STD_LOGIC_VECTOR(4 downto 0) := "11101";
     constant INSTRUCTION_NOP : STD_LOGIC_VECTOR(4 downto 0) := "00001";
     constant INSTRUCTION_OR : STD_LOGIC_VECTOR(4 downto 0) := "11101";
@@ -52,6 +54,8 @@ package constants is
     constant ALU_DATA_A : STD_LOGIC_VECTOR(4 downto 0) := "1000";
     constant ALU_DATA_B : STD_LOGIC_VECTOR(4 downto 0) := "1001";
     constant ALU_NOT : STD_LOGIC_VECTOR(4 downto 0) := "1010";
+    constant ALU_EQUAL_ZERO : STD_LOGIC_VECTOR(4 downto 0) := "1011";
+    constant ALU_NOT_EQUAL_ZERO : STD_LOGIC_VECTOR(4 downto 0) := "1100";
 
     constant EXT_3 : STD_LOGIC_VECTOR(2 downto 0) := "000";
     constant EXT_4 : STD_LOGIC_VECTOR(2 downto 0) := "001";
@@ -61,4 +65,11 @@ package constants is
     constant EXT_ZERO : STD_LOGIC := '0';
     constant EXT_SIGNED : STD_LOGIC := '1';
 
+    constant WB_ALU_MEM_ALU : STD_LOGIC := '0';
+    constant WB_ALU_MEM_MEM : STD_LOGIC := '1';
+
+    constant ZERO_16 : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+    constant ZERO_12 : STD_LOGIC_VECTOR(11 downto 0) := "000000000000";
+    constant ZERO_8 : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+    constant ZERO_5 : STD_LOGIC_VECTOR(4 downto 0) := "00000";
 end constants;
