@@ -44,9 +44,9 @@ entity states_idalu is
            in_wr_mem : in  STD_LOGIC;
            in_rd_mem : in  STD_LOGIC;
            in_use_imm : in  STD_LOGIC;
-           in_alumem_alu_res_equal_rz : STD_LOGIC;
-           in_memwb_memalu_res_equal_rz : STD_LOGIC;
-           in_memwb_wb_alu_mem : STD_LOGIC;
+           in_alumem_alu_res_equal_rz : in STD_LOGIC;
+           in_memwb_memalu_res_equal_rz : in STD_LOGIC;
+           in_memwb_wb_alu_mem : in STD_LOGIC;
            out_ra : out  STD_LOGIC_VECTOR (3 downto 0);
            out_rb : out  STD_LOGIC_VECTOR (3 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
@@ -80,38 +80,60 @@ begin
 --process
 process(clk,rst,ctl_bubble)
 begin
-	--clk up work
-	if(clk'event and clk='1') then
-		if(rst = '1') then
+	--rst async
+	if(rst='0')then
+	      out_ra <= (others=> '0');
+			out_rb <= (others=> '0');
+			out_rc <= (others=> '0');
+			out_data_a <= (others=> '0');
+			out_data_b <= (others=> '0');
+			out_alu_op <= (others=> '0');
+			out_instruction_op <= (others=> '0');
 			out_pc <= (others=> '0');
 			out_pc_inc <= (others=> '0');
+			out_imm <= (others=> '0');
+			out_alumem_alu_res_equal_rz <= '0';
+         out_memwb_memalu_res_equal_rz <= '0';
+         out_memwb_wb_alu_mem <= '0';
+			out_wr_reg <= '0';
+			out_wr_mem <= '0';
+			out_rd_mem <= '0';
+			out_use_imm <= '0';
+	--clk up work
+	elsif(clk'event and clk='1') then
+		if(ctl_rst = '1') then
 			out_ra <= (others=> '0');
 			out_rb <= (others=> '0');
 			out_rc <= (others=> '0');
 			out_data_a <= (others=> '0');
 			out_data_b <= (others=> '0');
-			out_op <= (others=> '0');
-			out_instruction5 <= (others=> '0');
-			out_is_branch <= (others=> '0');
+			out_alu_op <= (others=> '0');
+			out_instruction_op <= (others=> '0');
+			out_pc <= (others=> '0');
+			out_pc_inc <= (others=> '0');
 			out_imm <= (others=> '0');
+			out_alumem_alu_res_equal_rz <= '0';
+         out_memwb_memalu_res_equal_rz <= '0';
+         out_memwb_wb_alu_mem <= '0';
 			out_wr_reg <= '0';
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
+			out_use_imm <= '0';
 		elsif(ctl_bubble = '0') then
-			out_pc <= in_pc;
-			out_pc_inc <= in_pc_inc;
 			out_ra <= in_ra;
 			out_rb <= in_rb;
 			out_rc <= in_rc;
 			out_data_a <= in_data_a;
 			out_data_b <= in_data_b;
-			out_op <= in_op;
-			out_instruction5 <= in_instruction5;
-			out_is_branch <= in_is_branch;
+			out_alu_op <= in_alu_op;
+			out_instruction_op <= in_instruction_op;
+			out_pc <= in_pc;
+			out_pc_inc <= in_pc_inc;
 			out_imm <= in_imm;
 			out_wr_reg <= in_wr_reg;
 			out_wr_mem <= in_wr_mem;
 			out_rd_mem <= in_rd_mem;
+			out_use_imm <= in_use_imm;
 		end if;
 	end if;
 	

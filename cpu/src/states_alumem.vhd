@@ -43,9 +43,9 @@ entity states_alumem is
            in_wr_reg : in  STD_LOGIC;
            in_wr_mem : in  STD_LOGIC;
            in_rd_mem : in  STD_LOGIC;
-           in_alumem_alu_res_equal_rz : STD_LOGIC;
-           in_memwb_memalu_res_equal_rz : STD_LOGIC;
-           in_memwb_wb_alu_mem : STD_LOGIC;
+           in_alumem_alu_res_equal_rz : in STD_LOGIC;
+           in_memwb_memalu_res_equal_rz : in STD_LOGIC;
+           in_memwb_wb_alu_mem : in STD_LOGIC;
            out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_pc_inc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -69,27 +69,49 @@ architecture Behavioral of states_alumem is
 --signal s_rd_mem : STD_LOGIC := '0';
 begin
 --process
-process(clk,rst,ctl_bubble)
+process(clk,rst,ctl_bubble,ctl_rst)
 begin
-	--clk up work
-	if(clk'event and clk='1') then
-		if(rst = '1') then
-		--output all '0'
+	--rst async
+	if(rst='0')then
+	      --output all '0'
 			out_pc <= (others=> '0');
+			out_pc_inc <= (others=> '0');
 			out_alu_res <= (others=> '0');
 			out_rc <= (others=> '0');
-			out_instruction5 <= (others=> '0');
+			out_instruction_op <= (others=> '0');
 			out_wr_reg <= '0';
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
+			out_alumem_alu_res_equal_rz <= '0';
+         out_memwb_memalu_res_equal_rz <= '0';
+         out_memwb_wb_alu_mem <= '0';
+	--clk up work
+	elsif(clk'event and clk='1') then
+		if(ctl_rst = '1') then
+		--output all '0'
+			out_pc <= (others=> '0');
+			out_pc_inc <= (others=> '0');
+			out_alu_res <= (others=> '0');
+			out_rc <= (others=> '0');
+			out_instruction_op <= (others=> '0');
+			out_wr_reg <= '0';
+			out_wr_mem <= '0';
+			out_rd_mem <= '0';
+			out_alumem_alu_res_equal_rz <= '0';
+         out_memwb_memalu_res_equal_rz <= '0';
+         out_memwb_wb_alu_mem <= '0';
 		elsif(ctl_bubble = '0') then
 			out_pc <= in_pc;
+			out_pc_inc <= in_pc_inc;
 			out_alu_res <= in_alu_res;
 			out_rc <= in_rc;
-			out_instruction5 <= in_instruction5;
+			out_instruction_op <= in_instruction_op;
 			out_wr_reg <= in_wr_reg;
 			out_wr_mem <= in_wr_mem;
 			out_rd_mem <= in_rd_mem;
+			out_alumem_alu_res_equal_rz <= in_alumem_alu_res_equal_rz;
+         out_memwb_memalu_res_equal_rz <= in_memwb_memalu_res_equal_rz;
+         out_memwb_wb_alu_mem <= in_memwb_wb_alu_mem;
 		end if;
 	end if;
 	

@@ -49,9 +49,14 @@ begin
 --process
 process(clk,rst,ctl_bubble)
 begin
+	--rst async
+	if(rst='0')then
+			out_pc <= (others=> '0');
+			out_pc_inc <= (others=> '0');
+			out_instruction <= (others=> '0');
 	--clk up work
-	if(clk'event and clk='1') then
-		if(rst = '1') then
+	elsif(clk'event and clk='1') then
+		if(ctl_rst = '1') then
 			out_pc <= (others=> '0');
 			out_pc_inc <= (others=> '0');
 			out_instruction <= (others=> '0');
