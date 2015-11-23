@@ -34,6 +34,7 @@ package constants is
     constant INSTRUCTION_SW : STD_LOGIC_VECTOR(4 downto 0) := "11011";
     constant INSTRUCTION_SWSP : STD_LOGIC_VECTOR(4 downto 0) := "11010";
 
+
     constant REG_SP : STD_LOGIC_VECTOR(4 downto 0) := "1000";
     constant REG_IH : STD_LOGIC_VECTOR(4 downto 0) := "1001";
     constant REG_T : STD_LOGIC_VECTOR(4 downto 0) := "1010";
@@ -51,4 +52,13 @@ package constants is
     constant ALU_DATA_A : STD_LOGIC_VECTOR(4 downto 0) := "1000";
     constant ALU_DATA_B : STD_LOGIC_VECTOR(4 downto 0) := "1001";
     constant ALU_NOT : STD_LOGIC_VECTOR(4 downto 0) := "1010";
+
+    constant EXT_3 : STD_LOGIC_VECTOR(2 downto 0) := "000";
+    constant EXT_4 : STD_LOGIC_VECTOR(2 downto 0) := "001";
+    constant EXT_5 : STD_LOGIC_VECTOR(2 downto 0) := "010";
+    constant EXT_8 : STD_LOGIC_VECTOR(2 downto 0) := "011";
+    constant EXT_11 : STD_LOGIC_VECTOR(2 downto 0) := "100";
+    constant EXT_ZERO : STD_LOGIC := '0';
+    constant EXT_SIGNED : STD_LOGIC := '1';
+
 end constants;
