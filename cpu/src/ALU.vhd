@@ -34,8 +34,8 @@ entity alu is
     Port ( in_data_a : in  STD_LOGIC_VECTOR (15 downto 0);
            in_data_b : in  STD_LOGIC_VECTOR (15 downto 0);
            in_op : in  STD_LOGIC_VECTOR (3 downto 0);
-           out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
-           debug : out STD_LOGIC_VECTOR(15 downto 0));
+           out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0));
+			  
 end alu;
 
 architecture Behavioral of alu is
@@ -72,10 +72,7 @@ begin
         out_output => sub16_res,
         out_t => sub16_t
     );
-    -- debug <= "1111111111111111";
-	 debug <= add16_res;
-    -- two complement of input b
-
+    
     process (in_op, in_data_a, in_data_b, add16_res, sub16_res, add16_t, sub16_t)
     variable all_zero : STD_LOGIC;
     begin
