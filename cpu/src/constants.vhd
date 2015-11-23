@@ -34,7 +34,7 @@ package constants is
     -- distinguish these two 00110 instructions by the lowest bit (0 downto 0)
     constant INSTRUCTION_MFIH : STD_LOGIC_VECTOR(4 downto 0) := "11110"; -- 0
     constant INSTRUCTION_MTIH : STD_LOGIC_VECTOR(4 downto 0) := "11110"; -- 1
-    constant INSTRUCTION_RENAME_MTSP : STD_LOGIC_VECTOR(4 downto 0) := "01011";
+    -- constant INSTRUCTION_RENAME_MTSP : STD_LOGIC_VECTOR(4 downto 0) := "01011";
     constant INSTRUCTION_NOP : STD_LOGIC_VECTOR(4 downto 0) := "00001";
     -- distinguish these two 00110 instructions by the lowest bit (0 downto 0)
     constant INSTRUCTION_SLL : STD_LOGIC_VECTOR(4 downto 0) := "00110"; -- 0
