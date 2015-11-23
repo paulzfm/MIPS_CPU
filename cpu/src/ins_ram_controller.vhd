@@ -1,20 +1,23 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    16:25:57 11/23/2015 
--- Design Name: 
--- Module Name:    ins_ram_controller - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+-- Company:
+-- Engineer:
 --
--- Dependencies: 
+-- Create Date:    16:25:57 11/23/2015
+-- Design Name:
+-- Module Name:    ins_ram_controller - Behavioral
+-- Project Name:
+-- Target Devices:
+-- Tool versions:
+-- Description:
+--   RAM2 (Instruction RAM) Controller.
+--     when in_wr = '0' and in_rd = '0' then do nothing
+--     when in_wr = '1' then write ram2
+--     otherwise (in_rd = '1' and in_wr = '0') read ram2
+-- Dependencies:
 --
--- Revision: 
+-- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments: 
+-- Additional Comments:
 --
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -45,9 +48,43 @@ entity ins_ram_controller is
 end ins_ram_controller;
 
 architecture Behavioral of ins_ram_controller is
-
+    type state_type is (s_init, s_rd, s_wr);
+    signal state: state_type;
 begin
+    ram2_en <= '0';
+    ram2_addr <= "00" & in_addr;
 
-
+    transaction : process(clk, rst)
+    begin
+        if rst = '0' then -- reset
+            state <= s_init;
+        elsif rising_edge(clk) then -- transaction
+            if in_rd = '0' and in_wr = '0' then -- disable
+                out_data <= (others => 'Z');
+            else
+                case state is
+                    when s_init =>
+                        case in_wr is
+                            when '0' => -- read ram2
+                                state <= s_rd;
+                                ram2_oe <= '0';
+                                ram2_we <= '1';
+                                ram2_data <= (others => 'Z');
+                            when '1' => -- write ram2
+                                state <= s_wr;
+                                ram2_oe <= '1';
+                                ram2_we <= '1';
+                                ram2_data <= in_data;
+                            when others => null;
+                        end case;
+                    when s_rd =>
+                        state <= s_init;
+                        out_data <= ram2_data;
+                    when s_wr =>
+                        state <= s_init;
+                        ram2_we <= '0';
+                    when others => null;
+                end case;
+            end if;
+        end if;
 end Behavioral;
-

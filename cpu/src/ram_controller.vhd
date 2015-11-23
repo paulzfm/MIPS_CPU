@@ -12,7 +12,7 @@
 --   RAM1 and Serial Controller.
 --     when in_wr = '0' and in_rd = '0' then do nothing
 --     when in_wr = '1' then write ram1 or serial (BF00)
---     when in_wr = '0' and in_rd = '1' then read ram1 or serial (BF00) or serial control (BF01)
+--     otherwise (in_wr = '0' and in_rd = '1') read ram1 or serial (BF00) or serial control (BF01)
 -- Dependencies:
 --
 -- Revision:
@@ -58,6 +58,7 @@ architecture Behavioral of ram_controller is
     signal ctl: STD_LOGIC_VECTOR (2 downto 0);
     signal write_ready: STD_LOGIC;
 begin
+    ram1_en <= '0';
     ram1_addr <= "00" & in_addr;
     ctl(0) <= in_wr; -- write?
 
