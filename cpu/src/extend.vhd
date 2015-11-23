@@ -41,6 +41,7 @@ end extend;
 -- 010 5
 -- 011 8
 -- 100 11
+-- 111 no extend 16 bit imm
 --type 0 zero ext &  1 signed ext   
 
 architecture Behavioral of extend is
@@ -49,40 +50,42 @@ process(ctl_size,ctl_type,input)
 begin
 	case ctl_size is
 		when "000" =>
-			output(2 downto 0) <= iput(2 downto 0);
+			output(2 downto 0) <= input(2 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 3) <= (others=>'0');
 			else
 				output(15 downto 3) <= (others=>input(2));
 			end if;
 		when "001" =>
-			output(3 downto 0) <= iput(3 downto 0);
+			output(3 downto 0) <= input(3 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 4) <= (others=>'0');
 			else
 				output(15 downto 4) <= (others=>input(3));
 			end if;
 		when "010" =>
-			output(4 downto 0) <= iput(4 downto 0);
+			output(4 downto 0) <= input(4 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 5) <= (others=>'0');
 			else
 				output(15 downto 5) <= (others=>input(4));
 			end if;
 		when "011" =>
-			output(7 downto 0) <= iput(7 downto 0);
+			output(7 downto 0) <= input(7 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 8) <= (others=>'0');
 			else
 				output(15 downto 8) <= (others=>input(7));
 			end if;
 		when "100" =>
-			output(10 downto 0) <= iput(10 downto 0);
+			output(10 downto 0) <= input(10 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 11) <= (others=>'0');
 			else
 				output(15 downto 11) <= (others=>input(10));
 			end if;
+	   when "111" =>
+			output(15 downto 0) <= input(15 downto 0);
 		when others => null;
 	end case;
 end process;

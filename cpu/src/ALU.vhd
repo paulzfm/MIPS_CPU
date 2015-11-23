@@ -95,18 +95,21 @@ begin
                 else
                     out_alu_res <= std_logic_vector(unsigned(in_data_a) sll to_integer(unsigned(in_data_b)));
                 end if;
-            when ALU_SLR => 
+            when ALU_SRA => 
                 -- ALU >> data_a >> data_b 
-                -- logic shift
+                -- airthmetic shift
                 if (in_data_b = 0)
                     then
-                        out_alu_res <= std_logic_vector(unsigned(in_data_a) srl 8);
+                        out_alu_res <= std_logic_vector(unsigned(in_data_a) sra 8);
                     else
-                        out_alu_res <= std_logic_vector(unsigned(in_data_a) srl to_integer(unsigned(in_data_b)));
+                        out_alu_res <= std_logic_vector(unsigned(in_data_a) sra to_integer(unsigned(in_data_b)));
                     end if; 
             when ALU_XOR => 
                 -- ALU data_a xor in_data_b
                 out_alu_res <= in_data_a xor in_data_b;
+				when ALU_OR => 
+                -- ALU data_a or in_data_b
+                out_alu_res <= in_data_a or in_data_b;
             when ALU_CMP => 
                 -- ALU cmp 
                 -- data_a == data_b => 1 
