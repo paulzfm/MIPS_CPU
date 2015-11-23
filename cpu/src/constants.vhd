@@ -33,4 +33,9 @@ package constants is
     constant INSTRUCTION_SUBU : STD_LOGIC_VECTOR(4 downto 0) := "11100";
     constant INSTRUCTION_SW : STD_LOGIC_VECTOR(4 downto 0) := "11011";
     constant INSTRUCTION_SWSP : STD_LOGIC_VECTOR(4 downto 0) := "11010";
+
+    constant REG_SP : STD_LOGIC_VECTOR(4 downto 0) := "1000";
+    constant REG_IH : STD_LOGIC_VECTOR(4 downto 0) := "1001";
+    constant REG_T : STD_LOGIC_VECTOR(4 downto 0) := "1010";
+    constant REG_RA : STD_LOGIC_VECTOR(4 downto 0) := "1100";
 end constants;
