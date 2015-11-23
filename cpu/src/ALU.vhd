@@ -1,20 +1,20 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    20:17:55 11/17/2015 
--- Design Name: 
--- Module Name:    alu - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+-- Company:
+-- Engineer:
 --
--- Dependencies: 
+-- Create Date:    20:17:55 11/17/2015
+-- Design Name:
+-- Module Name:    alu - Behavioral
+-- Project Name:
+-- Target Devices:
+-- Tool versions:
+-- Description:
 --
--- Revision: 
+-- Dependencies:
+--
+-- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments: 
+-- Additional Comments:
 --
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -35,7 +35,7 @@ entity alu is
            in_data_b : in  STD_LOGIC_VECTOR (15 downto 0);
            in_op : in  STD_LOGIC_VECTOR (3 downto 0);
            out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0));
-			  
+
 end alu;
 
 architecture Behavioral of alu is
@@ -72,22 +72,22 @@ begin
         out_output => sub16_res,
         out_t => sub16_t
     );
-    
+
     process (in_op, in_data_a, in_data_b, add16_res, sub16_res, add16_t, sub16_t)
     variable all_zero : STD_LOGIC;
     begin
         case in_op is
-            when ALU_ADD => 
-                -- ALU add 
+            when ALU_ADD =>
+                -- ALU add
                 -- ATTENTION! unsigned!
                 out_alu_res <= add16_res;
-            when ALU_SUB => 
+            when ALU_SUB =>
                 -- ALU sub
                 -- ATTENTION! unsigned!
                 -- out_alu_res <= sub16_res;
                 out_alu_res <= sub16_res;
-            when ALU_SLL => 
-                -- ALU << data_a << data_b 
+            when ALU_SLL =>
+                -- ALU << data_a << data_b
                 -- logic shift
                 if (in_data_b = 0)
                 then
@@ -95,24 +95,24 @@ begin
                 else
                     out_alu_res <= std_logic_vector(unsigned(in_data_a) sll to_integer(unsigned(in_data_b)));
                 end if;
-            when ALU_SRA => 
-                -- ALU >> data_a >> data_b 
-                -- airthmetic shift
+            when ALU_SRA =>
+                -- ALU >> data_a >> data_b
+                -- arithmetic shift
                 if (in_data_b = 0)
                     then
                         out_alu_res <= std_logic_vector(unsigned(in_data_a) sra 8);
                     else
                         out_alu_res <= std_logic_vector(unsigned(in_data_a) sra to_integer(unsigned(in_data_b)));
-                    end if; 
-            when ALU_XOR => 
+                    end if;
+            when ALU_XOR =>
                 -- ALU data_a xor in_data_b
                 out_alu_res <= in_data_a xor in_data_b;
-				when ALU_OR => 
+				when ALU_OR =>
                 -- ALU data_a or in_data_b
                 out_alu_res <= in_data_a or in_data_b;
-            when ALU_CMP => 
-                -- ALU cmp 
-                -- data_a == data_b => 1 
+            when ALU_CMP =>
+                -- ALU cmp
+                -- data_a == data_b => 1
                 -- data_a != data_b => 0
                 -- UNSIGNED!!
                 all_zero := '0';
@@ -122,21 +122,21 @@ begin
                 end loop;
                 out_alu_res <= "000000000000000" & not(all_zero);
 
-            when ALU_SIGNED_CMP => 
-                -- ALU signed cmp 
-                -- data_a < data_b => 1  
+            when ALU_SIGNED_CMP =>
+                -- ALU signed cmp
+                -- data_a < data_b => 1
                 -- data_a >= data_b => 0
                 out_alu_res <= "000000000000000" & ((in_data_a(15) and not(in_data_b(15))) or
                                                   ( not(in_data_a(15) xor in_data_b(15)) and sub16_t ));
-            when ALU_UNSIGNED_CMP => 
-                -- ALU unsigned cmp 
-                -- data_a < data_b => 1 
+            when ALU_UNSIGNED_CMP =>
+                -- ALU unsigned cmp
+                -- data_a < data_b => 1
                 -- data_a >= data_b => 0
                 out_alu_res <= "000000000000000" & (sub16_t);
-            when ALU_DATA_A => 
+            when ALU_DATA_A =>
                 -- output data_a
                 out_alu_res <= in_data_a;
-            when ALU_DATA_B => 
+            when ALU_DATA_B =>
                 -- output data_b
                 out_alu_res <= in_data_b;
             when ALU_NOT =>
