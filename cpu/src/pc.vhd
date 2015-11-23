@@ -39,7 +39,15 @@ end pc;
 architecture Behavioral of pc is
 
 begin
-
-
+    process (clk)
+    begin
+        if (falling_edge(clk))
+        then
+            if (wr = '1')
+            then
+                output <= input;
+            end if;
+        end if;
+    end process;
 end Behavioral;
 

@@ -45,8 +45,7 @@ entity states_idalu is
            in_rd_mem : in  STD_LOGIC;
            in_use_imm : in  STD_LOGIC;
            in_alumem_alu_res_equal_rz : STD_LOGIC;
-           in_memwb_mem_res_equal_rz : STD_LOGIC;
-           in_memwb_alu_res_equal_rz : STD_LOGIC;
+           in_memwb_memalu_res_equal_rz : STD_LOGIC;
            in_memwb_wb_alu_mem : STD_LOGIC;
            out_ra : out  STD_LOGIC_VECTOR (3 downto 0);
            out_rb : out  STD_LOGIC_VECTOR (3 downto 0);
@@ -59,11 +58,9 @@ entity states_idalu is
            out_pc_inc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_imm : out  STD_LOGIC_VECTOR (15 downto 0);
 
-           out_memwb_alu_or_mem : STD_LOGIC;
-           out_alumem_alu_res_equal_rz : STD_LOGIC;
-           out_memwb_mem_res_equal_rz : STD_LOGIC;
-           out_memwb_alu_res_equal_rz : STD_LOGIC;
-           out_memwb_wb_alu_mem : STD_LOGIC;
+           out_alumem_alu_res_equal_rz : out STD_LOGIC;
+           out_memwb_memalu_res_equal_rz : out STD_LOGIC;
+           out_memwb_wb_alu_mem : out STD_LOGIC;
            ctl_bubble : in  STD_LOGIC;
            ctl_copy : in  STD_LOGIC;
            ctl_rst : in  STD_LOGIC;

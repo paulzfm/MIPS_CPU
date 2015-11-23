@@ -34,34 +34,50 @@ entity predict is
            in_op : in  STD_LOGIC_VECTOR (4 downto 0);
            in_is_jump : in  STD_LOGIC;
            in_is_branch : in  STD_LOGIC;
-           in_is_jump_ra : in STD_LOGIC;
            in_predict_res : in STD_LOGIC;
-           in_forward_ra_reg : in STD_LOGIC_VECTOR(3 downto 0);
+           in_jump_reg : in STD_LOGIC_VECTOR(3 downto 0);
+           in_jump_reg_data : in STD_LOGIC_VECTOR(15 downto 0);
+           in_alumem_rz : in STD_LOGIC_VECTOR(3 downto 0);
+           in_alumem_alu_res_equal_rz : in STD_LOGIC;
+           in_alumem_alu_res : STD_LOGIC_VECTOR(15 downto 0);
+           in_memwb_rz : in STD_LOGIC_VECTOR(3 downto 0);
+           in_memwb_alumem_res_equal_rz : in STD_LOGIC;
+           in_memwb_alumem_res : in STD_LOGIC_VECTOR(15 downto 0);
+           in_branch_imm : in STD_LOGIC_VECTOR(15 downto 0);
+           out_jump_reg_data : out STD_LOGIC_VECTOR(15 downto 0);
+           out_branch_imm : out STD_LOGIC_VECTOR(15 downto 0);
            out_ctl_predict : out STD_LOGIC_VECTOR(1 downto 0));
 end predict;
 
 architecture Behavioral of predict is
 
 begin
-    process (rst, in_op, in_is_jump, in_is_branch, in_predict_res)
+    process (rst, in_op, in_is_jump, in_is_branch, in_predict_res, in_alumem_rz, 
+        in_jump_reg, in_jump_reg_data, in_alumem_alu_res_equal_rz, in_memwb_alumem_res_equal_rz, 
+        in_alumem_alu_res, in_memwb_rz, in_memwb_alumem_res, in_branch_imm)
     begin
         -- 00 select PC + 1
         -- 01 select PC + 1 + Imm
         -- 10 select register
-        -- 11 select ra register
         if (rst = '1')
         then
             out_ctl_predict <= "00";
         else
             if (in_is_jump = '1')
             then
-                if (in_is_jump_ra = '1') then
-                    out_ctl_predict <= "11";
+                if (in_alumem_rz = in_jump_reg and in_alumem_alu_res_equal_rz = '1')
+                then
+                    out_jump_reg_data <= in_alumem_alu_res;
+                elsif (in_memwb_rz = in_jump_reg and in_memwb_alumem_res_equal_rz = '1')
+                then
+                    out_jump_reg_data <= in_memwb_alumem_res;
                 else
-                    out_ctl_predict <= "10";
+                    out_jump_reg_data <= in_jump_reg;
                 end if;
+                out_ctl_predict <= "10";
             else
                 -- branch
+                out_branch_imm <= in_branch_imm;
                 if (in_op = INSTRUCTION_B)
                 then
                     out_ctl_predict <= "01";

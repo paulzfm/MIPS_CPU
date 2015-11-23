@@ -40,17 +40,15 @@ entity states_memwb is
            in_rc : in  STD_LOGIC_VECTOR (3 downto 0);
            in_wr_reg : in  STD_LOGIC;
            in_mem_res : in  STD_LOGIC_VECTOR (15 downto 0);
-           in_memwb_mem_res_equal_rz : STD_LOGIC;
-           in_memwb_alu_res_equal_rz : STD_LOGIC;
+           in_memwb_memalu_res_equal_rz : STD_LOGIC;
            in_memwb_wb_alu_mem : STD_LOGIC;
            out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
            out_wr_reg : out  STD_LOGIC;
            out_mem_res : out  STD_LOGIC_VECTOR (15 downto 0);
-           out_memwb_wb_alu_mem : STD_LOGIC;
-           out_memwb_mem_res_equal_rz : STD_LOGIC;
-           out_memwb_alu_res_equal_rz : STD_LOGIC);
+           out_memwb_wb_alu_mem : out STD_LOGIC;
+           out_memwb_memalu_res_equal_rz : out STD_LOGIC);
 end states_memwb;
 
 architecture Behavioral of states_memwb is

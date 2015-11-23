@@ -44,12 +44,10 @@ entity decode is
            out_ctl_imm_extend_type : out STD_LOGIC;
            out_ctl_is_jump : out STD_LOGIC;
            out_ctl_is_branch : out STD_LOGIC;
-           out_is_jump_ra : out STD_LOGIC;
            out_use_imm : out STD_LOGIC;
-           out_alumem_alu_res_equal_rz : STD_LOGIC;
-           out_memwb_wb_alu_mem : STD_LOGIC;
-           out_memwb_mem_res_equal_rz : STD_LOGIC;
-           out_memwb_alu_res_equal_rz : STD_LOGIC
+           out_alumem_alu_res_equal_rz : out STD_LOGIC;
+           out_memwb_wb_alu_mem : out STD_LOGIC;
+           out_memwb_memalu_res_equal_rz : out STD_LOGIC
         );
 end decode;
 

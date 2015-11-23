@@ -43,6 +43,7 @@ entity center_controllor is
            out_predict_err : out  STD_LOGIC;
            out_predict_res : out  STD_LOGIC;
            out_branch_alu_pc_imm : out  STD_LOGIC;
+           out_idalu_pc_inc : out STD_LOGIC_VECTOR(15 downto 0);
            in_alumem_instruction_op : in  STD_LOGIC_VECTOR (4 downto 0);
            in_alumem_rc : in  STD_LOGIC_VECTOR (3 downto 0);
            in_memwb_rc : in STD_LOGIC_VECTOR(3 downto 0);
@@ -52,10 +53,10 @@ entity center_controllor is
            in_idalu_use_imm_ry : STD_LOGIC;
            in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
 		   in_key_interrupt : in  STD_LOGIC;
-           in_memwb_wb_alu_mem : in STD_LOGIC;
-           in_alumem_alu_res_equal_rz : STD_LOGIC;
-           in_memwb_mem_res_equal_rz : STD_LOGIC;
-           in_memwb_alu_res_equal_rz : STD_LOGIC;
+           in_alumem_alu_res_equal_rz : in STD_LOGIC;
+           in_memwb_memalu_res_equal_rz : in STD_LOGIC;
+           in_idalu_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
+
 
 
            clk : in  STD_LOGIC;
@@ -186,7 +187,7 @@ begin
     end process;
 
     calc_out_forward_alu_a:
-    process (rst, in_alumem_rc, in_idalu_ra, in_alumem_alu_res_equal_rz, in_memwb_wb_alu_mem, in_memwb_alu_res_equal_rz, in_memwb_mem_res_equal_rz)
+    process (rst, in_alumem_rc, in_idalu_ra, in_alumem_alu_res_equal_rz, in_memwb_alu_res_equal_rz, in_memwb_mem_res_equal_rz)
     begin
         -- 00 select origin A
         -- 01 select alu/memory data
@@ -199,9 +200,7 @@ begin
             if (in_alumem_rc = in_idalu_ra and in_alumem_alu_res_equal_rz = '1')
             then
                 out_forward_alu_a <= "01";
-            elsif ((in_memwb_rc = in_idalu_ra and in_memwb_wb_alu_mem = '0' and in_memwb_alu_res_equal_rz = '1') or
-                (in_memwb_rc = in_idalu_ra and in_memwb_wb_alu_mem = '1' and in_memwb_mem_res_equal_rz = '1')
-                )
+            elsif (in_memwb_rc = in_idalu_ra and in_memwb_alu_res_equal_rz = '1')
             then
                 out_forward_alu_a <= "10";
             else
@@ -213,7 +212,7 @@ begin
     
     calc_out_forward_alu_b:
     process (rst, in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry, in_memwb_alu_res_equal_rz, in_alumem_alu_res_equal_rz,
-        in_memwb_wb_alu_mem, in_memwb_mem_res_equal_rz)
+        in_memwb_mem_res_equal_rz)
     begin
         -- 00 select origin A
         -- 01 select alu/memory data
@@ -229,9 +228,7 @@ begin
             elsif (in_alumem_rc = in_idalu_rb and in_alumem_alu_res_equal_rz = '1')
             then
                 out_forward_alu_b <= "01";
-            elsif ((in_memwb_rc = in_idalu_rb and in_memwb_wb_alu_mem = '0' and in_memwb_alu_res_equal_rz = '1') or
-                (in_memwb_rc = in_idalu_rb and in_memwb_wb_alu_mem = '1' and in_memwb_mem_res_equal_rz = '1')
-                )
+            elsif (in_memwb_rc = in_idalu_rb and in_memwb_memalu_res_equal_rz = '1')
             then
                 out_forward_alu_b <= "10";
             else
