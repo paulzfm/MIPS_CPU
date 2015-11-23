@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company:
--- Engineer:
+-- Engineer: Zhu Fengmin
 --
 -- Create Date:    21:10:42 11/22/2015
 -- Design Name:
@@ -9,7 +9,10 @@
 -- Target Devices:
 -- Tool versions:
 -- Description:
---
+--   RAM1 and Serial Controller.
+--     when in_wr = '0' and in_rd = '0' then do nothing
+--     when in_wr = '1' then write ram1 or serial (BF00)
+--     when in_wr = '0' and in_rd = '1' then read ram1 or serial (BF00) or serial control (BF01)
 -- Dependencies:
 --
 -- Revision:
@@ -32,10 +35,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity ram_controller is
     Port ( clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
-           in_en : in  STD_LOGIC; -- '1': enable, '0': disable
-           in_wr : in  STD_LOGIC; -- '1': write, '0': read
+           in_rd : in  STD_LOGIC; -- '1': read, '0': not read
+           in_wr : in  STD_LOGIC; -- '1': write, '0': not write
            in_addr : in  STD_LOGIC_VECTOR (15 downto 0);
            in_data : in  STD_LOGIC_VECTOR (15 downto 0);
+           out_data : out  STD_LOGIC_VECTOR (15 downto 0);
            ram1_oe : out  STD_LOGIC;
            ram1_we : out  STD_LOGIC;
            ram1_en : out  STD_LOGIC;
@@ -71,7 +75,7 @@ begin
 
     wr_ready : process (serial_tsre, serial_tbre)
     begin
-        if serial_tsre and serial_tbre then
+        if serial_tsre = '1' and serial_tbre = '1' then
             write_ready <= '1';
         else
             write_ready <= '0';
@@ -83,15 +87,15 @@ begin
         if rst = '0' then -- reset
             state <= s_init;
         elsif rising_edge(clk) then -- transaction
-            if in_en = '0' then -- disable
-                ram1_serial_data <= (others => 'Z');
+            if in_rd = '0' and in_wr = '0' then -- disable
+                out_data <= (others => 'Z');
             else
                 case state is
                     when s_init =>
                         case ctl is
                             when "100" => -- serial control signal
                                 state <= s_rd_serial_ctl;
-                                ram1_serial_data <= (0 => write_ready, 1 => serial_data_ready, others => '0');
+                                out_data <= (0 => write_ready, 1 => serial_data_ready, others => '0');
                             when "000" => -- read ram1
                                 state <= s_rd_ram;
                                 ram1_oe <= '0';
@@ -127,11 +131,13 @@ begin
                     when s_rd_serial =>
                         state <= s_init;
                         serial_rdn <= '0';
+                        out_data <= ram1_serial_data;
                     when s_wr_serial =>
                         state <= s_init;
                         serial_wrn <= '1';
                     when s_rd_ram =>
                         state <= s_init;
+                        out_data <= ram1_serial_data;
                     when s_wr_ram =>
                         state <= s_init;
                         ram1_we <= '0';
