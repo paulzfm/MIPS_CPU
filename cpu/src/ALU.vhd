@@ -136,6 +136,9 @@ begin
             when "1001" => 
                 -- output data_b
                 out_alu_res <= in_data_b;
+            when "1010" =>
+                -- not a
+                out_alu_res <= not(in_data_a);
             when others =>
                 out_alu_res <= (others => '0');
         end case;

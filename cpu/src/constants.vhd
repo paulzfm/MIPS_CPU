@@ -38,4 +38,17 @@ package constants is
     constant REG_IH : STD_LOGIC_VECTOR(4 downto 0) := "1001";
     constant REG_T : STD_LOGIC_VECTOR(4 downto 0) := "1010";
     constant REG_RA : STD_LOGIC_VECTOR(4 downto 0) := "1100";
+    constant REG_NULL : STD_LOGIC_VECTOR(4 downto 0) := "1111";
+
+    constant ALU_ADD : STD_LOGIC_VECTOR(4 downto 0) := "0000";
+    constant ALU_SUB : STD_LOGIC_VECTOR(4 downto 0) := "0001";
+    constant ALU_SLL : STD_LOGIC_VECTOR(4 downto 0) := "0010";
+    constant ALU_SLR : STD_LOGIC_VECTOR(4 downto 0) := "0011";
+    constant ALU_XOR : STD_LOGIC_VECTOR(4 downto 0) := "0100";
+    constant ALU_CMP : STD_LOGIC_VECTOR(4 downto 0) := "0101";
+    constant ALU_SIGNED_CMP : STD_LOGIC_VECTOR(4 downto 0) := "0110";
+    constant ALU_UNSIGNED_CMP : STD_LOGIC_VECTOR(4 downto 0) := "0111";
+    constant ALU_DATA_A : STD_LOGIC_VECTOR(4 downto 0) := "1000";
+    constant ALU_DATA_B : STD_LOGIC_VECTOR(4 downto 0) := "1001";
+    constant ALU_NOT : STD_LOGIC_VECTOR(4 downto 0) := "1010";
 end constants;
