@@ -1,0 +1,2 @@
+select figure at 1867 4360 8 -branches -sn=1
+update symbols states_idalu
