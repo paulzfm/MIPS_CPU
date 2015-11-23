@@ -37,9 +37,12 @@ entity predict is
            in_predict_res : in STD_LOGIC;
            in_jump_reg : in STD_LOGIC_VECTOR(3 downto 0);
            in_jump_reg_data : in STD_LOGIC_VECTOR(15 downto 0);
+           in_idalu_alu_res_equal_rz : in STD_LOGIC;
+           in_idalu_rz : in STD_LOGIC;
+           in_alu_res : in STD_LOGIC_VECTOR(15 downto 0);
            in_alumem_rz : in STD_LOGIC_VECTOR(3 downto 0);
            in_alumem_alu_res_equal_rz : in STD_LOGIC;
-           in_alumem_alu_res : STD_LOGIC_VECTOR(15 downto 0);
+           in_alumem_alu_res : in STD_LOGIC_VECTOR(15 downto 0);
            in_memwb_rz : in STD_LOGIC_VECTOR(3 downto 0);
            in_memwb_alumem_res_equal_rz : in STD_LOGIC;
            in_memwb_alumem_res : in STD_LOGIC_VECTOR(15 downto 0);
@@ -54,7 +57,8 @@ architecture Behavioral of predict is
 begin
     process (rst, in_op, in_is_jump, in_is_branch, in_predict_res, in_alumem_rz, 
         in_jump_reg, in_jump_reg_data, in_alumem_alu_res_equal_rz, in_memwb_alumem_res_equal_rz, 
-        in_alumem_alu_res, in_memwb_rz, in_memwb_alumem_res, in_branch_imm)
+        in_alumem_alu_res, in_memwb_rz, in_memwb_alumem_res, in_branch_imm, in_idalu_alu_res_equal_rz, in_alu_res,
+        in_idalu_rz)
     begin
         -- 00 select PC + 1
         -- 01 select PC + 1 + Imm
@@ -65,7 +69,10 @@ begin
         else
             if (in_is_jump = '1')
             then
-                if (in_alumem_rz = in_jump_reg and in_alumem_alu_res_equal_rz = '1')
+                if (in_idalu_rz = in_jump_reg and in_idalu_alu_res_equal_rz = '1')
+                then
+                    out_jump_reg_data <= in_alu_res;
+                elsif (in_alumem_rz = in_jump_reg and in_alumem_alu_res_equal_rz = '1')
                 then
                     out_jump_reg_data <= in_alumem_alu_res;
                 elsif (in_memwb_rz = in_jump_reg and in_memwb_alumem_res_equal_rz = '1')
