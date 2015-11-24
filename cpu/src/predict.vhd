@@ -31,9 +31,9 @@ use work.constants.ALL;
 
 entity predict is
     Port ( rst : in  STD_LOGIC;
-           in_op : in  STD_LOGIC_VECTOR (4 downto 0);
            in_is_jump : in  STD_LOGIC;
-           in_is_branch : in  STD_LOGIC;
+           in_is_b : in  STD_LOGIC;
+           in_is_branch_except_b : in STD_LOGIC;
            in_predict_res : in STD_LOGIC;
            in_jump_reg : in STD_LOGIC_VECTOR(3 downto 0);
            in_jump_reg_data : in STD_LOGIC_VECTOR(15 downto 0);
@@ -55,10 +55,11 @@ end predict;
 architecture Behavioral of predict is
 
 begin
-    process (rst, in_op, in_is_jump, in_is_branch, in_predict_res, in_alumem_rc, 
-        in_jump_reg, in_jump_reg_data, in_alumem_alu_res_equal_rc, in_memwb_alumem_res_equal_rc, 
-        in_alumem_alu_res, in_memwb_rc, in_memwb_alumem_res, in_branch_imm, in_idalu_alu_res_equal_rc, in_alu_res,
-        in_idalu_rc)
+    process (rst, in_is_jump, in_is_b, in_is_branch_except_b, 
+        in_predict_res, in_jump_reg, in_jump_reg_data, in_idalu_alu_res_equal_rc, 
+        in_idalu_rc, in_alu_res, in_alumem_rc, in_alumem_alu_res_equal_rc, 
+        in_alumem_alu_res, in_memwb_rc, in_memwb_alumem_res_equal_rc, 
+        in_memwb_alumem_res, in_branch_imm)
     begin
         -- 00 select PC + 1
         -- 01 select PC + 1 + Imm
@@ -82,19 +83,17 @@ begin
                     out_jump_reg_data <= in_jump_reg_data;
                 end if;
                 out_ctl_predict <= "10";
-            else
-                -- branch
+            elsif (in_is_b = '1')
+            then
                 out_branch_imm <= in_branch_imm;
-                if (in_op = INSTRUCTION_B)
+                out_ctl_predict <= "01";
+            elsif (in_is_branch_except_b = '1')
+                out_branch_imm <= in_branch_imm;
+                if (in_predict_res = '1')
                 then
                     out_ctl_predict <= "01";
                 else
-                    if (in_predict_res = '1')
-                    then
-                        out_ctl_predict <= "01";
-                    else
-                        out_ctl_predict <= "00";
-                    end if;
+                    out_ctl_predict <= "00";
                 end if;
             end if;
         end if;
