@@ -100,6 +100,12 @@ signal states_alumem_out_wr_reg, states_alumem_out_wr_mem, states_alumem_out_rd_
     states_alumem_out_alumem_alu_res_equal_rc, states_alumem_out_memwb_wb_alu_mem : STD_LOGIC;
 signal states_alumem_out_data_rd : STD_LOGIC_VECTOR(15 downto 0);
 signal states_alumem_out_rd : STD_LOGIC_VECTOR(3 downto 0);
+-- states memwb
+signal states_memwb_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
+signal states_memwb_out_rc : STD_LOGIC_VECTOR(3 downto 0);
+signal states_memwb_out_mem_res : STD_LOGIC_VECTOR(15 downto 0);
+signal states_memwb_out_memwb_wb_alu_mem : STD_LOGIC;
+
 begin
     out_pc <= pc_output;
     pc_instance : entity work.pc port map(
@@ -165,7 +171,7 @@ begin
         wr => registers_wr,
         addr_a => decode_out_ra,
         addr_b => decode_out_rb,
-        addr_c => decode_out_rc,
+        addr_c => states_memwb_out_rc,
         data_a => registers_data_a,
         data_b => registers_data_b,
         data_c => registers_data_c
@@ -184,7 +190,7 @@ begin
         in_jump_reg => predict_in_jump_reg,
         in_jump_reg_data => predict_in_jump_reg_data, 
 
-        in_idalu_alu_res_equal_rc => predict_in_idalu_alu_res_equal_rc
+        in_idalu_alu_res_equal_rc => predict_in_idalu_alu_res_equal_rc,
         in_idalu_rc => predict_in_idalu_rc,
         in_alu_res => predict_in_alu_res,
 
@@ -218,7 +224,7 @@ begin
         in_use_imm => decode_out_use_imm,
         in_alumem_alu_res_equal_rc => decode_out_alumem_alu_res_equal_rc,
         in_memwb_wb_alu_mem => decode_out_memwb_wb_alu_mem,
-        in_is_branch_except_b => decode_out_ctl_is_branch_except_b;
+        in_is_branch_except_b => decode_out_ctl_is_branch_except_b,
         out_ra => states_idalu_out_ra,
         out_rb => states_idalu_out_rb,
         out_rc => states_idalu_out_rc,
@@ -235,7 +241,7 @@ begin
         out_is_branch_except_b => states_idalu_out_is_branch_except_b,
         ctl_bubble => states_idalu_ctl_bubble,
         ctl_copy => states_idalu_ctl_copy,
-        ctl_rst => states_idalu_ctl_rst
+        ctl_rst => states_idalu_ctl_rst,
         clk => clk,
         rst => rst,
         out_wr_reg => states_idalu_out_wr_reg,
@@ -306,6 +312,24 @@ begin
         out_rd_mem => states_alumem_out_rd_mem,
         out_alumem_alu_res_equal_rc => states_alumem_out_alumem_alu_res_equal_rc,
         out_memwb_wb_alu_mem => states_alumem_out_memwb_wb_alu_mem
+    );
+	 
+	 states_memwb_instance : entity work.states_memwb port map(
+        clk => clk,
+        rst => rst,
+        ctl_bubble => states_memwb_ctl_bubble,
+        ctl_copy => states_memwb_ctl_copy,
+        ctl_rst => states_memwb_ctl_rst,
+        in_alu_res => states_alumem_out_alu_res,
+        in_rc => states_alumem_out_rc,
+        in_wr_reg => states_alumem_out_wr_reg,
+        in_mem_res => in_mem_data,
+        in_memwb_wb_alu_mem => states_alumem_out_memwb_wb_alu_mem,
+        out_alu_res => states_memwb_out_alu_res,
+        out_rc => states_memwb_out_rc,
+        out_wr_reg => registers_wr,
+        out_mem_res => states_memwb_out_mem_res,
+        out_memwb_wb_alu_mem => states_memwb_out_memwb_wb_alu_mem
     );
     out_mem_wrn <= states_alumem_out_wr_mem;
     out_mem_rdn <= states_alumem_out_rd_mem;
