@@ -37,7 +37,7 @@ entity ins_ram_controller is
            rst : in  STD_LOGIC;
            in_rd : in  STD_LOGIC;
            in_wr : in  STD_LOGIC;
-           in_addr : in  STD_LOGIC_VECTOR (15 downto 0);
+           in_addr : in  STD_LOGIC_VECTOR (14 downto 0);
            in_data : in  STD_LOGIC_VECTOR (15 downto 0);
            out_data : out  STD_LOGIC_VECTOR (15 downto 0);
            ram2_oe : out  STD_LOGIC;
@@ -52,7 +52,7 @@ architecture Behavioral of ins_ram_controller is
     signal state: state_type;
 begin
     ram2_en <= '0';
-    ram2_addr <= "00" & in_addr;
+    ram2_addr <= "000" & in_addr;
 
     transaction : process(clk, rst)
     begin

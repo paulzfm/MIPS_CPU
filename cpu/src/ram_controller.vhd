@@ -37,7 +37,7 @@ entity ram_controller is
            rst : in  STD_LOGIC;
            in_rd : in  STD_LOGIC; -- '1': read, '0': not read
            in_wr : in  STD_LOGIC; -- '1': write, '0': not write
-           in_addr : in  STD_LOGIC_VECTOR (15 downto 0);
+           in_addr : in  STD_LOGIC_VECTOR (14 downto 0);
            in_data : in  STD_LOGIC_VECTOR (15 downto 0);
            out_data : out  STD_LOGIC_VECTOR (15 downto 0);
            ram1_oe : out  STD_LOGIC;
