@@ -59,9 +59,7 @@ entity center_controllor is
            in_memwb_wr_reg : in STD_LOGIC;
            in_idalu_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
            in_is_branch_except_b : in STD_LOGIC;
-
-
-
+           in_alumem_alu_res : in STD_LOGIC_VECTOR(15 downto 0);
            clk : in  STD_LOGIC;
            rst : in STD_LOGIC);
 end center_controllor;
@@ -71,32 +69,32 @@ architecture Behavioral of center_controllor is
 signal pipeline_stop_time : integer range 0 to 15;
 -- predict_res is data that whether next B is true or false
 signal predict_res : STD_LOGIC;
--- is_alu_branch means that the id/alu states contains one instruction
--- of Branch.
-signal is_alu_branch : STD_LOGIC;
+
 -- predict_error means the predict_res is not equal to the alu result,
 -- will output to out_predict_error as a control signal.
 signal predict_error : STD_LOGIC;
 -- is_alu_lw means that id/alu contains a instruction that will use register.
 -- and alu/mem contains a lw instruction.
 signal is_alu_lw : STD_LOGIC;
-
+-- is_alumem_sw_instruction will return weather alumem contain a 
+-- sw to instruction memory
+signal is_alumem_sw_instruction : STD_LOGIC;
 begin
     out_predict_res <= predict_res;
     out_predict_err <= predict_error;
 
-    calc_is_alu_branch:
-    process (rst, in_is_branch_except_b)
+    calc_is_alumem_sw_instruction:
+    process (rst, in_alumem_instruction_op, in_alumem_alu_res)
     begin
         if (rst = '1')
         then
-            is_alu_branch <= '0';
+            is_alumem_sw_instruction <= '0';
         else
-            if (in_is_branch_except_b = '1')
+            if (in_alumem_instruction_op = INSTRUCTION_SW and in_alumem_alu_res(15) = '0')
             then
-                is_alu_branch <= '1';
+                is_alumem_sw_instruction <= '1';
             else
-                is_alu_branch <= '0';
+                is_alumem_sw_instruction <= '0';
             end if;
         end if;
     end process;
@@ -108,7 +106,7 @@ begin
         then 
             predict_error <= '0';
         else
-            if (predict_res /= in_alu_res(0) and is_alu_branch = '1')
+            if (predict_res /= in_alu_res(0) and in_is_branch_except_b = '1')
             then
                 predict_error <= '1';
             else
@@ -118,7 +116,7 @@ begin
     end process;
 
     calc_predict_res:
-    process (rst, clk)
+    process (rst, clk, in_is_branch_except_b, is_alumem_sw_instruction, is_alu_lw)
     begin
         if (rst = '1')
         then
@@ -126,7 +124,7 @@ begin
         else
             if (rising_edge(clk))
             then
-                if (is_alu_branch = '1')
+                if (in_is_branch_except_b = '1' and is_alumem_sw_instruction = '0' and is_alu_lw = '0')
                 then
                     predict_res <= in_alu_res(0);
                 end if;
@@ -134,6 +132,20 @@ begin
         end if;
     end process;
     
+    calc_out_pc_wr:
+    process (rst)
+    begin
+        if (rst = '1')
+        then
+            out_pc_wr <= '1';
+        else
+            if (is_alumem_sw_instruction = '1' and is_alu_lw = '1')
+            then
+                out_pc_wr <= '0';
+            end if;
+        end if;
+    end process;
+
     calc_is_alu_lw:
     process (rst, in_idalu_instruction_op, in_alumem_instruction_op, 
         in_alumem_rc, in_idalu_ra, in_idalu_rb)
