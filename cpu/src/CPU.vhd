@@ -46,8 +46,9 @@ end CPU;
 architecture Behavioral of CPU is
 
 -- pc
-signal pc_wr, pc_t : STD_LOGIC;
+signal pc_wr, pc_t, pc_t1, pc_t2 : STD_LOGIC;
 signal pc_input, pc_output, pc_inc, pc_inc_imm : STD_LOGIC_VECTOR(15 downto 0);
+signal pc_s_inc_imm : STD_LOGIC_VECTOR(15 downto 0);
 signal pc_no_error, pc_yes_error : STD_LOGIC_VECTOR(15 downto 0);
 -- states ifid
 signal states_ifid_out_pc, states_ifid_out_pc_inc, states_ifid_out_instruction : STD_LOGIC_VECTOR(15 downto 0);
@@ -129,7 +130,15 @@ begin
         in_data_a => pc_inc,
         in_data_b => extend_imm,
         out_output => pc_inc_imm,
-        out_t => pc_t
+        out_t => pc_t1
+    );
+    -- input pc_s + 1
+    -- output pc_s + 1 + extend_Imm
+    pc_inc_imm_add16_instance : entity work.add16 port map(
+        in_data_a => states_idalu_out_pc_inc,
+        in_data_b => predict_out_branch_imm,
+        out_output => pc_s_inc_imm,
+        out_t => pc_t2
     );
     -- mux4 input pc+1 pc+1+imm jr_reg
     pc_no_error_mux4_instance : entity work.mux4 port map(
@@ -142,8 +151,8 @@ begin
     );
     -- mux2 input pc_s+1 pc_s+1+imm
     pc_yes_error_mux2_instance : entity work.mux2 port map(
-        input0 => null,
-        input1 => null,
+        input0 => states_idalu_out_pc_inc,
+        input1 => pc_s_inc_imm,
         addr => null,
         output => pc_yes_error
 	 );
