@@ -88,6 +88,7 @@ begin
                 out_branch_imm <= in_branch_imm;
                 out_ctl_predict <= "01";
             elsif (in_is_branch_except_b = '1')
+            then
                 out_branch_imm <= in_branch_imm;
                 if (in_predict_res = '1')
                 then
