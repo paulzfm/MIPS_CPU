@@ -59,15 +59,15 @@ architecture Behavioral of ram_controller is
     signal write_ready: STD_LOGIC;
 begin
     ram1_en <= '0';
-    ram1_addr <= "00" & in_addr;
+    ram1_addr <= "000" & in_addr;
     ctl(0) <= in_wr; -- write?
 
     control : process(in_addr)
     begin
         case in_addr is
-            when x"BF00" => -- is serial
+            when "011" & x"F00" => -- is serial
                 ctl(2 downto 1) <= "01";
-            when x"BF01" => -- is serial control
+            when "011" & x"F01" => -- is serial control
                 ctl(2 downto 1) <= "10";
             when others => -- is ram
                 ctl(2 downto 1) <= "00";
