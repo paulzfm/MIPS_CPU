@@ -52,7 +52,7 @@ entity memory_controller is
            ram1_we : out  STD_LOGIC;
            ram1_en : out  STD_LOGIC;
            ram1_addr : out  STD_LOGIC_VECTOR (17 downto 0);
-           ram1_serial_data : inout  STD_LOGIC_VECTOR (15 downto 0);
+           ram1_data : inout  STD_LOGIC_VECTOR (15 downto 0);
 
            -- serial ports
            serial_rdn : out  STD_LOGIC;
@@ -111,7 +111,7 @@ begin
         ram1_we => ram1_we,
         ram1_en => ram1_en,
         ram1_addr => ram1_addr,
-        ram1_serial_data => ram1_serial_data,
+        ram1_serial_data => ram1_data,
         serial_rdn => serial_rdn,
         serial_wrn => serial_wrn,
         serial_data_ready => serial_data_ready,
