@@ -64,6 +64,7 @@ package constants is
     constant ALU_EQUAL_ZERO : STD_LOGIC_VECTOR(3 downto 0) := "1011";
     constant ALU_NOT_EQUAL_ZERO : STD_LOGIC_VECTOR(3 downto 0) := "1100";
     constant ALU_OR : STD_LOGIC_VECTOR(3 downto 0) := "1101";
+	 constant ALU_AND : STD_LOGIC_VECTOR(3 downto 0) := "1110";
 
     -- extend sizes
     constant EXT_3 : STD_LOGIC_VECTOR(2 downto 0) := "000";

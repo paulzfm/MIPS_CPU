@@ -160,6 +160,8 @@ begin
                 out_alu_res <= "000000000000000" & (all_zero);
             when ALU_OR =>
                 out_alu_res <= in_data_a or in_data_b;
+				when ALU_AND =>
+                out_alu_res <= in_data_a and in_data_b;
             when others =>
                 out_alu_res <= (others => '0');
         end case;
