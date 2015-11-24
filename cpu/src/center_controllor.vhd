@@ -46,21 +46,25 @@ entity center_controllor is
            out_idalu_pc_inc : out STD_LOGIC_VECTOR(15 downto 0);
            out_pc_wr : out STD_LOGIC;
 
-           in_alumem_rd_mem : in STD_LOGIC;
-           in_alumem_wr_mem : in STD_LOGIC;
+           
 
-           in_alumem_rc : in  STD_LOGIC_VECTOR (3 downto 0);
-           in_memwb_rc : in STD_LOGIC_VECTOR(3 downto 0);
+           in_ifid_ra  : in  STD_LOGIC_VECTOR (3 downto 0);
+           in_ifid_rb  : in  STD_LOGIC_VECTOR (3 downto 0);
            in_idalu_ra : in  STD_LOGIC_VECTOR (3 downto 0);
            in_idalu_rb : in  STD_LOGIC_VECTOR (3 downto 0);
            in_idalu_use_imm_ry : STD_LOGIC;
-           in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
-           in_key_interrupt : in  STD_LOGIC;
-           in_alumem_alu_res_equal_rc : in STD_LOGIC;
-           in_memwb_wr_reg : in STD_LOGIC;
            in_idalu_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
+           in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
            in_is_branch_except_b : in STD_LOGIC;
            in_alumem_alu_res : in STD_LOGIC_VECTOR(15 downto 0);
+           in_alumem_rc : in  STD_LOGIC_VECTOR (3 downto 0);
+           in_alumem_rd_mem : in STD_LOGIC;
+           in_alumem_wr_mem : in STD_LOGIC;
+           in_alumem_alu_res_equal_rc : in STD_LOGIC;
+           in_memwb_rc : in STD_LOGIC_VECTOR(3 downto 0);
+           in_memwb_wr_reg : in STD_LOGIC;
+           in_key_interrupt : in  STD_LOGIC;
+
            clk : in  STD_LOGIC;
            rst : in STD_LOGIC);
 end center_controllor;
