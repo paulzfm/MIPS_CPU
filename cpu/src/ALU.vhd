@@ -21,6 +21,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
 use ieee.std_logic_signed.all;
+use work.constants.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -100,9 +101,11 @@ begin
                 -- arithmetic shift
                 if (in_data_b = 0)
                     then
-                        out_alu_res <= std_logic_vector(unsigned(in_data_a) sra 8);
+                        out_alu_res <= to_stdlogicvector(to_bitvector(in_data_a) sra 8);
+								--std_logic_vector(unsigned(in_data_a) sra 8);
                     else
-                        out_alu_res <= std_logic_vector(unsigned(in_data_a) sra to_integer(unsigned(in_data_b)));
+                        out_alu_res <= to_stdlogicvector(to_bitvector(in_data_a) sra to_integer(unsigned(in_data_b)));
+								--std_logic_vector(unsigned(in_data_a) sra to_integer(unsigned(in_data_b)));
                     end if;
             when ALU_XOR =>
                 -- ALU data_a xor in_data_b
@@ -158,8 +161,6 @@ begin
                     all_zero := all_zero or in_data_a(i);
                 end loop;
                 out_alu_res <= "000000000000000" & (all_zero);
-            when ALU_OR =>
-                out_alu_res <= in_data_a or in_data_b;
 				when ALU_AND =>
                 out_alu_res <= in_data_a and in_data_b;
             when others =>
