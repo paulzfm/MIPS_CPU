@@ -46,7 +46,10 @@ entity registers is
            addr_c : in  STD_LOGIC_VECTOR (3 downto 0);
            data_a : out  STD_LOGIC_VECTOR (15 downto 0);
            data_b : out  STD_LOGIC_VECTOR (15 downto 0);
-           data_c : in  STD_LOGIC_VECTOR (15 downto 0));
+           data_c : in  STD_LOGIC_VECTOR (15 downto 0);
+           -- debug
+           debug_in : in STD_LOGIC_VECTOR (3 downto 0);
+           debug_out : out STD_LOGIC_VECTOR (15 downto 0));
 end registers;
 
 architecture Behavioral of registers is
@@ -62,7 +65,7 @@ architecture Behavioral of registers is
     signal reg_ih: STD_LOGIC_VECTOR (15 downto 0);
     signal reg_t: STD_LOGIC_VECTOR (15 downto 0);
     signal reg_ra: STD_LOGIC_VECTOR (15 downto 0);
-	 signal reg_null: STD_LOGIC_VECTOR (15 downto 0);
+    signal reg_null: STD_LOGIC_VECTOR (15 downto 0);
 begin
     rd_a: process(addr_a)
     begin
@@ -79,7 +82,7 @@ begin
             when "1001" => data_a <= reg_ih;
             when "1010" => data_a <= reg_t;
             when "1100" => data_a <= reg_ra;
-				when "1111" => data_a <= reg_null;
+            when "1111" => data_a <= reg_null;
             when others => data_a <= (others => '0');
         end case;
     end process;
@@ -99,7 +102,7 @@ begin
             when "1001" => data_b <= reg_ih;
             when "1010" => data_b <= reg_t;
             when "1100" => data_b <= reg_ra;
-				when "1111" => data_b <= reg_null;
+            when "1111" => data_b <= reg_null;
             when others => data_b <= (others => '0');
         end case;
     end process;
@@ -119,7 +122,7 @@ begin
             reg_ih <= (others => '0');
             reg_t <= (others => '0');
             reg_ra <= (others => '0');
-				reg_null <= (others => '0');
+            reg_null <= (others => '0');
         elsif falling_edge(clk) and wr = '1' then -- write
             case addr_c is
                 when "0000" => reg_r0 <= data_c;
@@ -134,9 +137,29 @@ begin
                 when "1001" => reg_ih <= data_c;
                 when "1010" => reg_t <= data_c;
                 when "1100" => reg_ra <= data_c;
-					 when "1111" => reg_null <= data_c;
+                when "1111" => reg_null <= data_c;
                 when others => null;
             end case;
         end if;
+    end process;
+
+    debug : process(debug_in)
+    begin
+        case debug_in is
+            when "0000" => debug_out <= reg_r0;
+            when "0001" => debug_out <= reg_r1;
+            when "0010" => debug_out <= reg_r2;
+            when "0011" => debug_out <= reg_r3;
+            when "0100" => debug_out <= reg_r4;
+            when "0101" => debug_out <= reg_r5;
+            when "0110" => debug_out <= reg_r6;
+            when "0111" => debug_out <= reg_r7;
+            when "1000" => debug_out <= reg_sp;
+            when "1001" => debug_out <= reg_ih;
+            when "1010" => debug_out <= reg_t;
+            when "1100" => debug_out <= reg_ra;
+            when "1111" => debug_out <= reg_null;
+            when others => debug_out <= (others => '0');
+        end case;
     end process;
 end Behavioral;
