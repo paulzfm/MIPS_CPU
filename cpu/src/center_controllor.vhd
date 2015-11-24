@@ -44,6 +44,8 @@ entity center_controllor is
            out_predict_res : out  STD_LOGIC;
            out_branch_alu_pc_imm : out  STD_LOGIC;
            out_idalu_pc_inc : out STD_LOGIC_VECTOR(15 downto 0);
+           out_pc_wr : out STD_LOGIC;
+
            in_alumem_instruction_op : in  STD_LOGIC_VECTOR (4 downto 0);
            in_alumem_rc : in  STD_LOGIC_VECTOR (3 downto 0);
            in_memwb_rc : in STD_LOGIC_VECTOR(3 downto 0);
@@ -53,9 +55,10 @@ entity center_controllor is
            in_idalu_use_imm_ry : STD_LOGIC;
            in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
 		   in_key_interrupt : in  STD_LOGIC;
-           in_alumem_alu_res_equal_rz : in STD_LOGIC;
-           in_memwb_memalu_res_equal_rz : in STD_LOGIC;
+           in_alumem_alu_res_equal_rc : in STD_LOGIC;
+           in_memwb_wr_reg : in STD_LOGIC;
            in_idalu_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
+           in_is_branch_except_b : in STD_LOGIC;
 
 
 
@@ -83,16 +86,13 @@ begin
     out_predict_err <= predict_error;
 
     calc_is_alu_branch:
-    process (rst, in_idalu_instruction_op)
+    process (rst, in_is_branch_except_b)
     begin
         if (rst = '1')
         then
             is_alu_branch <= '0';
         else
-            if (in_idalu_instruction_op = INSTRUCTION_BEQZ or 
-                in_idalu_instruction_op = INSTRUCTION_BNEZ or 
-                in_idalu_instruction_op = INSTRUCTION_BTEQZ or 
-                in_idalu_instruction_op = INSTRUCTION_BTNEZ)
+            if (in_is_branch_except_b = '1')
             then
                 is_alu_branch <= '1';
             else
@@ -187,7 +187,7 @@ begin
     end process;
 
     calc_out_forward_alu_a:
-    process (rst, in_alumem_rc, in_idalu_ra, in_alumem_alu_res_equal_rz, in_memwb_alu_res_equal_rz, in_memwb_mem_res_equal_rz)
+    process (rst, in_alumem_rc, in_idalu_ra, in_alumem_alu_res_equal_rc, in_memwb_wr_reg )
     begin
         -- 00 select origin A
         -- 01 select alu/memory data
@@ -197,10 +197,10 @@ begin
         then
             out_forward_alu_a <= "00";
         else
-            if (in_alumem_rc = in_idalu_ra and in_alumem_alu_res_equal_rz = '1')
+            if (in_alumem_rc = in_idalu_ra and in_alumem_alu_res_equal_rc = '1')
             then
                 out_forward_alu_a <= "01";
-            elsif (in_memwb_rc = in_idalu_ra and in_memwb_alu_res_equal_rz = '1')
+            elsif ((in_memwb_rc = in_idalu_ra and in_memwb_wr_reg = '1'))
             then
                 out_forward_alu_a <= "10";
             else
@@ -211,10 +211,10 @@ begin
     
     
     calc_out_forward_alu_b:
-    process (rst, in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry, in_memwb_alu_res_equal_rz, in_alumem_alu_res_equal_rz,
-        in_memwb_mem_res_equal_rz)
+    process (rst, in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry, in_memwb_wr_reg, in_alumem_alu_res_equal_rc
+        )
     begin
-        -- 00 select origin B
+        -- 00 select origin A
         -- 01 select alu/memory data
         -- 10 select memory/wb data
         -- 11 select imm
@@ -225,10 +225,10 @@ begin
             if (in_idalu_use_imm_ry = '1')
             then
                 out_forward_alu_b <= "11";
-            elsif (in_alumem_rc = in_idalu_rb and in_alumem_alu_res_equal_rz = '1')
+            elsif (in_alumem_rc = in_idalu_rb and in_alumem_alu_res_equal_rc = '1')
             then
                 out_forward_alu_b <= "01";
-            elsif (in_memwb_rc = in_idalu_rb and in_memwb_memalu_res_equal_rz = '1')
+            elsif (in_memwb_rc = in_idalu_rb and in_memwb_wr_reg = '1')
             then
                 out_forward_alu_b <= "10";
             else

@@ -142,6 +142,24 @@ begin
             when ALU_NOT =>
                 -- not a
                 out_alu_res <= not(in_data_a);
+            when ALU_EQUAL_ZERO =>
+                -- data_a == zero => 00000000000001
+                all_zero := '0';
+                for i in 0 to 15
+                loop
+                    all_zero := all_zero or in_data_a(i);
+                end loop;
+                out_alu_res <= "000000000000000" & not(all_zero);
+            when ALU_NOT_EQUAL_ZERO =>
+                -- data_a != zero => 00000000000001
+                all_zero := '0';
+                for i in 0 to 15
+                loop
+                    all_zero := all_zero or in_data_a(i);
+                end loop;
+                out_alu_res <= "000000000000000" & (all_zero);
+            when ALU_OR =>
+                out_alu_res <= in_data_a or in_data_b;
             when others =>
                 out_alu_res <= (others => '0');
         end case;

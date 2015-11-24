@@ -43,8 +43,7 @@ entity states_alumem is
            in_wr_reg : in  STD_LOGIC;
            in_wr_mem : in  STD_LOGIC;
            in_rd_mem : in  STD_LOGIC;
-           in_alumem_alu_res_equal_rz : in STD_LOGIC;
-           in_memwb_memalu_res_equal_rz : in STD_LOGIC;
+           in_alumem_alu_res_equal_rc : in STD_LOGIC;
            in_memwb_wb_alu_mem : in STD_LOGIC;
            out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_pc_inc : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -54,9 +53,8 @@ entity states_alumem is
            out_wr_reg : out  STD_LOGIC;
            out_wr_mem : out  STD_LOGIC;
            out_rd_mem : out  STD_LOGIC;
-           out_alumem_alu_res_equal_rz : out STD_LOGIC;
-           out_memwb_wb_alu_mem : out STD_LOGIC;
-           out_memwb_memalu_res_equal_rz : out STD_LOGIC);
+           out_alumem_alu_res_equal_rc : out STD_LOGIC;
+           out_memwb_wb_alu_mem : out STD_LOGIC);
 end states_alumem;
 
 architecture Behavioral of states_alumem is
@@ -83,7 +81,6 @@ begin
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
 			out_alumem_alu_res_equal_rz <= '0';
-         out_memwb_memalu_res_equal_rz <= '0';
          out_memwb_wb_alu_mem <= '0';
 	--clk up work
 	elsif(clk'event and clk='1') then
@@ -98,7 +95,6 @@ begin
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
 			out_alumem_alu_res_equal_rz <= '0';
-         out_memwb_memalu_res_equal_rz <= '0';
          out_memwb_wb_alu_mem <= '0';
 		elsif(ctl_bubble = '0') then
 			out_pc <= in_pc;
@@ -109,8 +105,7 @@ begin
 			out_wr_reg <= in_wr_reg;
 			out_wr_mem <= in_wr_mem;
 			out_rd_mem <= in_rd_mem;
-			out_alumem_alu_res_equal_rz <= in_alumem_alu_res_equal_rz;
-         out_memwb_memalu_res_equal_rz <= in_memwb_memalu_res_equal_rz;
+			out_alumem_alu_res_equal_rc <= in_alumem_alu_res_equal_rc;
          out_memwb_wb_alu_mem <= in_memwb_wb_alu_mem;
 		end if;
 	end if;

@@ -40,15 +40,13 @@ entity states_memwb is
            in_rc : in  STD_LOGIC_VECTOR (3 downto 0);
            in_wr_reg : in  STD_LOGIC;
            in_mem_res : in  STD_LOGIC_VECTOR (15 downto 0);
-           in_memwb_memalu_res_equal_rz : in STD_LOGIC;
            in_memwb_wb_alu_mem : in STD_LOGIC;
            out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
            out_wr_reg : out  STD_LOGIC;
            out_mem_res : out  STD_LOGIC_VECTOR (15 downto 0);
-           out_memwb_wb_alu_mem : out STD_LOGIC;
-           out_memwb_memalu_res_equal_rz : out STD_LOGIC);
+           out_memwb_wb_alu_mem : out STD_LOGIC);
 end states_memwb;
 
 architecture Behavioral of states_memwb is
@@ -65,7 +63,6 @@ begin
 			out_wr_reg <= '0';
 			out_mem_res <= '0';
 			out_memwb_wb_alu_mem <= '0';
-         out_memwb_memalu_res_equal_rz <= '0';
 	--clk up work
 	elsif(clk'event and clk='1') then
 		if(ctl_rst = '1') then
@@ -75,7 +72,6 @@ begin
 			out_wr_reg <= '0';
 			out_mem_res <= '0';
 			out_memwb_wb_alu_mem <= '0';
-         out_memwb_memalu_res_equal_rz <= '0';
 		elsif(ctl_bubble = '0') then
 			out_pc <= in_pc;
 			out_alu_res <= in_alu_res;
@@ -83,7 +79,6 @@ begin
 			out_wr_reg <= in_wr_reg;
 			out_mem_res <= in_mem_res;
 			out_memwb_wb_alu_mem <= in_memwb_wb_alu_mem;
-         out_memwb_memalu_res_equal_rz <= in_memwb_wb_alu_mem;
 		end if;
 	end if;
 	

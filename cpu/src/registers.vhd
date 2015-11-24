@@ -62,6 +62,7 @@ architecture Behavioral of registers is
     signal reg_ih: STD_LOGIC_VECTOR (15 downto 0);
     signal reg_t: STD_LOGIC_VECTOR (15 downto 0);
     signal reg_ra: STD_LOGIC_VECTOR (15 downto 0);
+	 signal reg_null: STD_LOGIC_VECTOR (15 downto 0);
 begin
     rd_a: process(addr_a)
     begin
@@ -78,6 +79,7 @@ begin
             when "1001" => data_a <= reg_ih;
             when "1010" => data_a <= reg_t;
             when "1100" => data_a <= reg_ra;
+				when "1111" => data_a <= reg_null;
             when others => data_a <= (others => '0');
         end case;
     end process;
@@ -97,6 +99,7 @@ begin
             when "1001" => data_b <= reg_ih;
             when "1010" => data_b <= reg_t;
             when "1100" => data_b <= reg_ra;
+				when "1111" => data_b <= reg_null;
             when others => data_b <= (others => '0');
         end case;
     end process;
@@ -116,6 +119,7 @@ begin
             reg_ih <= (others => '0');
             reg_t <= (others => '0');
             reg_ra <= (others => '0');
+				reg_null <= (others => '0');
         elsif falling_edge(clk) and wr = '1' then -- write
             case addr_c is
                 when "0000" => reg_r0 <= data_c;
@@ -130,6 +134,7 @@ begin
                 when "1001" => reg_ih <= data_c;
                 when "1010" => reg_t <= data_c;
                 when "1100" => reg_ra <= data_c;
+					 when "1111" => reg_null <= data_c;
                 when others => null;
             end case;
         end if;

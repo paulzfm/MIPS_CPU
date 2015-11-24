@@ -44,9 +44,9 @@ entity states_idalu is
            in_wr_mem : in  STD_LOGIC;
            in_rd_mem : in  STD_LOGIC;
            in_use_imm : in  STD_LOGIC;
-           in_alumem_alu_res_equal_rz : in STD_LOGIC;
-           in_memwb_memalu_res_equal_rz : in STD_LOGIC;
+           in_alumem_alu_res_equal_rc : in STD_LOGIC;
            in_memwb_wb_alu_mem : in STD_LOGIC;
+           in_is_branch_except_b : in STD_LOGIC;
            out_ra : out  STD_LOGIC_VECTOR (3 downto 0);
            out_rb : out  STD_LOGIC_VECTOR (3 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
@@ -57,10 +57,9 @@ entity states_idalu is
            out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_pc_inc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_imm : out  STD_LOGIC_VECTOR (15 downto 0);
-
-           out_alumem_alu_res_equal_rz : out STD_LOGIC;
-           out_memwb_memalu_res_equal_rz : out STD_LOGIC;
+           out_alumem_alu_res_equal_rc : out STD_LOGIC;
            out_memwb_wb_alu_mem : out STD_LOGIC;
+           out_is_branch_except_b : out STD_LOGIC;
            ctl_bubble : in  STD_LOGIC;
            ctl_copy : in  STD_LOGIC;
            ctl_rst : in  STD_LOGIC;
@@ -92,9 +91,9 @@ begin
 			out_pc <= (others=> '0');
 			out_pc_inc <= (others=> '0');
 			out_imm <= (others=> '0');
-			out_alumem_alu_res_equal_rz <= '0';
-         out_memwb_memalu_res_equal_rz <= '0';
+			out_alumem_alu_res_equal_rc <= '0';
          out_memwb_wb_alu_mem <= '0';
+         out_is_branch_except_b <= '0';
 			out_wr_reg <= '0';
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
@@ -112,13 +111,13 @@ begin
 			out_pc <= (others=> '0');
 			out_pc_inc <= (others=> '0');
 			out_imm <= (others=> '0');
-			out_alumem_alu_res_equal_rz <= '0';
-         out_memwb_memalu_res_equal_rz <= '0';
+			out_alumem_alu_res_equal_rc <= '0';
          out_memwb_wb_alu_mem <= '0';
 			out_wr_reg <= '0';
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
 			out_use_imm <= '0';
+            out_is_branch_except_b <= '0';
 		elsif(ctl_bubble = '0') then
 			out_ra <= in_ra;
 			out_rb <= in_rb;
@@ -134,6 +133,7 @@ begin
 			out_wr_mem <= in_wr_mem;
 			out_rd_mem <= in_rd_mem;
 			out_use_imm <= in_use_imm;
+            out_is_branch_except_b <= in_is_branch_except_b;
 		end if;
 	end if;
 	

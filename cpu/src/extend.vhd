@@ -19,7 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
+use work.constants.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -49,42 +49,42 @@ begin
 process(ctl_size,ctl_type,input)
 begin
 	case ctl_size is
-		when "000" =>
+		when EXT_3 =>
 			output(2 downto 0) <= input(2 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 3) <= (others=>'0');
 			else
 				output(15 downto 3) <= (others=>input(2));
 			end if;
-		when "001" =>
+		when EXT_4 =>
 			output(3 downto 0) <= input(3 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 4) <= (others=>'0');
 			else
 				output(15 downto 4) <= (others=>input(3));
 			end if;
-		when "010" =>
+		when EXT_5 =>
 			output(4 downto 0) <= input(4 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 5) <= (others=>'0');
 			else
 				output(15 downto 5) <= (others=>input(4));
 			end if;
-		when "011" =>
+		when EXT_8 =>
 			output(7 downto 0) <= input(7 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 8) <= (others=>'0');
 			else
 				output(15 downto 8) <= (others=>input(7));
 			end if;
-		when "100" =>
+		when EXT_11 =>
 			output(10 downto 0) <= input(10 downto 0);
 			if(ctl_type = '0') then
 				output(15 downto 11) <= (others=>'0');
 			else
 				output(15 downto 11) <= (others=>input(10));
 			end if;
-	   when "111" =>
+	   when EXT_NO =>
 			output(15 downto 0) <= input(15 downto 0);
 		when others => null;
 	end case;

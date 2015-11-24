@@ -86,4 +86,6 @@ package constants is
     constant ZERO_12 : STD_LOGIC_VECTOR(11 downto 0) := "000000000000";
     constant ZERO_8 : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     constant ZERO_5 : STD_LOGIC_VECTOR(4 downto 0) := "00000";
+
+    constant SIGNAL_ONE : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000001";
 end constants;
