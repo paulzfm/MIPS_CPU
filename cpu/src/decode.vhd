@@ -116,8 +116,8 @@ begin
                out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
             when INSTRUCTION_ADDSP =>
                 -- 01100
-                case ra is 
-                    when "0011" =>
+                case (instruction_op(10 downto 8)) is 
+                    when "011" =>
                        -- ADDSP 
                        out_ra <= REG_SP;
                        out_rb <= REG_NULL;
@@ -135,7 +135,42 @@ begin
                        out_ctl_is_branch_except_b <= '0';--branch
                        out_alumem_alu_res_equal_rc <= '1';--forward
                        out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
-
+                    when "000" =>
+                       -- BTEQZ
+                       out_ra <= REG_T;
+                       out_rb <= REG_NULL;
+                       out_rc <= REG_NULL;
+                       out_ctl_write_reg <= '0';
+                       out_ctl_write_mem <= '0';
+                       out_ctl_read_mem <='0';
+                       out_ctl_alu_op <= ALU_EQUAL_ZERO;
+                       out_use_imm <= '1';
+                       out_imm <= signal_imm_8to16;
+                       out_ctl_imm_extend_size <= EXT_8;
+                       out_ctl_imm_extend_type <= EXT_SIGNED;
+                       out_ctl_is_jump <= '0';--jrra jr
+                       out_ctl_is_b <= '0';--b
+                       out_ctl_is_branch_except_b <= '1';--branch
+                       out_alumem_alu_res_equal_rc <= '0';--forward
+                       out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
+                    when "001" =>
+                       -- BTNEZ
+                       out_ra <= REG_T;
+                       out_rb <= REG_NULL;
+                       out_rc <= REG_NULL;
+                       out_ctl_write_reg <= '0';
+                       out_ctl_write_mem <= '0';
+                       out_ctl_read_mem <='0';
+                       out_ctl_alu_op <= ALU_NOT_EQUAL_ZERO;
+                       out_use_imm <= '1';
+                       out_imm <= signal_imm_8to16;
+                       out_ctl_imm_extend_size <= EXT_8;
+                       out_ctl_imm_extend_type <= EXT_SIGNED;
+                       out_ctl_is_jump <= '0';--jrra jr
+                       out_ctl_is_b <= '0';--b
+                       out_ctl_is_branch_except_b <= '1';--branch
+                       out_alumem_alu_res_equal_rc <= '0';--forward
+                       out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
                     when others =>
                         null;
                 end case;
@@ -150,6 +185,78 @@ begin
                         out_ctl_write_mem <= '0';
                         out_ctl_read_mem <='0';
                         out_ctl_alu_op <= ALU_AND;
+                        out_use_imm <= '0';
+                        out_imm <= signal_imm_8to16;
+                        out_ctl_imm_extend_size <= EXT_8;
+                        out_ctl_imm_extend_type <= EXT_SIGNED;
+                        out_ctl_is_jump <= '0';--jrra jr
+                        out_ctl_is_b <= '0';--b
+                        out_ctl_is_branch_except_b <= '0';--branch
+                        out_alumem_alu_res_equal_rc <= '1';--forward
+                        out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
+                    when "01010" =>
+                        --CMP
+                        out_ra <= ra;
+                        out_rb <= rb;
+                        out_rc <= REG_T;
+                        out_ctl_write_reg <= '1';
+                        out_ctl_write_mem <= '0';
+                        out_ctl_read_mem <='0';
+                        out_ctl_alu_op <= ALU_CMP;
+                        out_use_imm <= '0';
+                        out_imm <= signal_imm_8to16;
+                        out_ctl_imm_extend_size <= EXT_8;
+                        out_ctl_imm_extend_type <= EXT_SIGNED;
+                        out_ctl_is_jump <= '0';--jrra jr
+                        out_ctl_is_b <= '0';--b
+                        out_ctl_is_branch_except_b <= '0';--branch
+                        out_alumem_alu_res_equal_rc <= '1';--forward
+                        out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
+                    when "01111" =>
+                        --NOT
+                        out_ra <= rb;
+                        out_rb <= REG_NULL;
+                        out_rc <= ra;
+                        out_ctl_write_reg <= '1';
+                        out_ctl_write_mem <= '0';
+                        out_ctl_read_mem <='0';
+                        out_ctl_alu_op <= ALU_NOT;
+                        out_use_imm <= '0';
+                        out_imm <= signal_imm_8to16;
+                        out_ctl_imm_extend_size <= EXT_8;
+                        out_ctl_imm_extend_type <= EXT_SIGNED;
+                        out_ctl_is_jump <= '0';--jrra jr
+                        out_ctl_is_b <= '0';--b
+                        out_ctl_is_branch_except_b <= '0';--branch
+                        out_alumem_alu_res_equal_rc <= '1';--forward
+                        out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
+                    when "01101" =>
+                        --OR
+                        out_ra <= ra;
+                        out_rb <= rb;
+                        out_rc <= ra;
+                        out_ctl_write_reg <= '1';
+                        out_ctl_write_mem <= '0';
+                        out_ctl_read_mem <='0';
+                        out_ctl_alu_op <= ALU_OR;
+                        out_use_imm <= '0';
+                        out_imm <= signal_imm_8to16;
+                        out_ctl_imm_extend_size <= EXT_8;
+                        out_ctl_imm_extend_type <= EXT_SIGNED;
+                        out_ctl_is_jump <= '0';--jrra jr
+                        out_ctl_is_b <= '0';--b
+                        out_ctl_is_branch_except_b <= '0';--branch
+                        out_alumem_alu_res_equal_rc <= '1';--forward
+                        out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
+                    when "00010" =>
+                        --SLT
+                        out_ra <= ra;
+                        out_rb <= rb;
+                        out_rc <= REG_T;
+                        out_ctl_write_reg <= '1';
+                        out_ctl_write_mem <= '0';
+                        out_ctl_read_mem <='0';
+                        out_ctl_alu_op <= ALU_CMP;
                         out_use_imm <= '0';
                         out_imm <= signal_imm_8to16;
                         out_ctl_imm_extend_size <= EXT_8;
@@ -227,6 +334,23 @@ begin
                out_ctl_write_mem <= '0';
                out_ctl_read_mem <='0';
                out_ctl_alu_op <= ALU_EQUAL_ZERO;
+               out_use_imm <= '1';
+               out_imm <= signal_imm_8to16;
+               out_ctl_imm_extend_size <= EXT_8;
+               out_ctl_imm_extend_type <= EXT_SIGNED;
+               out_ctl_is_jump <= '0';--jrra jr
+               out_ctl_is_b <= '0';--b
+               out_ctl_is_branch_except_b <= '1';--branch
+               out_alumem_alu_res_equal_rc <= '0';--forward
+               out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
+            when INSTRUCTION_BNEZ =>
+               out_ra <= ra;
+               out_rb <= REG_NULL;
+               out_rc <= REG_NULL;
+               out_ctl_write_reg <= '0';
+               out_ctl_write_mem <= '0';
+               out_ctl_read_mem <='0';
+               out_ctl_alu_op <= ALU_NOT_EQUAL_ZERO;
                out_use_imm <= '1';
                out_imm <= signal_imm_8to16;
                out_ctl_imm_extend_size <= EXT_8;
