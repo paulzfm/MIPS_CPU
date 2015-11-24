@@ -36,7 +36,6 @@ entity states_idalu is
            in_data_a : in  STD_LOGIC_VECTOR (15 downto 0);
            in_data_b : in  STD_LOGIC_VECTOR (15 downto 0);
            in_alu_op : in  STD_LOGIC_VECTOR (3 downto 0);
-           in_instruction_op : in  STD_LOGIC_VECTOR (4 downto 0);
            in_pc : in  STD_LOGIC_VECTOR (15 downto 0);
            in_pc_inc : in  STD_LOGIC_VECTOR (15 downto 0);
            in_imm : in  STD_LOGIC_VECTOR (15 downto 0);
@@ -50,10 +49,12 @@ entity states_idalu is
            out_ra : out  STD_LOGIC_VECTOR (3 downto 0);
            out_rb : out  STD_LOGIC_VECTOR (3 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
+           out_rd : out  STD_LOGIC_VECTOR (3 downto 0);
            out_data_a : out  STD_LOGIC_VECTOR (15 downto 0);
            out_data_b : out  STD_LOGIC_VECTOR (15 downto 0);
+           out_data_d : out STD_LOGIC_VECTOR(15 downto 0);
+
            out_alu_op : out  STD_LOGIC_VECTOR (3 downto 0);
-           out_instruction_op : out  STD_LOGIC_VECTOR (4 downto 0);
            out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_pc_inc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_imm : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -77,6 +78,8 @@ architecture Behavioral of states_idalu is
 
 begin
 --process
+
+
 process(clk,rst,ctl_bubble)
 begin
 	--rst async
@@ -84,10 +87,12 @@ begin
 	      out_ra <= (others=> '0');
 			out_rb <= (others=> '0');
 			out_rc <= (others=> '0');
+            out_rd <= (others=> '0');
 			out_data_a <= (others=> '0');
 			out_data_b <= (others=> '0');
+            out_data_d <= (others=> '0');
 			out_alu_op <= (others=> '0');
-			out_instruction_op <= (others=> '0');
+
 			out_pc <= (others=> '0');
 			out_pc_inc <= (others=> '0');
 			out_imm <= (others=> '0');
@@ -103,11 +108,13 @@ begin
 		if(ctl_rst = '1') then
 			out_ra <= (others=> '0');
 			out_rb <= (others=> '0');
+            out_rd <= (others=> '0');
 			out_rc <= (others=> '0');
 			out_data_a <= (others=> '0');
 			out_data_b <= (others=> '0');
+            out_data_d <= (others=> '0');
 			out_alu_op <= (others=> '0');
-			out_instruction_op <= (others=> '0');
+
 			out_pc <= (others=> '0');
 			out_pc_inc <= (others=> '0');
 			out_imm <= (others=> '0');
@@ -122,10 +129,11 @@ begin
 			out_ra <= in_ra;
 			out_rb <= in_rb;
 			out_rc <= in_rc;
+            out_rd <= in_rb;
 			out_data_a <= in_data_a;
 			out_data_b <= in_data_b;
+            out_data_d <= in_data_b;
 			out_alu_op <= in_alu_op;
-			out_instruction_op <= in_instruction_op;
 			out_pc <= in_pc;
 			out_pc_inc <= in_pc_inc;
 			out_imm <= in_imm;

@@ -39,7 +39,8 @@ entity states_alumem is
            in_pc_inc : in  STD_LOGIC_VECTOR (15 downto 0);
            in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
            in_rc : in  STD_LOGIC_VECTOR (3 downto 0);
-           in_instruction_op : in  STD_LOGIC_VECTOR (4 downto 0);
+           in_rd : in  STD_LOGIC_VECTOR (3 downto 0);
+           in_data_rd : in  STD_LOGIC_VECTOR (15 downto 0);
            in_wr_reg : in  STD_LOGIC;
            in_wr_mem : in  STD_LOGIC;
            in_rd_mem : in  STD_LOGIC;
@@ -49,10 +50,11 @@ entity states_alumem is
            out_pc_inc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
-           out_instruction_op : out  STD_LOGIC_VECTOR (4 downto 0);
            out_wr_reg : out  STD_LOGIC;
            out_wr_mem : out  STD_LOGIC;
            out_rd_mem : out  STD_LOGIC;
+           out_rd : in  STD_LOGIC_VECTOR (3 downto 0);
+           out_data_rd : in  STD_LOGIC_VECTOR (15 downto 0);
            out_alumem_alu_res_equal_rc : out STD_LOGIC;
            out_memwb_wb_alu_mem : out STD_LOGIC);
 end states_alumem;
@@ -66,7 +68,7 @@ architecture Behavioral of states_alumem is
 --signal s_wr_mem : STD_LOGIC := '0';
 --signal s_rd_mem : STD_LOGIC := '0';
 begin
---process
+--process 
 process(clk,rst,ctl_bubble,ctl_rst)
 begin
 	--rst async
@@ -76,7 +78,9 @@ begin
 			out_pc_inc <= (others=> '0');
 			out_alu_res <= (others=> '0');
 			out_rc <= (others=> '0');
-			out_instruction_op <= (others=> '0');
+            out_rd <= (others=> '0');
+            out_data_rd <= (others=> '0');
+            out_data <= (others=> '0');
 			out_wr_reg <= '0';
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
@@ -90,7 +94,8 @@ begin
 			out_pc_inc <= (others=> '0');
 			out_alu_res <= (others=> '0');
 			out_rc <= (others=> '0');
-			out_instruction_op <= (others=> '0');
+            out_rd <= (others=> '0');
+            out_data_rd <= (others=> '0');
 			out_wr_reg <= '0';
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
@@ -101,7 +106,8 @@ begin
 			out_pc_inc <= in_pc_inc;
 			out_alu_res <= in_alu_res;
 			out_rc <= in_rc;
-			out_instruction_op <= in_instruction_op;
+            out_rd <= in_rd;
+            out_data_rd <= in_data_rd;
 			out_wr_reg <= in_wr_reg;
 			out_wr_mem <= in_wr_mem;
 			out_rd_mem <= in_rd_mem;
