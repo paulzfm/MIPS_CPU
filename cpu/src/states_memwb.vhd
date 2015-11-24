@@ -35,13 +35,13 @@ entity states_memwb is
            ctl_bubble : in  STD_LOGIC;
            ctl_copy : in  STD_LOGIC;
            ctl_rst : in  STD_LOGIC;
-           in_pc : in  STD_LOGIC_VECTOR (15 downto 0);
+           --in_pc : in  STD_LOGIC_VECTOR (15 downto 0);
            in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
            in_rc : in  STD_LOGIC_VECTOR (3 downto 0);
            in_wr_reg : in  STD_LOGIC;
            in_mem_res : in  STD_LOGIC_VECTOR (15 downto 0);
            in_memwb_wb_alu_mem : in STD_LOGIC;
-           out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
+           --out_pc : out  STD_LOGIC_VECTOR (15 downto 0);
            out_alu_res : out  STD_LOGIC_VECTOR (15 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
            out_wr_reg : out  STD_LOGIC;
@@ -57,7 +57,7 @@ process(clk,rst,ctl_bubble)
 begin
 	--rst async
 	if(rst='0')then
-			out_pc <= (others=> '0');
+			--out_pc <= (others=> '0');
 			out_alu_res <= (others=> '0');
 			out_rc <= (others=> '0');
 			out_wr_reg <= '0';
@@ -66,14 +66,14 @@ begin
 	--clk up work
 	elsif(clk'event and clk='1') then
 		if(ctl_rst = '1') then
-			out_pc <= (others=> '0');
+			--out_pc <= (others=> '0');
 			out_alu_res <= (others=> '0');
 			out_rc <= (others=> '0');
 			out_wr_reg <= '0';
 			out_mem_res <= '0';
 			out_memwb_wb_alu_mem <= '0';
 		elsif(ctl_bubble = '0') then
-			out_pc <= in_pc;
+			--out_pc <= in_pc;
 			out_alu_res <= in_alu_res;
 			out_rc <= in_rc;
 			out_wr_reg <= in_wr_reg;
