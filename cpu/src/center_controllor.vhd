@@ -190,7 +190,7 @@ begin
     begin
         if (rst = '1')
         then
-            is_alumem_lwsw_instruction <= '0'
+            is_alumem_lwsw_instruction <= '0';
         else
             if ((in_alumem_wr_mem = '1' or in_alumem_rd_mem = '1') and in_alumem_alu_res(15) = '0')
             then
@@ -199,7 +199,7 @@ begin
                 is_alumem_lwsw_instruction <= '0';
             end if;
         end if;
-    end;
+    end process;
 
     calc_out_forward_alu_a:
     process (rst, in_alumem_rc, in_idalu_ra, in_alumem_alu_res_equal_rc, in_memwb_wr_reg )
