@@ -47,7 +47,8 @@ architecture Behavioral of CPU is
 
 -- pc
 signal pc_wr, pc_t : STD_LOGIC;
-signal pc_input, pc_output, pc_inc : STD_LOGIC_VECTOR(15 downto 0);
+signal pc_input, pc_output, pc_inc, pc_inc_imm : STD_LOGIC_VECTOR(15 downto 0);
+signal pc_no_error, pc_yes_error : STD_LOGIC_VECTOR(15 downto 0);
 -- states ifid
 signal states_ifid_out_pc, states_ifid_out_pc_inc, states_ifid_out_instruction : STD_LOGIC_VECTOR(15 downto 0);
 signal states_ifid_ctl_bubble, states_ifid_ctl_rst, states_ifid_ctl_copy : STD_LOGIC;
@@ -58,7 +59,7 @@ signal decode_ctl_write_reg, decode_ctl_write_mem, decode_ctl_read_mem : STD_LOG
 signal decode_ctl_alu_op : STD_LOGIC_VECTOR(3 downto 0);
 signal decode_out_ctl_imm_extend_type : STD_LOGIC;
 signal decode_out_ctl_imm_extend_size : STD_LOGIC_VECTOR(2 downto 0);
-signal decode_out_ctl_is_jump, decode_out_ctl_is_branch, decode_out_ctl_is_branch_except_b : STD_LOGIC;
+signal decode_out_ctl_is_jump, decode_out_ctl_is_b, decode_out_ctl_is_branch_except_b : STD_LOGIC;
 signal decode_out_use_imm, decode_out_alumem_alu_res_equal_rc, decode_out_memwb_wb_alu_mem : STD_LOGIC;
 -- extend
 signal extend_imm : STD_LOGIC_VECTOR(15 downto 0);
@@ -122,6 +123,37 @@ begin
         out_output => pc_inc,
         out_t => pc_t
     );
+    -- input pc + 1
+    -- output pc + 1 + extend_Imm
+    pc_inc_imm_add16_instance : entity work.add16 port map(
+        in_data_a => pc_inc,
+        in_data_b => extend_imm,
+        out_output => pc_inc_imm,
+        out_t => pc_t
+    );
+    -- mux4 input pc+1 pc+1+imm jr_reg
+    pc_no_error_mux4_instance : entity work.mux4 port map(
+        input0 => pc_inc,
+        input1 => pc_inc_imm,
+        input2 => registers_data_a,
+        input3 => ZERO_16,
+        addr => null,
+        output => pc_no_error
+    );
+    -- mux2 input pc_s+1 pc_s+1+imm
+    pc_yes_error_mux2_instance : entity work.mux2 port map(
+        input0 => null,
+        input1 => null,
+        addr => null,
+        output => pc_yes_error
+	 );
+     -- mux2 input no_error yes_error
+     pc_error_yes_or_no_mux2_instance : entity work.mux2 port map(
+        input0 => pc_no_error,
+        input1 => pc_yes_error,
+        addr => null,
+        output => pc_input
+	 );
 
     states_ifid_instance : entity work.states_ifid port map(
         in_pc => pc_output,
@@ -151,7 +183,7 @@ begin
         out_ctl_imm_extend_size => decode_out_ctl_imm_extend_size,
         out_ctl_imm_extend_type => decode_out_ctl_imm_extend_type,
         out_ctl_is_jump => decode_out_ctl_is_jump,
-        out_ctl_is_branch => decode_out_ctl_is_branch,
+        out_ctl_is_b => decode_out_ctl_is_b,
         out_ctl_is_branch_except_b => decode_out_ctl_is_branch_except_b,
         out_use_imm => decode_out_use_imm,
         out_alumem_alu_res_equal_rc => decode_out_alumem_alu_res_equal_rc,
@@ -184,7 +216,7 @@ begin
     predict_instance : entity work.predict port map(
         rst => rst,
         in_is_jump => decode_out_ctl_is_jump,
-        in_is_b => decode_out_ctl_is_branch,
+        in_is_b => decode_out_ctl_is_b,
         in_is_branch_except_b => decode_out_ctl_is_branch_except_b,
         in_predict_res => predict_in_predict_res,
         in_jump_reg => predict_in_jump_reg,
@@ -313,7 +345,11 @@ begin
         out_alumem_alu_res_equal_rc => states_alumem_out_alumem_alu_res_equal_rc,
         out_memwb_wb_alu_mem => states_alumem_out_memwb_wb_alu_mem
     );
-	 
+	 out_mem_wrn <= states_alumem_out_wr_mem;
+     out_mem_rdn <= states_alumem_out_rd_mem;
+     out_mem_addr <= states_alumem_out_alu_res;
+     out_mem_data <= states_alumem_out_data_rd;
+     
 	 states_memwb_instance : entity work.states_memwb port map(
         clk => clk,
         rst => rst,
@@ -331,9 +367,12 @@ begin
         out_mem_res => states_memwb_out_mem_res,
         out_memwb_wb_alu_mem => states_memwb_out_memwb_wb_alu_mem
     );
-    out_mem_wrn <= states_alumem_out_wr_mem;
-    out_mem_rdn <= states_alumem_out_rd_mem;
-    out_mem_addr <= states_alumem_out_alu_res;
-    out_mem_data <= states_alumem_out_data_rd;
+	 
+	 wb_mux2_mem_or_alu_res_instance : entity work.mux2 port map(
+        input0 => states_memwb_out_alu_res,
+        input1 => states_memwb_out_mem_res,
+        addr => states_memwb_out_memwb_wb_alu_mem,
+        output => registers_data_c
+	 );
 end Behavioral;
 
