@@ -31,6 +31,7 @@ use work.constants.ALL;
 
 entity decode is
     Port ( in_instruction : in  STD_LOGIC_VECTOR (15 downto 0);
+           in_pc : in STD_LOGIC_VECTOR(15 downto 0);
            in_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
            --out_instruction_op : out STD_LOGIC_VECTOR(4 downto 0);
            out_ra : out STD_LOGIC_VECTOR(3 downto 0);
@@ -382,10 +383,58 @@ begin
                         out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
                     when "000" =>
                         --JR
+                        out_ra <= ra;
+                        out_rb <= REG_NULL;
+                        out_rc <= REG_NULL;
+                        out_ctl_write_reg <= '0';
+                        out_ctl_write_mem <= '0';
+                        out_ctl_read_mem <='0';
+                        out_ctl_alu_op <= ALU_DATA_B;
+                        out_use_imm <= '0';
+                        out_imm <= signal_imm_8to16;
+                        out_ctl_imm_extend_size <= EXT_NO;
+                        out_ctl_imm_extend_type <= EXT_SIGNED;
+                        out_ctl_is_jump <= '1';--jrra jr
+                        out_ctl_is_b <= '0';--b
+                        out_ctl_is_branch_except_b <= '0';--branch
+                        out_alumem_alu_res_equal_rc <= '0';--forward
+                        out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
                     when "001" =>
                         --JRRA
+                        out_ra <= REG_RA;
+                        out_rb <= REG_NULL;
+                        out_rc <= REG_NULL;
+                        out_ctl_write_reg <= '0';
+                        out_ctl_write_mem <= '0';
+                        out_ctl_read_mem <='0';
+                        out_ctl_alu_op <= ALU_DATA_B;
+                        out_use_imm <= '0';
+                        out_imm <= signal_imm_8to16;
+                        out_ctl_imm_extend_size <= EXT_NO;
+                        out_ctl_imm_extend_type <= EXT_SIGNED;
+                        out_ctl_is_jump <= '1';--jrra jr
+                        out_ctl_is_b <= '0';--b
+                        out_ctl_is_branch_except_b <= '0';--branch
+                        out_alumem_alu_res_equal_rc <= '0';--forward
+                        out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
                     when "010" =>
                         --MFPC
+                        out_ra <= REG_NULL;
+                        out_rb <= REG_NULL;
+                        out_rc <= ra;
+                        out_ctl_write_reg <= '1';
+                        out_ctl_write_mem <= '0';
+                        out_ctl_read_mem <='0';
+                        out_ctl_alu_op <= ALU_DATA_B;
+                        out_use_imm <= '1';
+                        out_imm <= in_pc;
+                        out_ctl_imm_extend_size <= EXT_NO;
+                        out_ctl_imm_extend_type <= EXT_SIGNED;
+                        out_ctl_is_jump <= '0';--jrra jr
+                        out_ctl_is_b <= '0';--b
+                        out_ctl_is_branch_except_b <= '0';--branch
+                        out_alumem_alu_res_equal_rc <= '1';--forward
+                        out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
                     when others =>null;
                 end case;
             when others =>
