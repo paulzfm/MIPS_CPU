@@ -50,8 +50,57 @@ entity top is
 end top;
 
 architecture Behavioral of top is
+-- signal
+-- cpu_out
+signal cpu_out_pc : STD_LOGIC_VECTOR(15 downto 0);
+signal cpu_out_mem_rdn, cpu_out_mem_wrn : STD_LOGIC;
+signal cpu_out_mem_data, cpu_out_mem_addr : STD_LOGIC_VECTOR(15 downto 0);
+
 
 begin
+cpu_instance : entity work.cpu port map(
+        clk => clk,
+        rst => rst,
+        out_mem_rdn => cpu_out_mem_rdn,
+        out_mem_wrn => cpu_out_mem_wrn,
+        out_mem_data => cpu_out_mem_data,
+        out_mem_addr => cpu_out_mem_addr,
+        out_pc => cpu_out_pc,
+        in_mem_data : in STD_LOGIC_VECTOR(15 downto 0);
+        in_instruction_data : in STD_LOGIC_VECTOR(15 downto 0);
+        debug : out STD_LOGIC_VECTOR(127 downto 0)
+    );
+    
+memory_controller_instance : entity work.memory_controller port map(
+        clk => clk,
+        rst => rst,
+        in_pc_addr => cpu_out_pc;
+        in_ram_addr => cpu_out_mem_addr,
+        in_data => cpu_out_mem_data,
+        in_rd => cpu_out_mem_rdn,
+        in_wr => cpu_out_mem_wrn,
+        out_data : out  STD_LOGIC_VECTOR (15 downto 0);
+        out_pc_ins : out  STD_LOGIC_VECTOR (15 downto 0);
 
+        -- ram2 ports
+        ram2_oe : out  STD_LOGIC;
+        ram2_we : out  STD_LOGIC;
+        ram2_en : out  STD_LOGIC;
+        ram2_addr : out  STD_LOGIC_VECTOR (17 downto 0);
+        ram2_data : inout  STD_LOGIC_VECTOR (15 downto 0);
 
+        -- ram1 ports
+        ram1_oe : out  STD_LOGIC;
+        ram1_we : out  STD_LOGIC;
+        ram1_en : out  STD_LOGIC;
+        ram1_addr : out  STD_LOGIC_VECTOR (17 downto 0);
+        ram1_data : inout  STD_LOGIC_VECTOR (15 downto 0);
+
+        -- serial ports
+        serial_rdn : out  STD_LOGIC;
+        serial_wrn : out  STD_LOGIC;
+        serial_data_ready : in  STD_LOGIC;
+        serial_tbre : in  STD_LOGIC;
+        serial_tsre : in  STD_LOGIC
+    );
 end Behavioral;
