@@ -46,7 +46,7 @@ begin
             when "0011" => display <= "1111001";
             when "0100" => display <= "0110011";
             when "0101" => display <= "1011011";
-            when "0110" => display <= "0011111";
+            when "0110" => display <= "1011111";
             when "0111" => display <= "1110000";
             when "1000" => display <= "1111111";
             when "1001" => display <= "1110011";
