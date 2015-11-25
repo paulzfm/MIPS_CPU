@@ -107,6 +107,10 @@ signal states_memwb_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
 signal states_memwb_out_rc : STD_LOGIC_VECTOR(3 downto 0);
 signal states_memwb_out_mem_res : STD_LOGIC_VECTOR(15 downto 0);
 signal states_memwb_out_memwb_wb_alu_mem : STD_LOGIC;
+-- center controllor
+signal center_controllor_out_predict_err : STD_LOGIC;
+signal center_controllor_out_branch_alu_pc_imm : STD_LOGIC;
+
 
 begin
     out_pc <= pc_output;
@@ -383,5 +387,52 @@ begin
         addr => states_memwb_out_memwb_wb_alu_mem,
         output => registers_data_c
 	 );
+     
+     center_controllor_instance : entity work.center_controllor port map(
+        out_bubble_ifid => states_ifid_ctl_bubble,
+        out_bubble_idalu => states_idalu_ctl_bubble,
+        out_bubble_alumem => states_alumem_ctl_bubble,
+        out_bubble_memwb => states_memwb_ctl_bubble,
+        out_rst_ifid => states_ifid_ctl_rst,
+        out_rst_idalu => states_idalu_ctl_rst,
+        out_rst_alumem => states_alumem_ctl_rst,
+        out_rst_memwb => states_memwb_ctl_rst,
+        out_forward_alu_a => alu_data_mux_a_addr,
+        out_forward_alu_b => alu_data_mux_b_addr,
+        out_forward_alu_d => alu_data_mux_d_addr,
+        out_predict_err => center_controllor_out_predict_err,
+        out_predict_res => predict_in_predict_res,
+        out_branch_alu_pc_imm => center_controllor_out_branch_alu_pc_imm,
+        -- out_idalu_pc_inc => ,
+        out_pc_wr => pc_wr,
+
+
+
+        in_decode_ra  => decode_out_ra,
+        in_decode_rb  => decode_out_rb,
+        in_decode_is_branch_except_b => decode_out_ctl_is_branch_except_b,
+
+        in_idalu_rd_mem => decode_ctl_read_mem,
+        in_idalu_wr_mem => decode_ctl_write_mem,
+        in_idalu_ra => states_idalu_out_ra,
+        in_idalu_rb => states_idalu_out_rb,
+        in_idalu_rc => states_idalu_out_rc,
+        in_idalu_rd => states_idalu_out_rd,
+        in_idalu_use_imm_ry => states_idalu_out_use_imm,
+        -- in_idalu_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
+        in_alu_res => alu_out_alu_res,
+        in_idalu_is_branch_except_b => states_idalu_out_is_branch_except_b,
+        in_alumem_alu_res => states_alumem_out_alu_res,
+        in_alumem_rc => states_alumem_out_rc,
+        in_alumem_wr_mem => states_alumem_out_wr_mem,
+        in_alumem_rd_mem => states_alumem_out_rd_mem,
+        in_alumem_alu_res_equal_rc => states_alumem_out_alumem_alu_res_equal_rc,
+        in_memwb_rc => states_memwb_out_rc,
+        in_memwb_wr_reg => registers_wr,
+        in_key_interrupt => '0',
+
+        clk => clk,
+        rst => rst
+     );
 end Behavioral;
 
