@@ -35,18 +35,18 @@ entity top is
            data_ready : in STD_LOGIC;
            tbre: in  STD_LOGIC;
            tsre: in  STD_LOGIC;
-           oe1 : out  STD_LOGIC;
-           oe2 : out  STD_LOGIC;
-           we1 : out  STD_LOGIC;
-           we2 : out  STD_LOGIC;
-           en1 : out  STD_LOGIC;
-           en2 : out  STD_LOGIC;
+           ram1_oe : out  STD_LOGIC;
+           ram2_oe : out  STD_LOGIC;
+           ram1_we : out  STD_LOGIC;
+           ram2_we : out  STD_LOGIC;
+           ram1_en : out  STD_LOGIC;
+           ram2_en : out  STD_LOGIC;
            rdn : out  STD_LOGIC;
            wrn : out  STD_LOGIC;
-           bus1_addr : out  STD_LOGIC_VECTOR (17 downto 0);
-           bus2_addr : out  STD_LOGIC_VECTOR (17 downto 0);
-           bus1_data : inout  STD_LOGIC_VECTOR (15 downto 0);
-           bus2_data : inout  STD_LOGIC_VECTOR (15 downto 0));
+           ram1_addr : out  STD_LOGIC_VECTOR (17 downto 0);
+           ram2_addr : out  STD_LOGIC_VECTOR (17 downto 0);
+           ram1_data : inout  STD_LOGIC_VECTOR (15 downto 0);
+           ram2_data : inout  STD_LOGIC_VECTOR (15 downto 0));
 end top;
 
 architecture Behavioral of top is
@@ -55,6 +55,9 @@ architecture Behavioral of top is
 signal cpu_out_pc : STD_LOGIC_VECTOR(15 downto 0);
 signal cpu_out_mem_rdn, cpu_out_mem_wrn : STD_LOGIC;
 signal cpu_out_mem_data, cpu_out_mem_addr : STD_LOGIC_VECTOR(15 downto 0);
+-- cpu_in
+signal cpu_in_mem_data, cpu_in_instruction_data : STD_LOGIC_VECTOR(15 downto 0);
+-- debug
 
 
 begin
@@ -66,8 +69,8 @@ cpu_instance : entity work.cpu port map(
         out_mem_data => cpu_out_mem_data,
         out_mem_addr => cpu_out_mem_addr,
         out_pc => cpu_out_pc,
-        in_mem_data : in STD_LOGIC_VECTOR(15 downto 0);
-        in_instruction_data : in STD_LOGIC_VECTOR(15 downto 0);
+        in_mem_data => cpu_in_mem_data,
+        in_instruction_data => cpu_in_instruction_data,
         debug : out STD_LOGIC_VECTOR(127 downto 0)
     );
     
@@ -79,22 +82,22 @@ memory_controller_instance : entity work.memory_controller port map(
         in_data => cpu_out_mem_data,
         in_rd => cpu_out_mem_rdn,
         in_wr => cpu_out_mem_wrn,
-        out_data : out  STD_LOGIC_VECTOR (15 downto 0);
-        out_pc_ins : out  STD_LOGIC_VECTOR (15 downto 0);
+        out_data => cpu_in_mem_data,
+        out_pc_ins => cpu_in_instruction_data,
 
         -- ram2 ports
-        ram2_oe : out  STD_LOGIC;
-        ram2_we : out  STD_LOGIC;
-        ram2_en : out  STD_LOGIC;
-        ram2_addr : out  STD_LOGIC_VECTOR (17 downto 0);
-        ram2_data : inout  STD_LOGIC_VECTOR (15 downto 0);
+        ram2_oe => ram2_oe,
+        ram2_we => ram2_we, 
+        ram2_en => ram2_en,
+        ram2_addr => ram2_addr,
+        ram2_data => ram2_data,
 
         -- ram1 ports
-        ram1_oe : out  STD_LOGIC;
-        ram1_we : out  STD_LOGIC;
-        ram1_en : out  STD_LOGIC;
-        ram1_addr : out  STD_LOGIC_VECTOR (17 downto 0);
-        ram1_data : inout  STD_LOGIC_VECTOR (15 downto 0);
+        ram1_oe => ram1_oe,
+        ram1_we => ram1_we, 
+        ram1_en => ram1_en,
+        ram1_addr => ram1_addr,
+        ram1_data => ram1_data,
 
         -- serial ports
         serial_rdn : out  STD_LOGIC;
