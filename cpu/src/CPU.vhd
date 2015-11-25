@@ -128,7 +128,7 @@ begin
     -- output pc + 1 + extend_Imm
     pc_inc_imm_add16_instance : entity work.add16 port map(
         in_data_a => pc_inc,
-        in_data_b => extend_imm,
+        in_data_b => predict_out_branch_imm,
         out_output => pc_inc_imm,
         out_t => pc_t1
     );
@@ -136,7 +136,7 @@ begin
     -- output pc_s + 1 + extend_Imm
     pc_inc_imm_add16_instance : entity work.add16 port map(
         in_data_a => states_idalu_out_pc_inc,
-        in_data_b => predict_out_branch_imm,
+        in_data_b => states_idalu_out_imm,
         out_output => pc_s_inc_imm,
         out_t => pc_t2
     );
@@ -144,23 +144,23 @@ begin
     pc_no_error_mux4_instance : entity work.mux4 port map(
         input0 => pc_inc,
         input1 => pc_inc_imm,
-        input2 => registers_data_a,
+        input2 => predict_out_jump_reg_data,
         input3 => ZERO_16,
-        addr => null,
+        addr => predict_out_ctl_predict,
         output => pc_no_error
     );
     -- mux2 input pc_s+1 pc_s+1+imm
     pc_yes_error_mux2_instance : entity work.mux2 port map(
         input0 => states_idalu_out_pc_inc,
         input1 => pc_s_inc_imm,
-        addr => null,
+        addr => center_controllor_out_branch_alu_pc_imm,
         output => pc_yes_error
 	 );
      -- mux2 input no_error yes_error
      pc_error_yes_or_no_mux2_instance : entity work.mux2 port map(
         input0 => pc_no_error,
         input1 => pc_yes_error,
-        addr => null,
+        addr => center_controllor_out_predict_err,
         output => pc_input
 	 );
 
