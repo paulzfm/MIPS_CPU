@@ -39,7 +39,9 @@ entity CPU is
            out_pc : out STD_LOGIC_VECTOR(15 downto 0);
            in_mem_data : in STD_LOGIC_VECTOR(15 downto 0);
            in_instruction_data : in STD_LOGIC_VECTOR(15 downto 0);
-           debug : out STD_LOGIC_VECTOR(127 downto 0)
+           debug : out STD_LOGIC_VECTOR(15 downto 0);
+           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0);
+           debug_control_data : in STD_LOGIC_VECTOR(15 downto 0)
         );
 end CPU;
 
@@ -67,16 +69,19 @@ signal extend_imm : STD_LOGIC_VECTOR(15 downto 0);
 -- registers
 signal registers_wr : STD_LOGIC;
 signal registers_data_a, registers_data_b, registers_data_c : STD_LOGIC_VECTOR(15 downto 0);
+signal registers_debug_in : STD_LOGIC_VECTOR(3 downto 0);
+signal registers_debug_out : STD_LOGIC_VECTOR(15 downto 0);
 -- predict
 signal predict_in_predict_res : STD_LOGIC;
 signal predict_in_jump_reg, predict_in_idalu_rc, predict_in_alumem_rc, 
     predict_in_memwb_rc : STD_LOGIC_VECTOR(3 downto 0);
 signal predict_in_jump_reg_data, predict_in_alu_res, predict_in_alumem_alu_res, 
-    predict_in_memwb_alumem_res_equal_rc : STD_LOGIC_VECTOR(15 downto 0);
+    predict_in_memwb_alumem_res : STD_LOGIC_VECTOR(15 downto 0);
 signal predict_in_idalu_alu_res_equal_rc, predict_in_alumem_alu_res_equal_rc, 
     predict_in_memwb_alumem_res_equal_rc: STD_LOGIC;
-signal predict_in_branch_imm : STD_LOGIC_VECTOR(15 downto 0);
-signal predict_out_ctl_predict : STD_LOGIC;
+signal predict_in_branch_imm, predict_out_branch_imm, 
+    predict_out_jump_reg_data: STD_LOGIC_VECTOR(15 downto 0);
+signal predict_out_ctl_predict : STD_LOGIC_VECTOR(1 downto 0);
 -- states idalu
 signal states_idalu_out_ra, states_idalu_out_rb, states_idalu_out_rc, states_idalu_out_rd : STD_LOGIC_VECTOR(3 downto 0);
 signal states_idalu_out_data_a, states_idalu_out_data_b, states_idalu_out_data_d : STD_LOGIC_VECTOR(15 downto 0);
@@ -107,6 +112,8 @@ signal states_memwb_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
 signal states_memwb_out_rc : STD_LOGIC_VECTOR(3 downto 0);
 signal states_memwb_out_mem_res : STD_LOGIC_VECTOR(15 downto 0);
 signal states_memwb_out_memwb_wb_alu_mem : STD_LOGIC;
+signal states_memwb_ctl_bubble, states_memwb_ctl_rst, states_memwb_ctl_copy : 
+    STD_LOGIC;
 -- center controllor
 signal center_controllor_out_predict_err : STD_LOGIC;
 signal center_controllor_out_branch_alu_pc_imm : STD_LOGIC;
@@ -138,7 +145,7 @@ begin
     );
     -- input pc_s + 1
     -- output pc_s + 1 + extend_Imm
-    pc_inc_imm_add16_instance : entity work.add16 port map(
+    pc_inc_imm_branch_add16_instance : entity work.add16 port map(
         in_data_a => states_idalu_out_pc_inc,
         in_data_b => states_idalu_out_imm,
         out_output => pc_s_inc_imm,
@@ -219,7 +226,9 @@ begin
         addr_c => states_memwb_out_rc,
         data_a => registers_data_a,
         data_b => registers_data_b,
-        data_c => registers_data_c
+        data_c => registers_data_c,
+		  debug_in => registers_debug_in,
+		  debug_out => registers_debug_out
     );
 
 
@@ -387,7 +396,7 @@ begin
         addr => states_memwb_out_memwb_wb_alu_mem,
         output => registers_data_c
 	 );
-     
+
      center_controllor_instance : entity work.center_controllor port map(
         out_bubble_ifid => states_ifid_ctl_bubble,
         out_bubble_idalu => states_idalu_ctl_bubble,
@@ -434,5 +443,54 @@ begin
         clk => clk,
         rst => rst
      );
+
+
+    process (debug_control_data, debug_control_ins, registers_debug_out)
+    begin
+        case debug_control_ins(15 downto 8) is
+            when "00000000" =>
+                debug <= pc_output;
+            when "00000001" =>
+                -- fetch register
+                registers_debug_in <= debug_control_ins(7 downto 4);
+                debug <= registers_debug_out;
+            when "00000010" =>
+                debug <= in_instruction_data;
+            when "00000011" =>
+                debug <= in_mem_data;
+            when "00000100" =>
+                debug <= states_ifid_out_instruction;
+            when "00000101" =>
+                debug <= states_ifid_out_pc_inc;
+            when "00000110" =>
+                debug <= ZERO_12 & decode_out_ra;
+            when "00000111" =>
+                debug <= ZERO_12 & decode_out_rb;
+            when "00001000" =>
+                debug <= ZERO_12 & decode_out_rc;
+            when "00001001" =>
+                debug <= decode_out_imm;
+            when "00001010" =>
+                debug <= ZERO_15 & decode_out_ctl_is_b;
+            when "00001011" =>
+                debug <= ZERO_15 & decode_out_ctl_is_branch_except_b;
+            when "00001100" =>
+                debug <= ZERO_15 & decode_out_ctl_is_jump;
+            when "00001101" =>
+                debug <= ZERO_15 & decode_out_memwb_wb_alu_mem;
+            when "00001110" =>
+                debug <= ZERO_15 & decode_out_use_imm;
+            when "00001111" =>
+                debug <= ZERO_15 & decode_out_ctl_imm_extend_type;
+            when "00010000" =>
+                debug <= ZERO_13 & decode_out_ctl_imm_extend_size;
+            when "00010001" =>
+                debug <= ZERO_15 & decode_out_alumem_alu_res_equal_rc;
+            when "00010010" =>
+                debug <= ZERO_12 & decode_ctl_alu_op;
+            when others =>
+                null;
+        end case;
+    end process;
 end Behavioral;
 

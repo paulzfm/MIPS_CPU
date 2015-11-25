@@ -67,7 +67,7 @@ architecture Behavioral of registers is
     signal reg_ra: STD_LOGIC_VECTOR (15 downto 0);
     signal reg_null: STD_LOGIC_VECTOR (15 downto 0);
 begin
-    rd_a: process(addr_a)
+    rd_a: process(addr_a, reg_r0, reg_r1, reg_r2, reg_r3, reg_r4, reg_r5, reg_r6, reg_r7, reg_sp, reg_ih, reg_t, reg_ra, reg_null)
     begin
         case addr_a is -- read x
             when "0000" => data_a <= reg_r0;
@@ -87,7 +87,7 @@ begin
         end case;
     end process;
 
-    rd_b : process(addr_b)
+    rd_b : process(addr_b, reg_r0, reg_r1, reg_r2, reg_r3, reg_r4, reg_r5, reg_r6, reg_r7, reg_sp, reg_ih, reg_t, reg_ra, reg_null)
     begin
         case addr_b is -- read y
             when "0000" => data_b <= reg_r0;
@@ -107,7 +107,7 @@ begin
         end case;
     end process;
 
-    wr_z : process(clk, rst)
+    wr_z : process(clk,  rst)
     begin
         if rst = '0' then -- set all registers to 0
             reg_r0 <= (others => '0');
@@ -143,7 +143,7 @@ begin
         end if;
     end process;
 
-    debug : process(debug_in)
+    debug : process(debug_in, reg_r0, reg_r1, reg_r2, reg_r3, reg_r4, reg_r5, reg_r6, reg_r7, reg_sp, reg_ih, reg_t, reg_ra, reg_null)
     begin
         case debug_in is
             when "0000" => debug_out <= reg_r0;
