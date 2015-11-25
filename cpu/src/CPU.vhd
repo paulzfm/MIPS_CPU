@@ -553,6 +553,7 @@ begin
                 debug <= decode_out_imm;
             when "00101101" =>
                 debug <= predict_out_branch_imm;
+            
             when others =>
                 null;
         end case;
