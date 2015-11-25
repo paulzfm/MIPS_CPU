@@ -61,7 +61,7 @@ begin
 			out_alu_res <= (others=> '0');
 			out_rc <= (others=> '0');
 			out_wr_reg <= '0';
-			out_mem_res <= '0';
+			out_mem_res <= (others => '0');
 			out_memwb_wb_alu_mem <= '0';
 	--clk up work
 	elsif(clk'event and clk='1') then
@@ -70,7 +70,7 @@ begin
 			out_alu_res <= (others=> '0');
 			out_rc <= (others=> '0');
 			out_wr_reg <= '0';
-			out_mem_res <= '0';
+			out_mem_res <= (others => '0');
 			out_memwb_wb_alu_mem <= '0';
 		elsif(ctl_bubble = '0') then
 			--out_pc <= in_pc;

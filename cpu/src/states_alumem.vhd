@@ -53,8 +53,8 @@ entity states_alumem is
            out_wr_reg : out  STD_LOGIC;
            out_wr_mem : out  STD_LOGIC;
            out_rd_mem : out  STD_LOGIC;
-           out_rd : in  STD_LOGIC_VECTOR (3 downto 0);
-           out_data_rd : in  STD_LOGIC_VECTOR (15 downto 0);
+           out_rd : out  STD_LOGIC_VECTOR (3 downto 0);
+           out_data_rd : out  STD_LOGIC_VECTOR (15 downto 0);
            out_alumem_alu_res_equal_rc : out STD_LOGIC;
            out_memwb_wb_alu_mem : out STD_LOGIC);
 end states_alumem;
@@ -80,11 +80,10 @@ begin
 			out_rc <= (others=> '0');
             out_rd <= (others=> '0');
             out_data_rd <= (others=> '0');
-            out_data <= (others=> '0');
 			out_wr_reg <= '0';
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
-			out_alumem_alu_res_equal_rz <= '0';
+			out_alumem_alu_res_equal_rc <= '0';
          out_memwb_wb_alu_mem <= '0';
 	--clk up work
 	elsif(clk'event and clk='1') then
@@ -99,7 +98,7 @@ begin
 			out_wr_reg <= '0';
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
-			out_alumem_alu_res_equal_rz <= '0';
+			out_alumem_alu_res_equal_rc <= '0';
          out_memwb_wb_alu_mem <= '0';
 		elsif(ctl_bubble = '0') then
 			out_pc <= in_pc;
