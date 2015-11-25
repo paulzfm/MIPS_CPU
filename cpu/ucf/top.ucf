@@ -16,22 +16,24 @@ NET "debug[3]" LOC = B11;
 NET "debug[2]" LOC = A11;
 NET "debug[1]" LOC = E10;
 NET "debug[0]" LOC = D10;
-NET "debug_control_ins[15]" LOC = T7;
-NET "debug_control_ins[14]" LOC = R7;
-NET "debug_control_ins[13]" LOC = U8;
-NET "debug_control_ins[12]" LOC = V4;
-NET "debug_control_ins[11]" LOC = V3;
-NET "debug_control_ins[10]" LOC = V2;
-NET "debug_control_ins[9]" LOC = U1;
-NET "debug_control_ins[8]" LOC = R4;
-NET "debug_control_ins[7]" LOC = R1;
-NET "debug_control_ins[6]" LOC = N2;
-NET "debug_control_ins[5]" LOC = N1;
-NET "debug_control_ins[4]" LOC = M1;
-NET "debug_control_ins[3]" LOC = K7;
-NET "debug_control_ins[2]" LOC = K2;
-NET "debug_control_ins[1]" LOC = J7;
-NET "debug_control_ins[0]" LOC = J6;
+
+NET "debug_control_ins[0]" LOC = T7;
+NET "debug_control_ins[1]" LOC = R7;
+NET "debug_control_ins[2]" LOC = U8;
+NET "debug_control_ins[3]" LOC = V4;
+NET "debug_control_ins[4]" LOC = V3;
+NET "debug_control_ins[5]" LOC = V2;
+NET "debug_control_ins[6]" LOC = U1;
+NET "debug_control_ins[7]" LOC = R4;
+NET "debug_control_ins[8]" LOC = R1;
+NET "debug_control_ins[9]" LOC = N2;
+NET "debug_control_ins[10]" LOC = N1;
+NET "debug_control_ins[11]" LOC = M1;
+NET "debug_control_ins[12]" LOC = K7;
+NET "debug_control_ins[13]" LOC = K2;
+NET "debug_control_ins[14]" LOC = J7;
+NET "debug_control_ins[15]" LOC = J6;
+
 NET "ram1_addr[17]" LOC = H17;
 NET "ram1_addr[16]" LOC = H16;
 NET "ram1_addr[15]" LOC = H15;
@@ -66,6 +68,7 @@ NET "ram1_data[3]" LOC = J15;
 NET "ram1_data[2]" LOC = J14;
 NET "ram1_data[1]" LOC = J13;
 NET "ram1_data[0]" LOC = J12;
+
 NET "ram2_addr[17]" LOC = U15;
 NET "ram2_addr[16]" LOC = U16;
 NET "ram2_addr[15]" LOC = V9;
@@ -84,6 +87,7 @@ NET "ram2_addr[3]" LOC = P16;
 NET "ram2_addr[2]" LOC = N18;
 NET "ram2_addr[1]" LOC = N15;
 NET "ram2_addr[0]" LOC = N14;
+
 NET "ram2_data[15]" LOC = N11;
 NET "ram2_data[14]" LOC = N12;
 NET "ram2_data[13]" LOC = P10;
@@ -100,20 +104,41 @@ NET "ram2_data[3]" LOC = T14;
 NET "ram2_data[2]" LOC = T15;
 NET "ram2_data[1]" LOC = T16;
 NET "ram2_data[0]" LOC = U13;
+
 NET "clk" LOC = U9;
 NET "rst" LOC = U10;
+
 NET "ram1_en" LOC = M15;
 NET "ram1_oe" LOC = M16;
 NET "ram1_we" LOC = M18;
+
 NET "ram2_en" LOC = N10;
 NET "ram2_oe" LOC = R9;
 NET "ram2_we" LOC = M9;
+
 NET "serial_rdn" LOC = C14;
 NET "serial_wrn" LOC = U5;
 NET "serial_data_ready" LOC = A16;
 NET "serial_tbre" LOC = D14;
 NET "serial_tsre" LOC = N9;
 
-# PlanAhead Generated physical constraints 
+# display
+NET "display1[0]" LOC = C7;
+NET "display1[1]" LOC = D7;
+NET "display1[2]" LOC = E7;
+NET "display1[3]" LOC = F7;
+NET "display1[4]" LOC = A8;
+NET "display1[5]" LOC = E8;
+NET "display1[6]" LOC = F8;
+
+NET "display2[0]" LOC = C9;
+NET "display2[1]" LOC = D9;
+NET "display2[2]" LOC = E9;
+NET "display2[3]" LOC = F9;
+NET "display2[4]" LOC = G9;
+NET "display2[5]" LOC = A10;
+NET "display2[6]" LOC = B10;
+
+# PlanAhead Generated physical constraints
 
 NET "clk_50" LOC = B9;
