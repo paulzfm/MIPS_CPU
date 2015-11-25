@@ -1,20 +1,20 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    13:56:20 11/17/2015 
--- Design Name: 
--- Module Name:    CPU - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+-- Company:
+-- Engineer:
 --
--- Dependencies: 
+-- Create Date:    13:56:20 11/17/2015
+-- Design Name:
+-- Module Name:    CPU - Behavioral
+-- Project Name:
+-- Target Devices:
+-- Tool versions:
+-- Description:
 --
--- Revision: 
+-- Dependencies:
+--
+-- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments: 
+-- Additional Comments:
 --
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -72,13 +72,13 @@ signal registers_debug_in : STD_LOGIC_VECTOR(3 downto 0);
 signal registers_debug_out : STD_LOGIC_VECTOR(15 downto 0);
 -- predict
 signal predict_in_predict_res : STD_LOGIC;
-signal predict_in_jump_reg, predict_in_idalu_rc, predict_in_alumem_rc, 
+signal predict_in_jump_reg, predict_in_idalu_rc, predict_in_alumem_rc,
     predict_in_memwb_rc : STD_LOGIC_VECTOR(3 downto 0);
-signal predict_in_jump_reg_data, predict_in_alu_res, predict_in_alumem_alu_res, 
+signal predict_in_jump_reg_data, predict_in_alu_res, predict_in_alumem_alu_res,
     predict_in_memwb_alumem_res : STD_LOGIC_VECTOR(15 downto 0);
-signal predict_in_idalu_alu_res_equal_rc, predict_in_alumem_alu_res_equal_rc, 
+signal predict_in_idalu_alu_res_equal_rc, predict_in_alumem_alu_res_equal_rc,
     predict_in_memwb_alumem_res_equal_rc: STD_LOGIC;
-signal predict_in_branch_imm, predict_out_branch_imm, 
+signal predict_in_branch_imm, predict_out_branch_imm,
     predict_out_jump_reg_data: STD_LOGIC_VECTOR(15 downto 0);
 signal predict_out_ctl_predict : STD_LOGIC_VECTOR(1 downto 0);
 -- states idalu
@@ -92,7 +92,7 @@ signal states_idalu_ctl_bubble, states_idalu_ctl_copy, states_idalu_ctl_rst : ST
 signal states_idalu_out_wr_reg, states_idalu_out_wr_mem, states_idalu_out_rd_mem, states_idalu_out_use_imm : STD_LOGIC;
 -- alu data mux
 signal alu_data_mux_a_addr : STD_LOGIC_VECTOR(1 downto 0);
-signal alu_data_mux_alu_mem_forward_data, alu_data_mux_mem_wb_forward_data, 
+signal alu_data_mux_alu_mem_forward_data, alu_data_mux_mem_wb_forward_data,
     alu_data_mux_a_output: STD_LOGIC_VECTOR(15 downto 0);
 signal alu_data_mux_b_addr, alu_data_mux_d_addr : STD_LOGIC_VECTOR(1 downto 0);
 signal alu_data_mux_b_output, alu_data_mux_d_output: STD_LOGIC_VECTOR(15 downto 0);
@@ -111,7 +111,7 @@ signal states_memwb_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
 signal states_memwb_out_rc : STD_LOGIC_VECTOR(3 downto 0);
 signal states_memwb_out_mem_res : STD_LOGIC_VECTOR(15 downto 0);
 signal states_memwb_out_memwb_wb_alu_mem : STD_LOGIC;
-signal states_memwb_ctl_bubble, states_memwb_ctl_rst, states_memwb_ctl_copy : 
+signal states_memwb_ctl_bubble, states_memwb_ctl_rst, states_memwb_ctl_copy :
     STD_LOGIC;
 -- center controllor
 signal center_controllor_out_predict_err : STD_LOGIC;
@@ -182,8 +182,8 @@ begin
         out_pc => states_ifid_out_pc,
         out_pc_inc => states_ifid_out_pc_inc,
         out_instruction => states_ifid_out_instruction,
-        clk => clk,  
-        rst => rst, 
+        clk => clk,
+        rst => rst,
         ctl_bubble => states_ifid_ctl_bubble,
         ctl_copy => states_ifid_ctl_copy,
         ctl_rst => states_ifid_ctl_rst
@@ -218,7 +218,7 @@ begin
     );
 
     registers_instance : entity work.registers port map(
-        clk => clk, 
+        clk => clk,
         rst => rst,
         wr => registers_wr,
         addr_a => decode_out_ra,
@@ -252,7 +252,7 @@ begin
         in_is_branch_except_b => decode_out_ctl_is_branch_except_b,
         in_predict_res => predict_in_predict_res,
         in_jump_reg => predict_in_jump_reg,
-        in_jump_reg_data => predict_in_jump_reg_data, 
+        in_jump_reg_data => predict_in_jump_reg_data,
 
         in_idalu_alu_res_equal_rc => predict_in_idalu_alu_res_equal_rc,
         in_idalu_rc => predict_in_idalu_rc,
@@ -260,9 +260,9 @@ begin
 
         in_alumem_rc => predict_in_alumem_rc,
         in_alumem_alu_res_equal_rc => predict_in_alumem_alu_res_equal_rc,
-        in_alumem_alu_res => predict_in_alumem_alu_res, 
+        in_alumem_alu_res => predict_in_alumem_alu_res,
 
-        in_memwb_rc => predict_in_memwb_rc, 
+        in_memwb_rc => predict_in_memwb_rc,
         in_memwb_alumem_res_equal_rc => predict_in_memwb_alumem_res_equal_rc,
         in_memwb_alumem_res => predict_in_memwb_alumem_res,
 
@@ -271,7 +271,7 @@ begin
         out_branch_imm => predict_out_branch_imm,
         out_ctl_predict => predict_out_ctl_predict
     );
-    
+
     states_idalu_instance : entity work.states_idalu port map(
         in_ra => decode_out_ra,
         in_rb => decode_out_rb,
@@ -367,7 +367,7 @@ begin
         in_memwb_wb_alu_mem => states_idalu_out_memwb_wb_alu_mem,
         out_pc => states_alumem_out_pc,
         out_pc_inc => states_alumem_out_pc_inc,
-        out_alu_res => states_alumem_out_alu_res, 
+        out_alu_res => states_alumem_out_alu_res,
         out_rc => states_alumem_out_rc,
         out_rd => states_alumem_out_rd,
         out_data_rd => states_alumem_out_data_rd,
@@ -381,7 +381,7 @@ begin
      out_mem_rdn <= states_alumem_out_rd_mem;
      out_mem_addr <= states_alumem_out_alu_res;
      out_mem_data <= states_alumem_out_data_rd;
-     
+
 	 states_memwb_instance : entity work.states_memwb port map(
         clk => clk,
         rst => rst,
@@ -399,7 +399,7 @@ begin
         out_mem_res => states_memwb_out_mem_res,
         out_memwb_wb_alu_mem => states_memwb_out_memwb_wb_alu_mem
     );
-	 
+
 	 wb_mux2_mem_or_alu_res_instance : entity work.mux2 port map(
         input0 => states_memwb_out_alu_res,
         input1 => states_memwb_out_mem_res,
@@ -457,7 +457,7 @@ begin
 
     process ( debug_control_ins, registers_debug_out)
     begin
-        
+
         case debug_control_ins(15 downto 8) is
             when "00000000" =>
                 debug <= pc_output;
@@ -526,7 +526,7 @@ begin
             when "00011111" =>
                 debug <= ZERO_15 & decode_ctl_write_reg;
             when "00100000" =>
-				    debug <= pc_input;
+				debug <= pc_input;
             when "00100001" =>
                 debug <= ZERO_15 & states_alumem_out_rd_mem;
             when "00100010" =>
@@ -553,10 +553,14 @@ begin
                 debug <= decode_out_imm;
             when "00101101" =>
                 debug <= predict_out_branch_imm;
-            
+            when "00101110" =>
+                debug <= alu_data_mux_a_output;
+            when "00101111" =>
+                debug <= alu_data_mux_b_output;
+            when "00110000" =>
+                debug <= ZERO_12 & states_idalu_out_alu_op;
             when others =>
                 null;
         end case;
     end process;
 end Behavioral;
-
