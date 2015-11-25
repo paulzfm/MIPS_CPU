@@ -56,7 +56,7 @@ begin
 process(clk,rst,ctl_bubble)
 begin
 	--rst async
-	if(rst='0')then
+	if(rst='1')then
 			--out_pc <= (others=> '0');
 			out_alu_res <= (others=> '0');
 			out_rc <= (others=> '0');

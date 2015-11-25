@@ -124,7 +124,8 @@ begin
         clk => clk,
         wr => pc_wr,
         input => pc_input,
-        output => pc_output
+        output => pc_output,
+        rst => rst
     );
     -- input pc_output
     -- output pc_output + 1
@@ -233,6 +234,16 @@ begin
 
     predict_in_jump_reg <= decode_out_ra;
     predict_in_jump_reg_data <= registers_data_a;
+    predict_in_idalu_alu_res_equal_rc <= states_idalu_out_alumem_alu_res_equal_rc;
+    predict_in_idalu_rc <= states_idalu_out_rc;
+    predict_in_alu_res <= alu_out_alu_res;
+    predict_in_alumem_rc <= states_alumem_out_rc;
+    predict_in_alumem_alu_res_equal_rc <= states_alumem_out_alumem_alu_res_equal_rc;
+    predict_in_alumem_alu_res <= states_alumem_out_alu_res;
+    predict_in_memwb_rc <= states_memwb_out_rc;
+    predict_in_memwb_alumem_res_equal_rc <= registers_wr;
+    predict_in_memwb_alumem_res <= registers_data_c;
+    predict_in_branch_imm <= extend_imm;
     -- todo
     predict_instance : entity work.predict port map(
         rst => rst,
@@ -446,6 +457,7 @@ begin
 
     process ( debug_control_ins, registers_debug_out)
     begin
+        
         case debug_control_ins(15 downto 8) is
             when "00000000" =>
                 debug <= pc_output;
@@ -480,13 +492,67 @@ begin
             when "00001110" =>
                 debug <= ZERO_15 & decode_out_use_imm;
             when "00001111" =>
-                debug <= ZERO_13 & decode_out_ctl_imm_extend_type;
+                debug <= ZERO_15 & decode_out_ctl_imm_extend_type;
             when "00010000" =>
-                debug <= ZERO_15 & decode_out_ctl_imm_extend_size;
+                debug <= ZERO_13 & decode_out_ctl_imm_extend_size;
             when "00010001" =>
                 debug <= ZERO_15 & decode_out_alumem_alu_res_equal_rc;
             when "00010010" =>
                 debug <= ZERO_12 & decode_ctl_alu_op;
+            when "00010011" =>
+                debug <= ZERO_15 & center_controllor_out_predict_err;
+            when "00010100" =>
+                debug <= ZERO_14 & predict_out_ctl_predict;
+            when "00010101" =>
+                debug <= ZERO_15 & predict_in_predict_res;
+            when "00010110" =>
+                debug <= ZERO_15 & states_idalu_out_is_branch_except_b;
+            when "00010111" =>
+                debug <= alu_out_alu_res;
+            when "00011000" =>
+                debug <= ZERO_12 & decode_out_ra;
+            when "00011001" =>
+                debug <= ZERO_12 & decode_out_rb;
+            when "00011010" =>
+                debug <= ZERO_12 & decode_out_rc;
+            when "00011011" =>
+                debug <= ZERO_15 & center_controllor_out_branch_alu_pc_imm;
+            when "00011100" =>
+                debug <= ZERO_15 & decode_out_use_imm;
+            when "00011101" =>
+                debug <= ZERO_15 & decode_ctl_read_mem;
+            when "00011110" =>
+                debug <= ZERO_15 & decode_ctl_write_mem;
+            when "00011111" =>
+                debug <= ZERO_15 & decode_ctl_write_reg;
+            when "00100000" =>
+				    debug <= pc_input;
+            when "00100001" =>
+                debug <= ZERO_15 & states_alumem_out_rd_mem;
+            when "00100010" =>
+                debug <= ZERO_15 & states_alumem_out_wr_mem;
+            when "00100011" =>
+                debug <= ZERO_15 & states_idalu_ctl_bubble;
+            when "00100100" =>
+                debug <= ZERO_15 & states_alumem_ctl_bubble;
+            when "00100101" =>
+                debug <= ZERO_15 & states_memwb_ctl_bubble;
+            when "00100110" =>
+                debug <= ZERO_15 & states_idalu_ctl_rst;
+            when "00100111" =>
+                debug <= ZERO_15 & states_alumem_ctl_rst;
+            when "00101000" =>
+                debug <= ZERO_15 & states_memwb_ctl_rst;
+            when "00101001" =>
+                debug <= pc_no_error;
+            when "00101010" =>
+                debug <= pc_yes_error;
+            when "00101011" =>
+                debug <= extend_imm;
+            when "00101100" =>
+                debug <= decode_out_imm;
+            when "00101101" =>
+                debug <= predict_out_branch_imm;
             when others =>
                 null;
         end case;

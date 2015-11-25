@@ -50,7 +50,7 @@ begin
 process(clk,rst,ctl_bubble)
 begin
 	--rst async
-	if(rst='0')then
+	if(rst='1')then
 			out_pc <= (others=> '0');
 			out_pc_inc <= (others=> '0');
 			out_instruction <= (others=> '0');

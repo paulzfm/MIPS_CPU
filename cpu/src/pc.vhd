@@ -33,21 +33,25 @@ entity pc is
     Port ( input : in  STD_LOGIC_VECTOR (15 downto 0);
            output : out  STD_LOGIC_VECTOR (15 downto 0);
            clk : in  STD_LOGIC;
-           wr : in  STD_LOGIC);
+           wr : in  STD_LOGIC;
+			  rst : in STD_LOGIC);
 end pc;
 
 architecture Behavioral of pc is
 
 begin
-    process (clk)
+    process (clk, rst)
     begin
-        if (falling_edge(clk))
+	     if (rst = '1') then
+		      output <= (others=>'0');
+		  elsif (falling_edge(clk))
         then
             if (wr = '1')
             then
                 output <= input;
             end if;
-        end if;
+         end if;
+		
     end process;
 end Behavioral;
 

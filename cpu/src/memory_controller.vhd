@@ -70,7 +70,7 @@ architecture Behavioral of memory_controller is
 begin
     control : process(in_rd, in_wr, in_pc_addr, in_ram_addr, in_data)
     begin
-        if in_ram_addr(15) = '0' then -- read or write instruction memory
+        if (in_ram_addr(15) = '0' and (in_rd = '1' or in_wr = '1')) then -- read or write instruction memory
             ram1_rd <= '0';
             ram1_wr <= '0';
             ram2_rd <= in_rd;
@@ -90,7 +90,7 @@ begin
 
     output : process(ram1_out_data, ram2_out_data)
     begin
-        if in_ram_addr(15) = '0' then -- read or write instruction memory
+        if (in_ram_addr(15) = '0' and (in_rd = '1' or in_wr = '1')) then -- read or write instruction memory
             out_data <= ram2_out_data;
         else -- access data memory
             out_data <= ram1_out_data;

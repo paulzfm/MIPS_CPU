@@ -639,7 +639,23 @@ begin
                 out_alumem_alu_res_equal_rc <= '0';--forward
                 out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
             when others =>
-                null;
+                -- regard as nop
+                out_ra <= REG_NULL;
+                out_rb <= REG_NULL;
+                out_rc <= REG_NULL;
+                out_ctl_write_reg <= '0';
+                out_ctl_write_mem <= '0';
+                out_ctl_read_mem <='0';
+                out_ctl_alu_op <= ALU_DATA_A;
+                out_use_imm <= '0';
+                out_imm <= signal_imm_8to16;
+                out_ctl_imm_extend_size <= EXT_8;
+                out_ctl_imm_extend_type <= EXT_SIGNED;
+                out_ctl_is_jump <= '0';--jrra jr
+                out_ctl_is_b <= '0';--b
+                out_ctl_is_branch_except_b <= '0';--branch
+                out_alumem_alu_res_equal_rc <= '0';--forward
+                out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
         end case;
     end process;
 

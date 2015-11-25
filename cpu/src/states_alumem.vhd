@@ -72,7 +72,7 @@ begin
 process(clk,rst,ctl_bubble,ctl_rst)
 begin
 	--rst async
-	if(rst='0')then
+	if(rst='1')then
 	      --output all '0'
 			out_pc <= (others=> '0');
 			out_pc_inc <= (others=> '0');

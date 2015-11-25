@@ -31,6 +31,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity top is
     Port ( clk : in  STD_LOGIC;
+           clk_50 : in STD_LOGIC;
            rst : in  STD_LOGIC;
            serial_data_ready : in STD_LOGIC;
            serial_tbre: in  STD_LOGIC;
@@ -66,7 +67,7 @@ signal cpu_in_mem_data, cpu_in_instruction_data : STD_LOGIC_VECTOR(15 downto 0);
 begin
 cpu_instance : entity work.cpu port map(
         clk => clk,
-        rst => rst,
+        rst => not rst,
         out_mem_rdn => cpu_out_mem_rdn,
         out_mem_wrn => cpu_out_mem_wrn,
         out_mem_data => cpu_out_mem_data,
@@ -79,7 +80,7 @@ cpu_instance : entity work.cpu port map(
     );
     
 memory_controller_instance : entity work.memory_controller port map(
-        clk => clk,
+        clk => clk_50,
         rst => rst,
         in_pc_addr => cpu_out_pc,
         in_ram_addr => cpu_out_mem_addr,

@@ -96,6 +96,8 @@ begin
                 else
                     out_ctl_predict <= "00";
                 end if;
+            else
+                out_ctl_predict <= "00";
             end if;
         end if;
     end process;

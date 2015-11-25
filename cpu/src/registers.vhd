@@ -109,7 +109,7 @@ begin
 
     wr_z : process(clk,  rst)
     begin
-        if rst = '0' then -- set all registers to 0
+        if rst = '1' then -- set all registers to 0
             reg_r0 <= (others => '0');
             reg_r1 <= (others => '0');
             reg_r2 <= (others => '0');
