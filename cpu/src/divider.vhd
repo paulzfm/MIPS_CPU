@@ -19,7 +19,6 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use work.constants.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -34,7 +33,7 @@ entity divider is
            output : out  STD_LOGIC);
 end divider;
 
-architecture Behavioral of extend is
+architecture Behavioral of divider is
     signal data : STD_LOGIC := '1';
 begin
     ff : process(input)
