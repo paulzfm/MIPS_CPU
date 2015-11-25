@@ -31,7 +31,6 @@ use work.constants.ALL;
 
 entity decode is
     Port ( in_instruction : in  STD_LOGIC_VECTOR (15 downto 0);
-           in_pc : in STD_LOGIC_VECTOR(15 downto 0);
            in_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
            --out_instruction_op : out STD_LOGIC_VECTOR(4 downto 0);
            out_ra : out STD_LOGIC_VECTOR(3 downto 0);
@@ -76,7 +75,9 @@ begin
     signal_imm_11to16 <= "00000"&in_instruction(10 downto 0);
     ----
 
-    process (in_instruction, ra, rb, rc, in_pc_inc, instruction_op)
+    process (in_instruction, ra, rb, rc, in_pc_inc, instruction_op,
+        signal_imm_3to16, signal_imm_4to16, signal_imm_5to16, 
+        signal_imm_8to16, signal_imm_11to16)
     begin
         case (instruction_op) is
             when INSTRUCTION_ADDIU =>
@@ -351,7 +352,7 @@ begin
 										out_ctl_read_mem <='0';
 										out_ctl_alu_op <= ALU_DATA_B;
 										out_use_imm <= '1';
-										out_imm <= in_pc;
+										out_imm <= in_pc_inc;
 										out_ctl_imm_extend_size <= EXT_NO;
 										out_ctl_imm_extend_type <= EXT_SIGNED;
 										out_ctl_is_jump <= '0';--jrra jr
