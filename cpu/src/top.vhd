@@ -32,21 +32,24 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity top is
     Port ( clk : in  STD_LOGIC;
            rst : in  STD_LOGIC;
-           data_ready : in STD_LOGIC;
-           tbre: in  STD_LOGIC;
-           tsre: in  STD_LOGIC;
+           serial_data_ready : in STD_LOGIC;
+           serial_tbre: in  STD_LOGIC;
+           serial_tsre: in  STD_LOGIC;
            ram1_oe : out  STD_LOGIC;
            ram2_oe : out  STD_LOGIC;
            ram1_we : out  STD_LOGIC;
            ram2_we : out  STD_LOGIC;
            ram1_en : out  STD_LOGIC;
            ram2_en : out  STD_LOGIC;
-           rdn : out  STD_LOGIC;
-           wrn : out  STD_LOGIC;
+           serial_rdn : out  STD_LOGIC;
+           serial_wrn : out  STD_LOGIC;
            ram1_addr : out  STD_LOGIC_VECTOR (17 downto 0);
            ram2_addr : out  STD_LOGIC_VECTOR (17 downto 0);
            ram1_data : inout  STD_LOGIC_VECTOR (15 downto 0);
-           ram2_data : inout  STD_LOGIC_VECTOR (15 downto 0));
+           ram2_data : inout  STD_LOGIC_VECTOR (15 downto 0);
+           debug : out STD_LOGIC_VECTOR(15 downto 0);
+           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0)
+           );
 end top;
 
 architecture Behavioral of top is
@@ -71,7 +74,8 @@ cpu_instance : entity work.cpu port map(
         out_pc => cpu_out_pc,
         in_mem_data => cpu_in_mem_data,
         in_instruction_data => cpu_in_instruction_data,
-        debug : out STD_LOGIC_VECTOR(127 downto 0)
+        debug => debug,
+        debug_control_ins => debug_control_ins
     );
     
 memory_controller_instance : entity work.memory_controller port map(
@@ -100,10 +104,10 @@ memory_controller_instance : entity work.memory_controller port map(
         ram1_data => ram1_data,
 
         -- serial ports
-        serial_rdn : out  STD_LOGIC;
-        serial_wrn : out  STD_LOGIC;
-        serial_data_ready : in  STD_LOGIC;
-        serial_tbre : in  STD_LOGIC;
-        serial_tsre : in  STD_LOGIC
+        serial_rdn => serial_rdn, 
+        serial_wrn => serial_wrn,
+        serial_data_ready => serial_data_ready,
+        serial_tbre => serial_tbre,
+        serial_tsre => serial_tsre
     );
 end Behavioral;
