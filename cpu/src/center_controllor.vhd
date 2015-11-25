@@ -44,7 +44,6 @@ entity center_controllor is
            out_predict_err : out  STD_LOGIC;
            out_predict_res : out  STD_LOGIC;
            out_branch_alu_pc_imm : out  STD_LOGIC;
-           out_idalu_pc_inc : out STD_LOGIC_VECTOR(15 downto 0);
            out_pc_wr : out STD_LOGIC;
 
            
@@ -58,8 +57,8 @@ entity center_controllor is
            in_idalu_ra : in  STD_LOGIC_VECTOR (3 downto 0);
            in_idalu_rb : in  STD_LOGIC_VECTOR (3 downto 0);
            in_idalu_rc : in  STD_LOGIC_VECTOR (3 downto 0);
+           in_idalu_rd : in  STD_LOGIC_VECTOR (3 downto 0);
            in_idalu_use_imm_ry : STD_LOGIC;
-           -- in_idalu_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
            in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
            in_idalu_is_branch_except_b : in STD_LOGIC;
            in_alumem_alu_res : in STD_LOGIC_VECTOR(15 downto 0);
@@ -84,10 +83,13 @@ signal predict_res : STD_LOGIC;
 -- will output to out_predict_error as a control signal.
 signal predict_error : STD_LOGIC;
 
--- is_alu_lw means that decode contains a instruction that will use register.
--- and id_alu contains a lw instruction.
+-- is_alu_lw means that decode contains a instruction that will use register
+-- and idalu contains a lw instruction with same register.
+-- is_alu_lw also contains this situation that the idalu contains a lwsw and
+-- decode is a branch instruction.
 signal is_alu_lw : STD_LOGIC;
--- is_alumem_lwsw_instruction means alumem has lw instruction.
+-- is_alumem_lwsw_instruction means alumem has lwsw instruction, so
+-- we will ignore next pc.
 signal is_alumem_lwsw_instruction : STD_LOGIC;
 -- is_alumem_swlw_instruction will return weather alumem contain a 
 -- sw to instruction memory
@@ -146,7 +148,7 @@ begin
     end process;
     
     calc_out_pc_wr:
-    process (rst)
+    process (rst, is_alumem_lwsw_instruction, is_alu_lw)
     begin
         if (rst = '1')
         then
@@ -162,7 +164,8 @@ begin
     end process;
 
     calc_is_alu_lw:
-    process (rst, in_alumem_rc, in_idalu_ra, in_idalu_rb)
+    process (rst, in_idalu_rc, in_decode_ra, in_decode_rb, 
+        in_idalu_rd_mem, in_idalu_wr_mem, in_alu_res, in_decode_is_branch_except_b)
     variable idalu_lw, reg_same : STD_LOGIC;
     begin
         if (rst = '1')
@@ -186,7 +189,7 @@ begin
         end if;
     end process;
     calc_is_alumem_lwsw_instruction:
-    process (rst, in_alumem_wr_mem, in_alumem_rd_mem)
+    process (rst, in_alumem_wr_mem, in_alumem_rd_mem, in_alumem_alu_res)
     begin
         if (rst = '1')
         then
@@ -202,7 +205,8 @@ begin
     end process;
 
     calc_out_forward_alu_a:
-    process (rst, in_alumem_rc, in_idalu_ra, in_alumem_alu_res_equal_rc, in_memwb_wr_reg )
+    process (rst, in_alumem_rc, in_idalu_ra, 
+        in_alumem_alu_res_equal_rc, in_memwb_wr_reg, in_memwb_rc )
     begin
         -- 00 select origin A
         -- 01 select alu/memory data
@@ -226,7 +230,8 @@ begin
     
     
     calc_out_forward_alu_b:
-    process (rst, in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry, in_memwb_wr_reg, in_alumem_alu_res_equal_rc)
+    process (rst, in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry, 
+        in_memwb_wr_reg, in_alumem_alu_res_equal_rc, in_memwb_rc)
     begin
         -- 00 select origin A
         -- 01 select alu/memory data
@@ -252,7 +257,8 @@ begin
     end process;
 
     calc_out_forward_alu_d:
-    process (rst, in_alumem_rc, in_idalu_ra, in_alumem_alu_res_equal_rc, in_memwb_wr_reg )
+    process (rst, in_alumem_rc, in_idalu_rd, 
+        in_alumem_alu_res_equal_rc, in_memwb_wr_reg, in_memwb_rc)
     begin
         -- 00 select origin A
         -- 01 select alu/memory data
