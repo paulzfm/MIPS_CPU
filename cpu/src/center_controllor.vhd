@@ -64,6 +64,7 @@ entity center_controllor is
            in_alumem_alu_res : in STD_LOGIC_VECTOR(15 downto 0);
            in_alumem_rc : in  STD_LOGIC_VECTOR (3 downto 0);
            in_alumem_wr_mem : in STD_LOGIC;
+           in_alumem_rd_mem : in STD_LOGIC;
            in_alumem_alu_res_equal_rc : in STD_LOGIC;
            in_memwb_rc : in STD_LOGIC_VECTOR(3 downto 0);
            in_memwb_wr_reg : in STD_LOGIC;
