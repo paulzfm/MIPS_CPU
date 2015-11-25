@@ -40,8 +40,7 @@ entity CPU is
            in_mem_data : in STD_LOGIC_VECTOR(15 downto 0);
            in_instruction_data : in STD_LOGIC_VECTOR(15 downto 0);
            debug : out STD_LOGIC_VECTOR(15 downto 0);
-           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0);
-           debug_control_data : in STD_LOGIC_VECTOR(15 downto 0)
+           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0)
         );
 end CPU;
 
@@ -445,7 +444,7 @@ begin
      );
 
 
-    process (debug_control_data, debug_control_ins, registers_debug_out)
+    process ( debug_control_ins, registers_debug_out)
     begin
         case debug_control_ins(15 downto 8) is
             when "00000000" =>
@@ -481,9 +480,9 @@ begin
             when "00001110" =>
                 debug <= ZERO_15 & decode_out_use_imm;
             when "00001111" =>
-                debug <= ZERO_15 & decode_out_ctl_imm_extend_type;
+                debug <= ZERO_13 & decode_out_ctl_imm_extend_type;
             when "00010000" =>
-                debug <= ZERO_13 & decode_out_ctl_imm_extend_size;
+                debug <= ZERO_15 & decode_out_ctl_imm_extend_size;
             when "00010001" =>
                 debug <= ZERO_15 & decode_out_alumem_alu_res_equal_rc;
             when "00010010" =>
