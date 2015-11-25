@@ -49,8 +49,9 @@ entity top is
            ram1_data : inout  STD_LOGIC_VECTOR (15 downto 0);
            ram2_data : inout  STD_LOGIC_VECTOR (15 downto 0);
            debug : out STD_LOGIC_VECTOR(15 downto 0);
-           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0)
-           );
+           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0);
+           display1 : out STD_LOGIC_VECTOR(0 to 6);
+           display2 : out STD_LOGIC_VECTOR(0 to 6));
 end top;
 
 architecture Behavioral of top is
@@ -78,7 +79,7 @@ cpu_instance : entity work.cpu port map(
         debug => debug,
         debug_control_ins => debug_control_ins
     );
-    
+
 memory_controller_instance : entity work.memory_controller port map(
         clk => clk_50,
         rst => rst,
@@ -92,23 +93,33 @@ memory_controller_instance : entity work.memory_controller port map(
 
         -- ram2 ports
         ram2_oe => ram2_oe,
-        ram2_we => ram2_we, 
+        ram2_we => ram2_we,
         ram2_en => ram2_en,
         ram2_addr => ram2_addr,
         ram2_data => ram2_data,
 
         -- ram1 ports
         ram1_oe => ram1_oe,
-        ram1_we => ram1_we, 
+        ram1_we => ram1_we,
         ram1_en => ram1_en,
         ram1_addr => ram1_addr,
         ram1_data => ram1_data,
 
         -- serial ports
-        serial_rdn => serial_rdn, 
+        serial_rdn => serial_rdn,
         serial_wrn => serial_wrn,
         serial_data_ready => serial_data_ready,
         serial_tbre => serial_tbre,
         serial_tsre => serial_tsre
+    );
+
+    disp1 : entity work.display7 port map (
+        input => cpu_out_pc(7 downto 4),
+        display => display1
+    );
+
+    disp2 : entity work.display7 port map (
+        input => cpu_out_pc(3 downto 0),
+        display => display2
     );
 end Behavioral;
