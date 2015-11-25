@@ -81,7 +81,7 @@ cpu_instance : entity work.cpu port map(
 memory_controller_instance : entity work.memory_controller port map(
         clk => clk,
         rst => rst,
-        in_pc_addr => cpu_out_pc;
+        in_pc_addr => cpu_out_pc,
         in_ram_addr => cpu_out_mem_addr,
         in_data => cpu_out_mem_data,
         in_rd => cpu_out_mem_rdn,
