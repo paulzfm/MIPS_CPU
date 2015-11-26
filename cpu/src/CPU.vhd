@@ -559,6 +559,19 @@ begin
                 debug <= alu_data_mux_b_output;
             when "00110000" =>
                 debug <= ZERO_12 & states_idalu_out_alu_op;
+            when "00110001" =>
+                debug <= ZERO_12 & decode_ctl_alu_op;
+            when "00110010" =>
+                debug <= ZERO_14 & alu_data_mux_a_addr;
+            when "00110011" =>
+                debug <= ZERO_14 & alu_data_mux_b_addr;
+            when "00110100" =>
+                debug <= ZERO_12 & states_alumem_out_rc;
+            when "00110101" =>
+                debug <= ZERO_15 & states_alumem_out_alumem_alu_res_equal_rc;
+            when "00110110" =>
+                debug <= states_alumem_out_alu_res;
+
             when others =>
                 null;
         end case;
