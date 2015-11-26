@@ -508,7 +508,7 @@ begin
                out_alumem_alu_res_equal_rc <= '0';--forward
                out_memwb_wb_alu_mem <= WB_ALU_MEM_MEM;
             when INSTRUCTION_MFIH =>
-                case (instruction_op(0 downto 0)) is
+                case (in_instruction(0 downto 0)) is
                     when "0" =>
                         --MFIH
                         out_ra <= REG_IH;
@@ -565,7 +565,7 @@ begin
                 out_alumem_alu_res_equal_rc <= '0';--forward
                 out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
             when INSTRUCTION_SLL =>
-                case (instruction_op(1 downto 0)) is
+                case (in_instruction(1 downto 0)) is
                     when "00" =>
                         --SLL
                         out_ra <= rb;
