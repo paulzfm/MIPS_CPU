@@ -578,6 +578,12 @@ begin
                 debug <= ZERO_15 & registers_wr;
             when "00111001" =>
                 debug <= registers_data_c;
+            when "00111010" =>
+                debug <= ZERO_15 & pc_wr;
+            when "00111011" =>
+                debug <= states_idalu_out_data_d;
+            when "00111100" =>
+                debug <= ZERO_14 & states_alumem_out_rd_mem & states_alumem_out_wr_mem;
             when others =>
                 null;
         end case;
