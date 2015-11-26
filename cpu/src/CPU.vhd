@@ -571,7 +571,12 @@ begin
                 debug <= ZERO_15 & states_alumem_out_alumem_alu_res_equal_rc;
             when "00110110" =>
                 debug <= states_alumem_out_alu_res;
-
+            when "00110111" =>
+                debug <= ZERO_12 & states_memwb_out_rc;
+            when "00111000" =>
+                debug <= ZERO_15 & registers_wr;
+            when "00111001" =>
+                debug <= registers_data_c;
             when others =>
                 null;
         end case;
