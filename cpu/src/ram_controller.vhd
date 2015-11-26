@@ -49,7 +49,10 @@ entity ram_controller is
            serial_wrn : out  STD_LOGIC;
            serial_data_ready : in  STD_LOGIC;
            serial_tbre : in  STD_LOGIC;
-           serial_tsre : in  STD_LOGIC);
+           serial_tsre : in  STD_LOGIC;
+
+           --debug
+           debug_info : out STD_LOGIC_VECTOR (4 downto 0));
 end ram_controller;
 
 architecture Behavioral of ram_controller is
@@ -61,6 +64,8 @@ begin
     ram1_en <= '0';
     ram1_addr <= "000" & in_addr;
     ctl(0) <= in_wr; -- write?
+
+    debug_info <= ctl & serial_data_ready & write_ready;
 
     control : process(in_addr)
     begin
@@ -147,6 +152,9 @@ begin
         end if;
     end process;
 
-    out_data <= ram1_serial_data;
+    process (ram1_serial_data)
+    begin
+        out_data <= ram1_serial_data;
+    end process;
 
 end Behavioral;

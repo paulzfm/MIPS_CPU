@@ -59,7 +59,11 @@ entity memory_controller is
            serial_wrn : out  STD_LOGIC;
            serial_data_ready : in  STD_LOGIC;
            serial_tbre : in  STD_LOGIC;
-           serial_tsre : in  STD_LOGIC);
+           serial_tsre : in  STD_LOGIC;
+
+           -- debug
+           debug_in : in STD_LOGIC_VECTOR (3 downto 0);
+           debug_out : out STD_LOGIC_VECTOR (15 downto 0));
 end memory_controller;
 
 architecture Behavioral of memory_controller is
@@ -67,6 +71,7 @@ architecture Behavioral of memory_controller is
     signal ram1_in_addr, ram2_in_addr : STD_LOGIC_VECTOR (14 downto 0);
     signal ram1_in_data, ram2_in_data : STD_LOGIC_VECTOR (15 downto 0);
     signal ram1_out_data, ram2_out_data : STD_LOGIC_VECTOR (15 downto 0);
+    signal info : STD_LOGIC_VECTOR (4 downto 0);
 begin
     control : process(in_rd, in_wr, in_pc_addr, in_ram_addr, in_data)
     begin
@@ -116,7 +121,8 @@ begin
         serial_wrn => serial_wrn,
         serial_data_ready => serial_data_ready,
         serial_tbre => serial_tbre,
-        serial_tsre => serial_tsre
+        serial_tsre => serial_tsre,
+        debug_info => info
     );
 
     ram2 : entity work.ins_ram_controller port map (
@@ -133,5 +139,14 @@ begin
         ram2_addr => ram2_addr,
         ram2_data => ram2_data
     );
+
+    debug : process (debug_in)
+    begin
+        case debug_in is
+            when "0000" =>
+                debug_out <= x"00" & "000" & info;
+            when others => null;
+        end case;
+    end process;
 
 end Behavioral;

@@ -65,6 +65,7 @@ signal cpu_out_mem_data, cpu_out_mem_addr : STD_LOGIC_VECTOR(15 downto 0);
 -- cpu_in
 signal cpu_in_mem_data, cpu_in_instruction_data : STD_LOGIC_VECTOR(15 downto 0);
 -- debug
+signal debug_out_cpu, debug_out_mem : STD_LOGIC_VECTOR(15 downto 0);
 
 
 begin
@@ -78,7 +79,7 @@ cpu_instance : entity work.cpu port map(
         out_pc => cpu_out_pc,
         in_mem_data => cpu_in_mem_data,
         in_instruction_data => cpu_in_instruction_data,
-        debug => debug,
+        debug => debug_out_cpu,
         debug_control_ins => debug_control_ins
     );
 
@@ -112,7 +113,11 @@ memory_controller_instance : entity work.memory_controller port map(
         serial_wrn => serial_wrn,
         serial_data_ready => serial_data_ready,
         serial_tbre => serial_tbre,
-        serial_tsre => serial_tsre
+        serial_tsre => serial_tsre,
+
+        -- debug
+        debug_in => debug_control_ins(3 downto 0),
+        debug_out => debug_out_mem
     );
 
     disp1 : entity work.display7 port map (
@@ -135,4 +140,13 @@ memory_controller_instance : entity work.memory_controller port map(
         clk => clk_50,
         clk_1hz => real_clk
     );
+
+    output_debug : process (debug_control_ins)
+    begin
+        case debug_control_ins(15) is
+            when '0' => debug <= debug_out_cpu;
+            when '1' => debug <= debug_out_mem;
+            when others => null;
+        end case;
+    end process;
 end Behavioral;
