@@ -175,7 +175,7 @@ begin
                        out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
                     when "100" =>
                        -- MTSP
-                       out_ra <= ra;
+                       out_ra <= rb;
                        out_rb <= REG_NULL;
                        out_rc <= REG_SP;
                        out_ctl_write_reg <= '1';
