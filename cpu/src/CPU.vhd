@@ -116,7 +116,8 @@ signal states_memwb_ctl_bubble, states_memwb_ctl_rst, states_memwb_ctl_copy :
 -- center controllor
 signal center_controllor_out_predict_err : STD_LOGIC;
 signal center_controllor_out_branch_alu_pc_imm : STD_LOGIC;
-
+signal out_is_alumem_lwsw_instruction : STD_LOGIC;
+signal out_is_alu_lw : STD_LOGIC;
 
 begin
     out_pc <= pc_output;
@@ -426,14 +427,15 @@ begin
         -- out_idalu_pc_inc => ,
         out_pc_wr => pc_wr,
 
-
+        out_is_alumem_lwsw_instruction => out_is_alumem_lwsw_instruction,
+        out_is_alu_lw => out_is_alu_lw,
 
         in_decode_ra  => decode_out_ra,
         in_decode_rb  => decode_out_rb,
         in_decode_is_branch_except_b => decode_out_ctl_is_branch_except_b,
 
-        in_idalu_rd_mem => decode_ctl_read_mem,
-        in_idalu_wr_mem => decode_ctl_write_mem,
+        in_idalu_rd_mem => states_idalu_out_rd_mem,
+        in_idalu_wr_mem => states_idalu_out_wr_mem,
         in_idalu_ra => states_idalu_out_ra,
         in_idalu_rb => states_idalu_out_rb,
         in_idalu_rc => states_idalu_out_rc,
@@ -584,6 +586,14 @@ begin
                 debug <= states_idalu_out_data_d;
             when "00111100" =>
                 debug <= ZERO_14 & states_alumem_out_rd_mem & states_alumem_out_wr_mem;
+            when "00111101" =>
+                debug <= ZERO_15 & out_is_alumem_lwsw_instruction;
+            when "00111110" =>
+                debug <= ZERO_15 & out_is_alu_lw;
+            when "00111111" =>
+                debug <= ZERO_14 & alu_data_mux_d_addr;
+            when "01000000" =>
+                debug <= states_alumem_out_data_rd;
             when others =>
                 null;
         end case;

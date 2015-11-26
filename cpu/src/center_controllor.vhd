@@ -1,20 +1,20 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    20:28:58 11/21/2015 
--- Design Name: 
--- Module Name:    center_controllor - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+-- Company:
+-- Engineer:
 --
--- Dependencies: 
+-- Create Date:    20:28:58 11/21/2015
+-- Design Name:
+-- Module Name:    center_controllor - Behavioral
+-- Project Name:
+-- Target Devices:
+-- Tool versions:
+-- Description:
 --
--- Revision: 
+-- Dependencies:
+--
+-- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments: 
+-- Additional Comments:
 --
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -45,8 +45,9 @@ entity center_controllor is
            out_predict_res : out  STD_LOGIC;
            out_branch_alu_pc_imm : out  STD_LOGIC;
            out_pc_wr : out STD_LOGIC;
-
-           
+           -- debug
+           out_is_alumem_lwsw_instruction : out STD_LOGIC;
+           out_is_alu_lw : out STD_LOGIC;
 
            in_decode_ra  : in  STD_LOGIC_VECTOR (3 downto 0);
            in_decode_rb  : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -92,12 +93,16 @@ signal is_alu_lw : STD_LOGIC;
 -- is_alumem_lwsw_instruction means alumem has lwsw instruction, so
 -- we will ignore next pc.
 signal is_alumem_lwsw_instruction : STD_LOGIC;
--- is_alumem_swlw_instruction will return weather alumem contain a 
+-- is_alumem_swlw_instruction will return weather alumem contain a
 -- sw to instruction memory
 -- signal is_alumem_swlw_instruction : STD_LOGIC;
 begin
     out_predict_res <= predict_res;
     out_predict_err <= predict_error;
+
+    --debug
+    out_is_alumem_lwsw_instruction <= is_alumem_lwsw_instruction;
+    out_is_alu_lw <= is_alu_lw;
 
     --calc_is_alumem_swlw_instruction:
     --process (rst, in_alumem_wr_mem, in_alumem_alu_res, in_alumem_rd_mem)
@@ -119,7 +124,7 @@ begin
     process (rst, in_alu_res, predict_res, in_idalu_is_branch_except_b)
     begin
         if (rst = '1')
-        then 
+        then
             predict_error <= '0';
         else
             if (predict_res /= in_alu_res(0) and in_idalu_is_branch_except_b = '1')
@@ -147,7 +152,7 @@ begin
             end if;
         end if;
     end process;
-    
+
     calc_out_pc_wr:
     process (rst, is_alumem_lwsw_instruction, is_alu_lw)
     begin
@@ -165,21 +170,21 @@ begin
     end process;
 
     calc_is_alu_lw:
-    process (rst, in_idalu_rc, in_decode_ra, in_decode_rb, 
+    process (rst, in_idalu_rc, in_decode_ra, in_decode_rb,
         in_idalu_rd_mem, in_idalu_wr_mem, in_alu_res, in_decode_is_branch_except_b)
-    variable idalu_lw, reg_same : STD_LOGIC;
+    variable reg_same : STD_LOGIC;
     begin
         if (rst = '1')
         then
             is_alu_lw <= '0';
         else
-
+            reg_same := '0';
             if (in_idalu_rc = in_decode_ra or in_idalu_rc = in_decode_rb)
             then
                 reg_same := '1';
             end if;
 
-            if ((in_idalu_rd_mem = '1' and reg_same = '1') or 
+            if ((in_idalu_rd_mem = '1' and reg_same = '1') or
                 ((in_idalu_rd_mem = '1' or in_idalu_wr_mem = '1') and in_alu_res(15) = '0' and in_decode_is_branch_except_b = '1') )
             then
                 is_alu_lw <= '1';
@@ -206,7 +211,7 @@ begin
     end process;
 
     calc_out_forward_alu_a:
-    process (rst, in_alumem_rc, in_idalu_ra, 
+    process (rst, in_alumem_rc, in_idalu_ra,
         in_alumem_alu_res_equal_rc, in_memwb_wr_reg, in_memwb_rc )
     begin
         -- 00 select origin A
@@ -228,10 +233,10 @@ begin
             end if;
         end if;
     end process;
-    
-    
+
+
     calc_out_forward_alu_b:
-    process (rst, in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry, 
+    process (rst, in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry,
         in_memwb_wr_reg, in_alumem_alu_res_equal_rc, in_memwb_rc)
     begin
         -- 00 select origin A
@@ -258,7 +263,7 @@ begin
     end process;
 
     calc_out_forward_alu_d:
-    process (rst, in_alumem_rc, in_idalu_rd, 
+    process (rst, in_alumem_rc, in_idalu_rd,
         in_alumem_alu_res_equal_rc, in_memwb_wr_reg, in_memwb_rc)
     begin
         -- 00 select origin A
@@ -380,5 +385,5 @@ begin
             out_branch_alu_pc_imm <= in_alu_res(0);
         end if;
     end process;
-    
+
 end Behavioral;
