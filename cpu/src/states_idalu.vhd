@@ -1,20 +1,20 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    19:57:42 11/17/2015 
--- Design Name: 
--- Module Name:    states_idalu - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+-- Company:
+-- Engineer:
 --
--- Dependencies: 
+-- Create Date:    19:57:42 11/17/2015
+-- Design Name:
+-- Module Name:    states_idalu - Behavioral
+-- Project Name:
+-- Target Devices:
+-- Tool versions:
+-- Description:
 --
--- Revision: 
+-- Dependencies:
+--
+-- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments: 
+-- Additional Comments:
 --
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -141,11 +141,12 @@ begin
 			out_wr_mem <= in_wr_mem;
 			out_rd_mem <= in_rd_mem;
 			out_use_imm <= in_use_imm;
+            out_alumem_alu_res_equal_rc <= in_alumem_alu_res_equal_rc;
             out_is_branch_except_b <= in_is_branch_except_b;
+            out_memwb_wb_alu_mem <= in_memwb_wb_alu_mem;
 		end if;
 	end if;
-	
+
 end process;
 
 end Behavioral;
-
