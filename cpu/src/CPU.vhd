@@ -594,6 +594,12 @@ begin
                 debug <= ZERO_14 & alu_data_mux_d_addr;
             when "01000000" =>
                 debug <= states_alumem_out_data_rd;
+            when "01000001" =>
+                debug <= states_memwb_out_mem_res;
+            when "01000010" =>
+                debug <= states_memwb_out_alu_res;
+            when "01000011" =>
+                debug <= ZERO_15 & states_memwb_out_memwb_wb_alu_mem;
             when others =>
                 null;
         end case;

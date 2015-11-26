@@ -115,15 +115,15 @@ begin
                 out_alu_res <= in_data_a or in_data_b;
             when ALU_CMP =>
                 -- ALU cmp
-                -- data_a == data_b => 1
-                -- data_a != data_b => 0
+                -- data_a == data_b => 0
+                -- data_a != data_b => 1
                 -- UNSIGNED!!
                 all_zero := '0';
                 for i in 0 to 15
                 loop
                     all_zero := all_zero or sub16_res(i);
                 end loop;
-                out_alu_res <= "000000000000000" & not(all_zero);
+                out_alu_res <= "000000000000000" & all_zero;
 
             when ALU_SIGNED_CMP =>
                 -- ALU signed cmp

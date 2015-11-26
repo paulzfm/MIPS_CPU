@@ -56,6 +56,8 @@ end top;
 
 architecture Behavioral of top is
 -- signal
+signal real_clk : STD_LOGIC;
+signal cpu_clk : STD_LOGIC;
 -- cpu_out
 signal cpu_out_pc : STD_LOGIC_VECTOR(15 downto 0);
 signal cpu_out_mem_rdn, cpu_out_mem_wrn : STD_LOGIC;
@@ -67,7 +69,7 @@ signal cpu_in_mem_data, cpu_in_instruction_data : STD_LOGIC_VECTOR(15 downto 0);
 
 begin
 cpu_instance : entity work.cpu port map(
-        clk => clk,
+        clk => cpu_clk,
         rst => not rst,
         out_mem_rdn => cpu_out_mem_rdn,
         out_mem_wrn => cpu_out_mem_wrn,
@@ -81,7 +83,7 @@ cpu_instance : entity work.cpu port map(
     );
 
 memory_controller_instance : entity work.memory_controller port map(
-        clk => clk_50,
+        clk => real_clk,
         rst => rst,
         in_pc_addr => cpu_out_pc,
         in_ram_addr => cpu_out_mem_addr,
@@ -121,5 +123,16 @@ memory_controller_instance : entity work.memory_controller port map(
     disp2 : entity work.display7 port map (
         input => cpu_out_pc(3 downto 0),
         display => display2
+    );
+
+    divider : entity work.divider port map (
+        input => real_clk,
+        output => cpu_clk
+    );
+
+    divider1 : entity work.divider1 port map (
+        en => not clk,
+        clk => clk_50,
+        clk_1hz => real_clk
     );
 end Behavioral;

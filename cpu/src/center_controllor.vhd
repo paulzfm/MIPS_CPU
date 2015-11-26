@@ -378,7 +378,7 @@ begin
     calc_out_branch_alu_pc_imm:
     process (rst, in_alu_res)
     begin
-        if (rst = '0')
+        if (rst = '1')
         then
             out_branch_alu_pc_imm <= '0';
         else

@@ -53,6 +53,7 @@ architecture Behavioral of ins_ram_controller is
 begin
     ram2_en <= '0';
     ram2_addr <= "000" & in_addr;
+    out_data <= ram2_data;
 
     transaction : process(clk, rst)
     begin
@@ -79,7 +80,6 @@ begin
                         end case;
                     when s_rd =>
                         state <= s_init;
-                        out_data <= ram2_data;
                     when s_wr =>
                         state <= s_init;
                         ram2_we <= '0';

@@ -89,14 +89,14 @@ begin
             state <= s_init;
         elsif rising_edge(clk) then -- transaction
             if in_rd = '0' and in_wr = '0' then -- disable
-                out_data <= (others => 'Z');
+                --out_data <= (others => 'Z');
             else
                 case state is
                     when s_init =>
                         case ctl is
                             when "100" => -- serial control signal
                                 state <= s_rd_serial_ctl;
-                                out_data <= (0 => write_ready, 1 => serial_data_ready, others => '0');
+                                ram1_serial_data <= (0 => write_ready, 1 => serial_data_ready, others => '0');
                             when "000" => -- read ram1
                                 state <= s_rd_ram;
                                 ram1_oe <= '0';
@@ -132,13 +132,12 @@ begin
                     when s_rd_serial =>
                         state <= s_init;
                         serial_rdn <= '0';
-                        out_data <= ram1_serial_data;
                     when s_wr_serial =>
                         state <= s_init;
                         serial_wrn <= '1';
                     when s_rd_ram =>
                         state <= s_init;
-                        out_data <= ram1_serial_data;
+                        --out_data <= ram1_serial_data;
                     when s_wr_ram =>
                         state <= s_init;
                         ram1_we <= '0';
@@ -147,5 +146,7 @@ begin
             end if;
         end if;
     end process;
+
+    out_data <= ram1_serial_data;
 
 end Behavioral;
