@@ -313,7 +313,8 @@ begin
         out_rd_mem => states_idalu_out_rd_mem,
         out_use_imm => states_idalu_out_use_imm
     );
-
+    alu_data_mux_alu_mem_forward_data <= states_alumem_out_alu_res;
+    alu_data_mux_mem_wb_forward_data <= registers_data_c;
     alu_data_mux_a_instance : entity work.mux4 port map(
         input0 => states_idalu_out_data_a,
         input1 => alu_data_mux_alu_mem_forward_data,
