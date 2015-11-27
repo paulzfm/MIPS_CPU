@@ -56,7 +56,7 @@ entity ram_controller is
 end ram_controller;
 
 architecture Behavioral of ram_controller is
-    type state_type is (s_init, s_rd_ram, s_rd_serial_ctl, s_rd_serial, s_wr_ram, s_wr_serial);
+    type state_type is (s_init, s_rd_ram, s_rd_serial, s_rd_serial_ctl, s_wr_ram, s_wr_serial, s_empty);
     signal state: state_type;
     signal ctl: STD_LOGIC_VECTOR (2 downto 0);
     signal write_ready: STD_LOGIC;
@@ -93,15 +93,22 @@ begin
         if rst = '0' then -- reset
             state <= s_init;
         elsif rising_edge(clk) then -- transaction
-            if in_rd = '0' and in_wr = '0' then -- disable
-                --out_data <= (others => 'Z');
-            else
-                case state is
-                    when s_init =>
+            case state is
+                when s_init =>
+                    if in_rd = '0' and in_wr = '0' then
+                        state <= s_empty;
+                        serial_rdn <= '1';
+                        serial_wrn <= '1';
+                        ram1_oe <= '1';
+                        ram1_we <= '1';
+                    else
                         case ctl is
-                            when "100" => -- serial control signal
+                            when "100" =>
                                 state <= s_rd_serial_ctl;
-                                ram1_serial_data <= (0 => write_ready, 1 => serial_data_ready, others => '0');
+                                serial_rdn <= '1';
+                                serial_wrn <= '1';
+                                ram1_oe <= '1';
+                                ram1_we <= '1';
                             when "000" => -- read ram1
                                 state <= s_rd_ram;
                                 ram1_oe <= '0';
@@ -132,29 +139,37 @@ begin
                                 ram1_we <= '1';
                             when others => null;
                         end case;
-                    when s_rd_serial_ctl =>
-                        state <= s_init;
-                    when s_rd_serial =>
-                        state <= s_init;
-                        serial_rdn <= '0';
-                    when s_wr_serial =>
-                        state <= s_init;
-                        serial_wrn <= '1';
-                    when s_rd_ram =>
-                        state <= s_init;
-                        --out_data <= ram1_serial_data;
-                    when s_wr_ram =>
-                        state <= s_init;
-                        ram1_we <= '0';
-                    when others => null;
-                end case;
-            end if;
+                    end if;
+                when s_rd_serial_ctl =>
+                    state <= s_init;
+                    out_data <= (0 => write_ready, 1 => serial_data_ready, others => '0');
+                when s_rd_serial =>
+                    state <= s_init;
+                    serial_rdn <= '0';
+                    out_data <= ram1_serial_data;
+                when s_wr_serial =>
+                    state <= s_init;
+                    serial_wrn <= '1';
+                when s_rd_ram =>
+                    state <= s_init;
+                    out_data <= ram1_serial_data;
+                when s_wr_ram =>
+                    state <= s_init;
+                    ram1_we <= '0';
+                when s_empty =>
+                    state <= s_init;
+                when others => null;
+            end case;
         end if;
     end process;
 
-    process (ram1_serial_data)
-    begin
-        out_data <= ram1_serial_data;
-    end process;
+    -- process (ctl, ram1_serial_data)
+    -- begin
+    --     if ctl = "100" then -- serial control signal
+    --         out_data <= (0 => write_ready, 1 => serial_data_ready, others => '0');
+    --     else
+    --         out_data <= ram1_serial_data;
+    --     end if;
+    -- end process;
 
 end Behavioral;
