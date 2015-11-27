@@ -81,6 +81,9 @@ begin
                     end if;
                     when s_rd =>
                         state <= s_init;
+                        ram2_oe <= '0';
+                        ram2_we <= '1';
+                        ram2_data <= (others => 'Z');
                     when s_wr =>
                         state <= s_init;
                         ram2_we <= '0';
