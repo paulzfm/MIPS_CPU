@@ -136,7 +136,7 @@ memory_controller_instance : entity work.memory_controller port map(
     );
 
     divider1 : entity work.divider1 port map (
-        en => '1',
+        en => not clk,
         clk => clk_50,
         clk_1hz => real_clk
     );

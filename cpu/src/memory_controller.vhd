@@ -87,9 +87,8 @@ begin
             ram1_wr <= in_wr;
             ram1_in_addr <= in_ram_addr(14 downto 0);
             ram1_in_data <= in_data;
-            ram2_rd <= '1'; -- fetch instruction
+            ram2_rd <= '0'; -- fetch instruction
             ram2_wr <= '0';
-            ram2_in_addr <= in_pc_addr(14 downto 0);
         end if;
     end process;
 
@@ -131,6 +130,7 @@ begin
         in_rd => ram2_rd,
         in_wr => ram2_wr,
         in_addr => ram2_in_addr,
+        in_pc_addr => in_pc_addr(14 downto 0),
         in_data => ram2_in_data,
         out_data => ram2_out_data,
         ram2_oe => ram2_oe,
