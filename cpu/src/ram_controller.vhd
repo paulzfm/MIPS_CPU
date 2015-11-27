@@ -92,7 +92,7 @@ begin
     begin
         if rst = '0' then -- reset
             state <= s_init;
-        elsif rising_edge(clk) then -- transaction
+        elsif falling_edge(clk) then -- transaction
             case state is
                 when s_init =>
                     if in_rd = '0' and in_wr = '0' then
@@ -125,7 +125,7 @@ begin
                                 ram1_serial_data <= in_data;
                             when "010" => -- read serial
                                 state <= s_rd_serial;
-                                serial_rdn <= '1';
+                                serial_rdn <= '0';
                                 serial_wrn <= '1';
                                 ram1_serial_data <= (others => 'Z');
                                 ram1_oe <= '1';
@@ -134,7 +134,7 @@ begin
                                 state <= s_wr_serial;
                                 serial_rdn <= '1';
                                 serial_wrn <= '0';
-                                ram1_serial_data <= in_data;
+                                ram1_serial_data <= x"00" & in_data(7 downto 0);
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
                             when others => null;
@@ -145,8 +145,8 @@ begin
                     out_data <= (0 => write_ready, 1 => serial_data_ready, others => '0');
                 when s_rd_serial =>
                     state <= s_init;
-                    serial_rdn <= '0';
                     out_data <= ram1_serial_data;
+                    serial_rdn <= '1';
                 when s_wr_serial =>
                     state <= s_init;
                     serial_wrn <= '1';

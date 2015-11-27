@@ -48,7 +48,7 @@ entity ins_ram_controller is
 end ins_ram_controller;
 
 architecture Behavioral of ins_ram_controller is
-    type state_type is (s_init, s_rd, s_wr);
+    type state_type is (s_init, s_rd, s_wr, s_empty);
     signal state: state_type;
 begin
     ram2_en <= '0';
@@ -59,12 +59,12 @@ begin
     begin
         if rst = '0' then -- reset
             state <= s_init;
-        elsif rising_edge(clk) then -- transaction
-            if in_rd = '0' and in_wr = '0' then -- disable
-                out_data <= (others => 'Z');
-            else
+        elsif falling_edge(clk) then -- transaction
                 case state is
                     when s_init =>
+                    if in_rd = '0' and in_wr = '0' then -- disable
+                        state <= s_empty;
+                    else
                         case in_wr is
                             when '0' => -- read ram2
                                 state <= s_rd;
@@ -78,14 +78,16 @@ begin
                                 ram2_data <= in_data;
                             when others => null;
                         end case;
+                    end if;
                     when s_rd =>
                         state <= s_init;
                     when s_wr =>
                         state <= s_init;
                         ram2_we <= '0';
+                    when s_empty =>
+                        state <= s_init;
                     when others => null;
                 end case;
-            end if;
         end if;
     end process;
 end Behavioral;
