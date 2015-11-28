@@ -345,8 +345,8 @@ begin
                 out_rst_ifid <= is_alumem_lwsw_instruction;
             else
                 -- in_decode_is_b = '1'
-                -- change to bubble 
-                out_rst_ifid <= not is_alumem_lwsw_instruction;
+                -- change to bubble
+                out_rst_ifid <= '0';
             end if;
         end if;
     end process;
