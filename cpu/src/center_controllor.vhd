@@ -289,13 +289,13 @@ begin
     end process;
 
     calc_out_bubble_ifid:
-    process (rst, is_alu_lw, in_decode_is_b, is_alumem_lwsw_instruction)
+    process (rst, is_alu_lw, in_decode_is_b, is_alumem_lwsw_instruction, in_decode_is_branch_except_b)
     begin
         if (rst = '1')
         then
             out_bubble_ifid <= '0';
         else
-            out_bubble_ifid <= is_alu_lw or (in_decode_is_b and is_alumem_lwsw_instruction);
+            out_bubble_ifid <= is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b) and is_alumem_lwsw_instruction);
         end if;
     end process;
 
@@ -334,13 +334,13 @@ begin
 
 
     calc_out_rst_ifid:
-    process (rst, is_alumem_lwsw_instruction, in_decode_is_b)
+    process (rst, is_alumem_lwsw_instruction, in_decode_is_b, in_decode_is_branch_except_b)
     begin
         if (rst = '1')
         then
             out_rst_ifid <= '0';
         else
-            if (in_decode_is_b = '0')
+            if (in_decode_is_b = '0' and in_decode_is_branch_except_b = '0')
             then
                 out_rst_ifid <= is_alumem_lwsw_instruction;
             else
@@ -352,13 +352,14 @@ begin
     end process;
 
     calc_out_rst_idalu:
-    process (rst, predict_error, is_alu_lw, in_decode_is_b, is_alumem_lwsw_instruction)
+    process (rst, predict_error, is_alu_lw, in_decode_is_b, 
+        is_alumem_lwsw_instruction, in_decode_is_branch_except_b)
     begin
         if (rst = '1')
         then
             out_rst_idalu <= '0';
         else
-            out_rst_idalu <= predict_error or is_alu_lw or (in_decode_is_b and is_alumem_lwsw_instruction);
+            out_rst_idalu <= predict_error or is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b) and is_alumem_lwsw_instruction);
         end if;
     end process;
 
