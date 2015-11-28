@@ -601,6 +601,8 @@ begin
                 debug <= states_memwb_out_alu_res;
             when "01000011" =>
                 debug <= ZERO_15 & states_memwb_out_memwb_wb_alu_mem;
+            when "01000100" =>
+                debug <= ZERO_13 & states_ifid_ctl_rst & states_ifid_ctl_copy & states_ifid_ctl_bubble;
             when others =>
                 null;
         end case;
