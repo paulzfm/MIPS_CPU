@@ -134,17 +134,17 @@ memory_controller_instance : entity work.memory_controller port map(
         input => real_clk,
         output => cpu_clk
     );
-    
+
     divider1 : entity work.divider port map (
         input => clk_50,
         output => real_clk
     );
 
---    divider1 : entity work.divider1 port map (
---        en => not clk,
---        clk => clk_50,
---        clk_1hz => real_clk
---    );
+    -- divider1 : entity work.divider1 port map (
+    --     en => not clk,
+    --     clk => clk_50,
+    --     clk_1hz => real_clk
+    -- );
 
     output_debug : process (debug_control_ins)
     begin
