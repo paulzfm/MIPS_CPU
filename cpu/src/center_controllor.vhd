@@ -52,6 +52,7 @@ entity center_controllor is
            in_decode_ra  : in  STD_LOGIC_VECTOR (3 downto 0);
            in_decode_rb  : in  STD_LOGIC_VECTOR (3 downto 0);
            in_decode_is_branch_except_b : in STD_LOGIC;
+           in_decode_is_b : in STD_LOGIC;
 
            in_idalu_rd_mem : in STD_LOGIC;
            in_idalu_wr_mem : in STD_LOGIC;
@@ -70,6 +71,7 @@ entity center_controllor is
            in_memwb_rc : in STD_LOGIC_VECTOR(3 downto 0);
            in_memwb_wr_reg : in STD_LOGIC;
            in_key_interrupt : in  STD_LOGIC;
+
 
            clk : in  STD_LOGIC;
            rst : in STD_LOGIC);
@@ -287,13 +289,13 @@ begin
     end process;
 
     calc_out_bubble_ifid:
-    process (rst, is_alu_lw)
+    process (rst, is_alu_lw, in_decode_is_b, is_alumem_lwsw_instruction)
     begin
         if (rst = '1')
         then
             out_bubble_ifid <= '0';
         else
-            out_bubble_ifid <= is_alu_lw;
+            out_bubble_ifid <= is_alu_lw or (in_decode_is_b and is_alumem_lwsw_instruction);
         end if;
     end process;
 
@@ -332,24 +334,31 @@ begin
 
 
     calc_out_rst_ifid:
-    process (rst, is_alumem_lwsw_instruction)
+    process (rst, is_alumem_lwsw_instruction, in_decode_is_b)
     begin
         if (rst = '1')
         then
             out_rst_ifid <= '0';
         else
-            out_rst_ifid <= is_alumem_lwsw_instruction;
+            if (in_decode_is_b = '0')
+            then
+                out_rst_ifid <= is_alumem_lwsw_instruction;
+            else
+                -- in_decode_is_b = '1'
+                -- change to bubble 
+                out_rst_ifid <= not is_alumem_lwsw_instruction;
+            end if;
         end if;
     end process;
 
     calc_out_rst_idalu:
-    process (rst, predict_error, is_alu_lw)
+    process (rst, predict_error, is_alu_lw, in_decode_is_b, is_alumem_lwsw_instruction)
     begin
         if (rst = '1')
         then
             out_rst_idalu <= '0';
         else
-            out_rst_idalu <= predict_error or is_alu_lw;
+            out_rst_idalu <= predict_error or is_alu_lw or (in_decode_is_b and is_alumem_lwsw_instruction);
         end if;
     end process;
 

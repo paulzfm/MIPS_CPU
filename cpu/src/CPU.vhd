@@ -433,6 +433,7 @@ begin
         in_decode_ra  => decode_out_ra,
         in_decode_rb  => decode_out_rb,
         in_decode_is_branch_except_b => decode_out_ctl_is_branch_except_b,
+        in_decode_is_b => decode_out_ctl_is_b,
 
         in_idalu_rd_mem => states_idalu_out_rd_mem,
         in_idalu_wr_mem => states_idalu_out_wr_mem,
