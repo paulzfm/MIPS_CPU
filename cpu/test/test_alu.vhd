@@ -45,7 +45,6 @@ ARCHITECTURE behavior OF test_alu IS
          in_data_b : IN  std_logic_vector(15 downto 0);
          in_op : IN  std_logic_vector(3 downto 0);
          out_alu_res : OUT  std_logic_vector(15 downto 0)
-			;debug : OUT std_logic_vector(15 downto 0)
         );
     END COMPONENT;
     
@@ -71,7 +70,7 @@ BEGIN
           in_data_b => in_data_b,
           in_op => in_op,
           out_alu_res => out_alu_res
-			 ,debug => debug
+
         );
 
    -- Clock process definitions
