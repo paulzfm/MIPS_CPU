@@ -240,13 +240,13 @@ begin
         -- out_forward_alu_a(1) <= (not rst) and (not(in_memwb_rc xor in_idalu_ra) and in_memwb_wr_reg);
         out_forward_alu_a(0) <= (not rst) and (
             (not((in_alumem_rc(0) xor in_idalu_ra(0)) or (in_alumem_rc(1) xor in_idalu_ra(1)) or
-                (in_alumem_rc(2) xor in_idalu_ra(2))) or (in_alumem_rc(3) xor in_idalu_ra(3))
+                (in_alumem_rc(2) xor in_idalu_ra(2)) or (in_alumem_rc(3) xor in_idalu_ra(3)))
             ) 
             and in_alumem_alu_res_equal_rc);
 
         out_forward_alu_a(1) <= (not rst) and (
             (not((in_memwb_rc(0) xor in_idalu_ra(0)) or (in_memwb_rc(1) xor in_idalu_ra(1)) or
-                (in_memwb_rc(2) xor in_idalu_ra(2))) or (in_memwb_rc(3) xor in_idalu_ra(3))
+                (in_memwb_rc(2) xor in_idalu_ra(2)) or (in_memwb_rc(3) xor in_idalu_ra(3)))
             ) 
             and in_alumem_alu_res_equal_rc);
     end process;
@@ -277,6 +277,36 @@ begin
         --        out_forward_alu_b <= "00";
         --    end if;
         --end if;
+        out_forward_alu_b(0) <= (not rst) and 
+            (
+                (
+                    (not((in_alumem_rc(0) xor in_idalu_rb(0)) or (in_alumem_rc(1) xor in_idalu_rb(1)) or
+                        (in_alumem_rc(2) xor in_idalu_rb(2)) or (in_alumem_rc(3) xor in_idalu_rb(3)))
+                    )  
+                    and 
+                    in_alumem_alu_res_equal_rc
+                )
+                or
+                (
+                    (not((in_memwb_rc(0) xor in_idalu_rb(0)) or (in_memwb_rc(1) xor in_idalu_rb(1)) or
+                        (in_memwb_rc(2) xor in_idalu_rb(2)) or (in_memwb_rc(3) xor in_idalu_rb(3)))
+                    )  
+                    and 
+                    in_memwb_wr_reg
+                )
+            );
+        out_forward_alu_b(1) <= (not rst) and 
+            (
+                in_idalu_use_imm_ry
+                or 
+                (
+                    (not((in_memwb_rc(0) xor in_idalu_rb(0)) or (in_memwb_rc(1) xor in_idalu_rb(1)) or
+                        (in_memwb_rc(2) xor in_idalu_rb(2)) or (in_memwb_rc(3) xor in_idalu_rb(3)))
+                    )  
+                    and 
+                    in_memwb_wr_reg
+                )
+            );
     end process;
 
     calc_out_forward_alu_d:
@@ -303,13 +333,13 @@ begin
         --end if;
         out_forward_alu_d(0) <= (not rst) and (
             (not((in_alumem_rc(0) xor in_idalu_rd(0)) or (in_alumem_rc(1) xor in_idalu_rd(1)) or
-                (in_alumem_rc(2) xor in_idalu_rd(2))) or (in_alumem_rc(3) xor in_idalu_rd(3))
+                (in_alumem_rc(2) xor in_idalu_rd(2)) or (in_alumem_rc(3) xor in_idalu_rd(3)))
             ) 
             and in_alumem_alu_res_equal_rc);
 
         out_forward_alu_d(1) <= (not rst) and (
             (not((in_memwb_rc(0) xor in_idalu_rd(0)) or (in_memwb_rc(1) xor in_idalu_rd(1)) or
-                (in_memwb_rc(2) xor in_idalu_rd(2))) or (in_memwb_rc(3) xor in_idalu_rd(3))
+                (in_memwb_rc(2) xor in_idalu_rd(2)) or (in_memwb_rc(3) xor in_idalu_rd(3)))
             ) 
             and in_alumem_alu_res_equal_rc);
         -- out_forward_alu_d(1) <= (not rst) and (not(in_memwb_rc xor in_idalu_rd) and in_memwb_wr_reg);
