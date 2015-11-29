@@ -126,17 +126,18 @@ begin
     calc_predict_error:
     process (rst, in_alu_res, predict_res, in_idalu_is_branch_except_b)
     begin
-        if (rst = '1')
-        then
-            predict_error <= '0';
-        else
-            if (predict_res /= in_alu_res(0) and in_idalu_is_branch_except_b = '1')
-            then
-                predict_error <= '1';
-            else
-                predict_error <= '0';
-            end if;
-        end if;
+        --if (rst = '1')
+        --then
+        --    predict_error <= '0';
+        --else
+        --    if (predict_res /= in_alu_res(0) and in_idalu_is_branch_except_b = '1')
+        --    then
+        --        predict_error <= '1';
+        --    else
+        --        predict_error <= '0';
+        --    end if;
+        --end if;
+        predict_error <= (not rst) and ((predict_res xor in_alu_res(0)) and in_idalu_is_branch_except_b);
     end process;
 
     calc_predict_res:
