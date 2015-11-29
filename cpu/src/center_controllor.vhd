@@ -126,17 +126,18 @@ begin
     calc_predict_error:
     process (rst, in_alu_res, predict_res, in_idalu_is_branch_except_b)
     begin
-        if (rst = '1')
-        then
-            predict_error <= '0';
-        else
-            if (predict_res /= in_alu_res(0) and in_idalu_is_branch_except_b = '1')
-            then
-                predict_error <= '1';
-            else
-                predict_error <= '0';
-            end if;
-        end if;
+        --if (rst = '1')
+        --then
+        --    predict_error <= '0';
+        --else
+        --    if (predict_res /= in_alu_res(0) and in_idalu_is_branch_except_b = '1')
+        --    then
+        --        predict_error <= '1';
+        --    else
+        --        predict_error <= '0';
+        --    end if;
+        --end if
+        predict_error <= (not rst) and ((predict_res xor in_alu_res(0)) and in_idalu_is_branch_except_b);
     end process;
 
     calc_predict_res:
@@ -221,20 +222,33 @@ begin
         -- 01 select alu/memory data
         -- 10 select memory/wb data
 
-        if (rst = '1')
-        then
-            out_forward_alu_a <= "00";
-        else
-            if (in_alumem_rc = in_idalu_ra and in_alumem_alu_res_equal_rc = '1')
-            then
-                out_forward_alu_a <= "01";
-            elsif ((in_memwb_rc = in_idalu_ra and in_memwb_wr_reg = '1'))
-            then
-                out_forward_alu_a <= "10";
-            else
-                out_forward_alu_a <= "00";
-            end if;
-        end if;
+        --if (rst = '1')
+        --then
+        --    out_forward_alu_a <= "00";
+        --else
+        --    if (in_alumem_rc = in_idalu_ra and in_alumem_alu_res_equal_rc = '1')
+        --    then
+        --        out_forward_alu_a <= "01";
+        --    elsif ((in_memwb_rc = in_idalu_ra and in_memwb_wr_reg = '1'))
+        --    then
+        --        out_forward_alu_a <= "10";
+        --    else
+        --        out_forward_alu_a <= "00";
+        --    end if;
+        --end if;
+        -- out_forward_alu_a(0) <= (not rst) and (not(in_alumem_rc xor in_idalu_ra) and in_alumem_alu_res_equal_rc);
+        -- out_forward_alu_a(1) <= (not rst) and (not(in_memwb_rc xor in_idalu_ra) and in_memwb_wr_reg);
+        out_forward_alu_a(0) <= (not rst) and (
+            (not((in_alumem_rc(0) xor in_idalu_ra(0)) or (in_alumem_rc(1) xor in_idalu_ra(1)) or
+                (in_alumem_rc(2) xor in_idalu_ra(2))) or (in_alumem_rc(3) xor in_idalu_ra(3))
+            ) 
+            and in_alumem_alu_res_equal_rc);
+
+        out_forward_alu_a(1) <= (not rst) and (
+            (not((in_memwb_rc(0) xor in_idalu_ra(0)) or (in_memwb_rc(1) xor in_idalu_ra(1)) or
+                (in_memwb_rc(2) xor in_idalu_ra(2))) or (in_memwb_rc(3) xor in_idalu_ra(3))
+            ) 
+            and in_alumem_alu_res_equal_rc);
     end process;
 
 
@@ -246,23 +260,23 @@ begin
         -- 01 select alu/memory data
         -- 10 select memory/wb data
         -- 11 select imm
-        if (rst = '1')
-        then
-            out_forward_alu_b <= "00";
-        else
-            if (in_idalu_use_imm_ry = '1')
-            then
-                out_forward_alu_b <= "11";
-            elsif (in_alumem_rc = in_idalu_rb and in_alumem_alu_res_equal_rc = '1')
-            then
-                out_forward_alu_b <= "01";
-            elsif (in_memwb_rc = in_idalu_rb and in_memwb_wr_reg = '1')
-            then
-                out_forward_alu_b <= "10";
-            else
-                out_forward_alu_b <= "00";
-            end if;
-        end if;
+        --if (rst = '1')
+        --then
+        --    out_forward_alu_b <= "00";
+        --else
+        --    if (in_idalu_use_imm_ry = '1')
+        --    then
+        --        out_forward_alu_b <= "11";
+        --    elsif (in_alumem_rc = in_idalu_rb and in_alumem_alu_res_equal_rc = '1')
+        --    then
+        --        out_forward_alu_b <= "01";
+        --    elsif (in_memwb_rc = in_idalu_rb and in_memwb_wr_reg = '1')
+        --    then
+        --        out_forward_alu_b <= "10";
+        --    else
+        --        out_forward_alu_b <= "00";
+        --    end if;
+        --end if;
     end process;
 
     calc_out_forward_alu_d:
@@ -273,20 +287,32 @@ begin
         -- 01 select alu/memory data
         -- 10 select memory/wb data
 
-        if (rst = '1')
-        then
-            out_forward_alu_d <= "00";
-        else
-            if (in_alumem_rc = in_idalu_rd and in_alumem_alu_res_equal_rc = '1')
-            then
-                out_forward_alu_d <= "01";
-            elsif ((in_memwb_rc = in_idalu_rd and in_memwb_wr_reg = '1'))
-            then
-                out_forward_alu_d <= "10";
-            else
-                out_forward_alu_d <= "00";
-            end if;
-        end if;
+        --if (rst = '1')
+        --then
+        --    out_forward_alu_d <= "00";
+        --else
+        --    if (in_alumem_rc = in_idalu_rd and in_alumem_alu_res_equal_rc = '1')
+        --    then
+        --        out_forward_alu_d <= "01";
+        --    elsif ((in_memwb_rc = in_idalu_rd and in_memwb_wr_reg = '1'))
+        --    then
+        --        out_forward_alu_d <= "10";
+        --    else
+        --        out_forward_alu_d <= "00";
+        --    end if;
+        --end if;
+        out_forward_alu_d(0) <= (not rst) and (
+            (not((in_alumem_rc(0) xor in_idalu_rd(0)) or (in_alumem_rc(1) xor in_idalu_rd(1)) or
+                (in_alumem_rc(2) xor in_idalu_rd(2))) or (in_alumem_rc(3) xor in_idalu_rd(3))
+            ) 
+            and in_alumem_alu_res_equal_rc);
+
+        out_forward_alu_d(1) <= (not rst) and (
+            (not((in_memwb_rc(0) xor in_idalu_rd(0)) or (in_memwb_rc(1) xor in_idalu_rd(1)) or
+                (in_memwb_rc(2) xor in_idalu_rd(2))) or (in_memwb_rc(3) xor in_idalu_rd(3))
+            ) 
+            and in_alumem_alu_res_equal_rc);
+        -- out_forward_alu_d(1) <= (not rst) and (not(in_memwb_rc xor in_idalu_rd) and in_memwb_wr_reg);
     end process;
 
     calc_out_bubble_ifid:
@@ -356,12 +382,13 @@ begin
     process (rst, predict_error, is_alu_lw, in_decode_is_b, 
         is_alumem_lwsw_instruction, in_decode_is_branch_except_b, in_decode_is_jump)
     begin
-        if (rst = '1')
-        then
-            out_rst_idalu <= '0';
-        else
-            out_rst_idalu <= predict_error or is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b or in_decode_is_jump) and is_alumem_lwsw_instruction);
-        end if;
+        --if (rst = '1')
+        --then
+        --    out_rst_idalu <= '0';
+        --else
+        --    out_rst_idalu <= predict_error or is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b or in_decode_is_jump) and is_alumem_lwsw_instruction);
+        --end if;
+        out_rst_idalu <= (not rst) and (predict_error or is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b or in_decode_is_jump) and is_alumem_lwsw_instruction));
     end process;
 
     calc_out_rst_alu_mem:
