@@ -248,7 +248,7 @@ begin
             (not((in_memwb_rc(0) xor in_idalu_ra(0)) or (in_memwb_rc(1) xor in_idalu_ra(1)) or
                 (in_memwb_rc(2) xor in_idalu_ra(2)) or (in_memwb_rc(3) xor in_idalu_ra(3)))
             ) 
-            and in_alumem_alu_res_equal_rc);
+            and in_memwb_wr_reg);
     end process;
 
 
@@ -341,7 +341,7 @@ begin
             (not((in_memwb_rc(0) xor in_idalu_rd(0)) or (in_memwb_rc(1) xor in_idalu_rd(1)) or
                 (in_memwb_rc(2) xor in_idalu_rd(2)) or (in_memwb_rc(3) xor in_idalu_rd(3)))
             ) 
-            and in_alumem_alu_res_equal_rc);
+            and in_memwb_wr_reg);
         -- out_forward_alu_d(1) <= (not rst) and (not(in_memwb_rc xor in_idalu_rd) and in_memwb_wr_reg);
     end process;
 
