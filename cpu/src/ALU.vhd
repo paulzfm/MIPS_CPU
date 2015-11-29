@@ -216,21 +216,33 @@ begin
                 out_alu_res <= not(in_data_a);
             when ALU_EQUAL_ZERO =>
                 -- data_a == zero => 00000000000001
-                all_zero := '0';
-                for i in 0 to 15
-                loop
-                    all_zero := all_zero or in_data_a(i);
-                end loop;
-                out_alu_res <= "000000000000000" & not(all_zero);
+                --all_zero := '0';
+                --for i in 0 to 15
+                --loop
+                --    all_zero := all_zero or in_data_a(i);
+                --end loop;
+                --out_alu_res <= "000000000000000" & not(all_zero);
+                if (signed(in_data_a) = signed(ZERO_16))
+                then
+                    out_alu_res <= "0000000000000001";
+                else
+                    out_alu_res <= "0000000000000000";
+                end if;
             when ALU_NOT_EQUAL_ZERO =>
                 -- data_a != zero => 00000000000001
-                all_zero := '0';
-                for i in 0 to 15
-                loop
-                    all_zero := all_zero or in_data_a(i);
-                end loop;
-                out_alu_res <= "000000000000000" & (all_zero);
-                when ALU_AND =>
+                --all_zero := '0';
+                --for i in 0 to 15
+                --loop
+                --    all_zero := all_zero or in_data_a(i);
+                --end loop;
+                --out_alu_res <= "000000000000000" & (all_zero);
+                if (signed(in_data_a) /= signed(ZERO_16))
+                then
+                    out_alu_res <= "0000000000000001";
+                else
+                    out_alu_res <= "0000000000000000";
+                end if;
+            when ALU_AND =>
                 out_alu_res <= in_data_a and in_data_b;
             when others =>
                 out_alu_res <= (others => '0');
