@@ -174,25 +174,13 @@ begin
                 --loop
                 --    all_zero := all_zero or sub16_res(i);
                 --end loop;
-                out_alu_res <= "000000000000000" & 
-                (
-                    (in_data_a(0) xor in_data_b(0)) or 
-                    (in_data_a(1) xor in_data_b(1)) or 
-                    (in_data_a(2) xor in_data_b(2)) or 
-                    (in_data_a(3) xor in_data_b(3)) or 
-                    (in_data_a(4) xor in_data_b(4)) or 
-                    (in_data_a(5) xor in_data_b(5)) or 
-                    (in_data_a(6) xor in_data_b(6)) or 
-                    (in_data_a(7) xor in_data_b(7)) or 
-                    (in_data_a(8) xor in_data_b(8)) or 
-                    (in_data_a(9) xor in_data_b(9)) or 
-                    (in_data_a(10) xor in_data_b(10)) or 
-                    (in_data_a(11) xor in_data_b(11)) or 
-                    (in_data_a(12) xor in_data_b(12)) or 
-                    (in_data_a(13) xor in_data_b(13)) or 
-                    (in_data_a(14) xor in_data_b(14)) or 
-                    (in_data_a(15) xor in_data_b(15))
-                );
+                if (in_data_a = in_data_b)
+                then
+                    out_alu_res <= "0000000000000001";
+                else
+                    out_alu_res <= "0000000000000000";
+                end if;
+
 
             when ALU_SIGNED_CMP =>
                 -- ALU signed cmp
