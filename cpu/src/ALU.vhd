@@ -20,6 +20,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
+use ieee.std_logic_arith.all;
 use ieee.std_logic_signed.all;
 use work.constants.ALL;
 -- Uncomment the following library declaration if using
@@ -59,6 +60,9 @@ end component;
 signal add16_res, sub16_res : STD_LOGIC_VECTOR(15 downto 0);
 signal add16_t, sub16_t : STD_LOGIC;
 
+signal signed_a, signed_b : signed(15 downto 0);
+signal unsigned_a, unsigned_b : unsigned(15 downto 0);
+
 begin
     add16_entity : add16 port map(
         in_data_a => in_data_a,
@@ -73,6 +77,10 @@ begin
         out_output => sub16_res,
         out_t => sub16_t
     );
+    signed_a <= signed(in_data_a);
+    signed_b <= signed(in_data_b);
+    unsigned_a <= unsigned(in_data_a);
+    unsigned_b <= unsigned(in_data_b);
 
     process (in_op, in_data_a, in_data_b, add16_res, sub16_res, add16_t, sub16_t)
     variable all_zero : STD_LOGIC;
@@ -118,24 +126,55 @@ begin
                 -- data_a == data_b => 0
                 -- data_a != data_b => 1
                 -- UNSIGNED!!
-                all_zero := '0';
-                for i in 0 to 15
-                loop
-                    all_zero := all_zero or sub16_res(i);
-                end loop;
-                out_alu_res <= "000000000000000" & all_zero;
+
+                --all_zero := '0';
+                --for i in 0 to 15
+                --loop
+                --    all_zero := all_zero or sub16_res(i);
+                --end loop;
+                out_alu_res <= "000000000000000" & 
+                (
+                    (in_data_a(0) xor in_data_b(0)) or 
+                    (in_data_a(1) xor in_data_b(1)) or 
+                    (in_data_a(2) xor in_data_b(2)) or 
+                    (in_data_a(3) xor in_data_b(3)) or 
+                    (in_data_a(4) xor in_data_b(4)) or 
+                    (in_data_a(5) xor in_data_b(5)) or 
+                    (in_data_a(6) xor in_data_b(6)) or 
+                    (in_data_a(7) xor in_data_b(7)) or 
+                    (in_data_a(8) xor in_data_b(8)) or 
+                    (in_data_a(9) xor in_data_b(9)) or 
+                    (in_data_a(10) xor in_data_b(10)) or 
+                    (in_data_a(11) xor in_data_b(11)) or 
+                    (in_data_a(12) xor in_data_b(12)) or 
+                    (in_data_a(13) xor in_data_b(13)) or 
+                    (in_data_a(14) xor in_data_b(14)) or 
+                    (in_data_a(15) xor in_data_b(15))
+                );
 
             when ALU_SIGNED_CMP =>
                 -- ALU signed cmp
                 -- data_a < data_b => 1
                 -- data_a >= data_b => 0
-                out_alu_res <= "000000000000000" & ((in_data_a(15) and not(in_data_b(15))) or
-                                                  ( not(in_data_a(15) xor in_data_b(15)) and sub16_t ));
+                --out_alu_res <= "000000000000000" & ((in_data_a(15) and not(in_data_b(15))) or
+                --                                  ( not(in_data_a(15) xor in_data_b(15)) and sub16_t ));
+                if (signed_a < signed_b)
+                then
+                    out_alu_res <= "0000000000000001";
+                else
+                    out_alu_res <= "0000000000000000";
+                end if;
             when ALU_UNSIGNED_CMP =>
                 -- ALU unsigned cmp
                 -- data_a < data_b => 1
                 -- data_a >= data_b => 0
-                out_alu_res <= "000000000000000" & (sub16_t);
+                --out_alu_res <= "000000000000000" & (sub16_t);
+                if (unsigned_a < unsigned_b)
+                then
+                    out_alu_res <= "0000000000000001";
+                else
+                    out_alu_res <= "0000000000000000";
+                end if;
             when ALU_DATA_A =>
                 -- output data_a
                 out_alu_res <= in_data_a;
