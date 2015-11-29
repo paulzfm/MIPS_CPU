@@ -278,7 +278,9 @@ begin
         --    end if;
         --end if;
         out_forward_alu_b(0) <= (not rst) and 
-            (
+            (   
+                in_idalu_use_imm_ry
+                or
                 (
                     (not((in_alumem_rc(0) xor in_idalu_rb(0)) or (in_alumem_rc(1) xor in_idalu_rb(1)) or
                         (in_alumem_rc(2) xor in_idalu_rb(2)) or (in_alumem_rc(3) xor in_idalu_rb(3)))
@@ -286,25 +288,27 @@ begin
                     and 
                     in_alumem_alu_res_equal_rc
                 )
-                or
-                (
-                    (not((in_memwb_rc(0) xor in_idalu_rb(0)) or (in_memwb_rc(1) xor in_idalu_rb(1)) or
-                        (in_memwb_rc(2) xor in_idalu_rb(2)) or (in_memwb_rc(3) xor in_idalu_rb(3)))
-                    )  
-                    and 
-                    in_memwb_wr_reg
-                )
+                
             );
         out_forward_alu_b(1) <= (not rst) and 
             (
                 in_idalu_use_imm_ry
                 or 
                 (
-                    (not((in_memwb_rc(0) xor in_idalu_rb(0)) or (in_memwb_rc(1) xor in_idalu_rb(1)) or
-                        (in_memwb_rc(2) xor in_idalu_rb(2)) or (in_memwb_rc(3) xor in_idalu_rb(3)))
-                    )  
-                    and 
-                    in_memwb_wr_reg
+                    not (
+                        (not((in_alumem_rc(0) xor in_idalu_rb(0)) or (in_alumem_rc(1) xor in_idalu_rb(1)) or
+                            (in_alumem_rc(2) xor in_idalu_rb(2)) or (in_alumem_rc(3) xor in_idalu_rb(3)))
+                        )  
+                        and 
+                        in_alumem_alu_res_equal_rc
+                    )
+                    and (
+                        (not((in_memwb_rc(0) xor in_idalu_rb(0)) or (in_memwb_rc(1) xor in_idalu_rb(1)) or
+                            (in_memwb_rc(2) xor in_idalu_rb(2)) or (in_memwb_rc(3) xor in_idalu_rb(3)))
+                        )  
+                        and 
+                        in_memwb_wr_reg
+                    )
                 )
             );
     end process;
