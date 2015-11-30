@@ -48,7 +48,7 @@ entity center_controllor is
            -- debug
            out_is_alumem_lwsw_instruction : out STD_LOGIC;
            out_is_alu_lw : out STD_LOGIC;
-
+           out_idalu_alu_res_addr : out STD_LOGIC_VECTOR(1 downto 0);
            in_decode_ra  : in  STD_LOGIC_VECTOR (3 downto 0);
            in_decode_rb  : in  STD_LOGIC_VECTOR (3 downto 0);
            in_decode_is_jump : in STD_LOGIC;
@@ -62,7 +62,9 @@ entity center_controllor is
            in_idalu_rc : in  STD_LOGIC_VECTOR (3 downto 0);
            in_idalu_rd : in  STD_LOGIC_VECTOR (3 downto 0);
            in_idalu_use_imm_ry : STD_LOGIC;
-           in_alu_res : in  STD_LOGIC_VECTOR (15 downto 0);
+           in_idalu_alu_op : STD_LOGIC_VECTOR(3 downto 0);
+           in_alu_add_res : in  STD_LOGIC_VECTOR (15 downto 0);
+           in_alu_equal_res : in  STD_LOGIC_VECTOR (15 downto 0);
            in_idalu_is_branch_except_b : in STD_LOGIC;
            in_alumem_alu_res : in STD_LOGIC_VECTOR(15 downto 0);
            in_alumem_rc : in  STD_LOGIC_VECTOR (3 downto 0);
@@ -124,13 +126,13 @@ begin
     --end process;
 
     calc_predict_error:
-    process (rst, in_alu_res, predict_res, in_idalu_is_branch_except_b)
+    process (rst, in_alu_equal_res, predict_res, in_idalu_is_branch_except_b)
     begin
         if (rst = '1')
         then
             predict_error <= '0';
         else
-            if (predict_res /= in_alu_res(0) and in_idalu_is_branch_except_b = '1')
+            if (predict_res /= in_alu_equal_res(0) and in_idalu_is_branch_except_b = '1')
             then
                 predict_error <= '1';
             else
@@ -150,7 +152,7 @@ begin
             then
                 if (in_idalu_is_branch_except_b = '1')
                 then
-                    predict_res <= in_alu_res(0);
+                    predict_res <= in_alu_equal_res(0);
                 end if;
             end if;
         end if;
@@ -174,7 +176,7 @@ begin
 
     calc_is_alu_lw:
     process (rst, in_idalu_rc, in_decode_ra, in_decode_rb,
-        in_idalu_rd_mem, in_idalu_wr_mem, in_alu_res, in_decode_is_branch_except_b)
+        in_idalu_rd_mem, in_idalu_wr_mem, in_alu_add_res, in_decode_is_branch_except_b)
     variable reg_same : STD_LOGIC;
     begin
         if (rst = '1')
@@ -188,7 +190,7 @@ begin
             end if;
 
             if ((in_idalu_rd_mem = '1' and reg_same = '1') or
-                ((in_idalu_rd_mem = '1' or in_idalu_wr_mem = '1') and in_alu_res(15) = '0' and in_decode_is_branch_except_b = '1') )
+                ((in_idalu_rd_mem = '1' or in_idalu_wr_mem = '1') and in_alu_add_res(15) = '0' and in_decode_is_branch_except_b = '1') )
             then
                 is_alu_lw <= '1';
             else
@@ -387,13 +389,32 @@ begin
     end process;
 
     calc_out_branch_alu_pc_imm:
-    process (rst, in_alu_res)
+    process (rst, in_alu_equal_res)
     begin
         if (rst = '1')
         then
             out_branch_alu_pc_imm <= '0';
         else
-            out_branch_alu_pc_imm <= in_alu_res(0);
+            out_branch_alu_pc_imm <= in_alu_equal_res(0);
+        end if;
+    end process;
+
+    process (rst, in_idalu_alu_op)
+    begin
+        if (rst = '1')
+        then
+            out_idalu_alu_res_addr  <= "00";
+        else
+            case in_idalu_alu_op is
+                when ALU_ADD =>
+                    out_idalu_alu_res_addr <= "00";
+                when ALU_EQUAL_ZERO =>
+                    out_idalu_alu_res_addr <= "01";
+                when ALU_NOT_EQUAL_ZERO =>
+                    out_idalu_alu_res_addr <= "01";
+                when others =>
+                    out_idalu_alu_res_addr <= "10";  
+            end case;
         end if;
     end process;
 

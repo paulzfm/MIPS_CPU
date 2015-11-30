@@ -97,7 +97,7 @@ signal alu_data_mux_alu_mem_forward_data, alu_data_mux_mem_wb_forward_data,
 signal alu_data_mux_b_addr, alu_data_mux_d_addr : STD_LOGIC_VECTOR(1 downto 0);
 signal alu_data_mux_b_output, alu_data_mux_d_output: STD_LOGIC_VECTOR(15 downto 0);
 -- alu
-signal alu_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
+signal alu_out_alu_res, alu_out_alu_final_res, alu_add_out_alu_res, alu_equal_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
 -- states alumem
 signal states_alumem_ctl_bubble, states_alumem_ctl_rst, states_alumem_ctl_copy : STD_LOGIC;
 signal states_alumem_out_pc, states_alumem_out_pc_inc, states_alumem_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
@@ -118,6 +118,7 @@ signal center_controllor_out_predict_err : STD_LOGIC;
 signal center_controllor_out_branch_alu_pc_imm : STD_LOGIC;
 signal out_is_alumem_lwsw_instruction : STD_LOGIC;
 signal out_is_alu_lw : STD_LOGIC;
+signal center_controllor_out_idalu_alu_res_addr : STD_LOGIC_VECTOR(1 downto 0);
 
 begin
     out_pc <= pc_output;
@@ -237,7 +238,7 @@ begin
     predict_in_jump_reg_data <= registers_data_a;
     predict_in_idalu_alu_res_equal_rc <= states_idalu_out_alumem_alu_res_equal_rc;
     predict_in_idalu_rc <= states_idalu_out_rc;
-    predict_in_alu_res <= alu_out_alu_res;
+    predict_in_alu_res <= alu_out_alu_final_res;
     predict_in_alumem_rc <= states_alumem_out_rc;
     predict_in_alumem_alu_res_equal_rc <= states_alumem_out_alumem_alu_res_equal_rc;
     predict_in_alumem_alu_res <= states_alumem_out_alu_res;
@@ -349,6 +350,26 @@ begin
         in_op => states_idalu_out_alu_op,
         out_alu_res => alu_out_alu_res
     );
+    alu_add_instance : entity work.ALU port map(
+        in_data_a => alu_data_mux_a_output,
+        in_data_b => alu_data_mux_b_output,
+        in_op => states_idalu_out_alu_op,
+        out_alu_res => alu_add_out_alu_res
+    );
+    alu_equal_instance : entity work.ALU port map(
+        in_data_a => alu_data_mux_a_output,
+        in_data_b => alu_data_mux_b_output,
+        in_op => states_idalu_out_alu_op,
+        out_alu_res => alu_equal_out_alu_res
+    );
+    alu_data_res_mux : entity work.mux4 port map(
+        input0 => alu_add_out_alu_res,
+        input1 => alu_equal_out_alu_res,
+        input2 => alu_out_alu_res,
+        input3 => ZERO_16,
+        addr => center_controllor_out_idalu_alu_res_addr,
+        output => alu_out_alu_final_res
+    );
 
     states_alumem_instance : entity work.states_alumem port map(
         clk => clk,
@@ -358,7 +379,7 @@ begin
         ctl_rst => states_alumem_ctl_rst,
         in_pc => states_idalu_out_pc,
         in_pc_inc => states_idalu_out_pc_inc,
-        in_alu_res => alu_out_alu_res,
+        in_alu_res => alu_out_alu_final_res,
         in_rc => states_idalu_out_rc,
         in_rd => states_idalu_out_rd,
         in_data_rd => alu_data_mux_d_output,
@@ -424,6 +445,7 @@ begin
         out_predict_err => center_controllor_out_predict_err,
         out_predict_res => predict_in_predict_res,
         out_branch_alu_pc_imm => center_controllor_out_branch_alu_pc_imm,
+        out_idalu_alu_res_addr => center_controllor_out_idalu_alu_res_addr,
         -- out_idalu_pc_inc => ,
         out_pc_wr => pc_wr,
 
@@ -443,8 +465,11 @@ begin
         in_idalu_rc => states_idalu_out_rc,
         in_idalu_rd => states_idalu_out_rd,
         in_idalu_use_imm_ry => states_idalu_out_use_imm,
+        in_idalu_alu_op => states_idalu_out_alu_op,
+
         -- in_idalu_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
-        in_alu_res => alu_out_alu_res,
+        in_alu_add_res => alu_add_out_alu_res,
+        in_alu_equal_res => alu_equal_out_alu_res,
         in_idalu_is_branch_except_b => states_idalu_out_is_branch_except_b,
         in_alumem_alu_res => states_alumem_out_alu_res,
         in_alumem_rc => states_alumem_out_rc,
