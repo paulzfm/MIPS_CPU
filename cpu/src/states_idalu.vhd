@@ -46,6 +46,9 @@ entity states_idalu is
            in_alumem_alu_res_equal_rc : in STD_LOGIC;
            in_memwb_wb_alu_mem : in STD_LOGIC;
            in_is_branch_except_b : in STD_LOGIC;
+           in_forward_a : in STD_LOGIC_VECTOR(1 downto 0);
+           in_forward_b : in STD_LOGIC_VECTOR(1 downto 0);
+           in_forward_d : in STD_LOGIC_VECTOR(1 downto 0);
            out_ra : out  STD_LOGIC_VECTOR (3 downto 0);
            out_rb : out  STD_LOGIC_VECTOR (3 downto 0);
            out_rc : out  STD_LOGIC_VECTOR (3 downto 0);
@@ -62,6 +65,10 @@ entity states_idalu is
            out_memwb_wb_alu_mem : out STD_LOGIC;
            out_is_branch_except_b : out STD_LOGIC;
            ctl_bubble : in  STD_LOGIC;
+           out_forward_a : out STD_LOGIC_VECTOR(1 downto 0);
+           out_forward_b : out STD_LOGIC_VECTOR(1 downto 0);
+           out_forward_d : out STD_LOGIC_VECTOR(1 downto 0);
+
            ctl_copy : in  STD_LOGIC;
            ctl_rst : in  STD_LOGIC;
            clk : in  STD_LOGIC;
@@ -103,6 +110,9 @@ begin
 			out_wr_mem <= '0';
 			out_rd_mem <= '0';
 			out_use_imm <= '0';
+      out_forward_a <= "00";
+      out_forward_b <= "00";
+      out_forward_d <= "00";
 	--clk up work
 	elsif(clk'event and clk='1') then
 		if(ctl_rst = '1') then
@@ -125,6 +135,9 @@ begin
 			out_rd_mem <= '0';
 			out_use_imm <= '0';
             out_is_branch_except_b <= '0';
+      out_forward_a <= "00";
+      out_forward_b <= "00";
+      out_forward_d <= "00";
 		elsif(ctl_bubble = '0') then
 			out_ra <= in_ra;
 			out_rb <= in_rb;
@@ -144,6 +157,9 @@ begin
             out_alumem_alu_res_equal_rc <= in_alumem_alu_res_equal_rc;
             out_is_branch_except_b <= in_is_branch_except_b;
             out_memwb_wb_alu_mem <= in_memwb_wb_alu_mem;
+      out_forward_a <= in_forward_a;
+      out_forward_b <= in_forward_b;
+      out_forward_d <= in_forward_d;
 		end if;
 	end if;
 

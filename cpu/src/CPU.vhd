@@ -119,7 +119,8 @@ signal center_controllor_out_branch_alu_pc_imm : STD_LOGIC;
 signal out_is_alumem_lwsw_instruction : STD_LOGIC;
 signal out_is_alu_lw : STD_LOGIC;
 signal center_controllor_out_idalu_alu_res_addr : STD_LOGIC_VECTOR(1 downto 0);
-
+-- forward decode
+signal forward_decode_forward_a, forward_decode_forward_b, forward_decode_forward_d : STD_LOGIC_VECTOR(1 downto 0);
 begin
     out_pc <= pc_output;
     pc_instance : entity work.pc port map(
@@ -212,6 +213,19 @@ begin
         out_memwb_wb_alu_mem => decode_out_memwb_wb_alu_mem
     );
 
+    forward_decode_instance : entity work.forward_decode port map(
+        in_decode_ra => decode_out_ra,
+        in_decode_rb => decode_out_rb,
+        in_decode_use_imm => decode_out_use_imm,
+        in_states_idalu_rc => states_idalu_out_rc,
+        in_states_alumem_rc => states_alumem_out_rc,
+        in_states_idalu_alu_res_equal_rc => states_idalu_out_alumem_alu_res_equal_rc,
+        in_states_alumem_alu_res_equal_rc => states_alumem_out_wr_reg,
+        out_forward_a => forward_decode_forward_a,
+        out_forward_b => forward_decode_forward_b,
+        out_forward_d => forward_decode_forward_d
+    );
+
     extend_instance : entity work.extend port map(
         ctl_size => decode_out_ctl_imm_extend_size,
         ctl_type => decode_out_ctl_imm_extend_type,
@@ -291,6 +305,9 @@ begin
         in_alumem_alu_res_equal_rc => decode_out_alumem_alu_res_equal_rc,
         in_memwb_wb_alu_mem => decode_out_memwb_wb_alu_mem,
         in_is_branch_except_b => decode_out_ctl_is_branch_except_b,
+        in_forward_a => forward_decode_forward_a,
+        in_forward_b => forward_decode_forward_b,
+        in_forward_d => forward_decode_forward_d,
         out_ra => states_idalu_out_ra,
         out_rb => states_idalu_out_rb,
         out_rc => states_idalu_out_rc,
@@ -305,6 +322,9 @@ begin
         out_alumem_alu_res_equal_rc => states_idalu_out_alumem_alu_res_equal_rc,
         out_memwb_wb_alu_mem => states_idalu_out_memwb_wb_alu_mem,
         out_is_branch_except_b => states_idalu_out_is_branch_except_b,
+        out_forward_a => alu_data_mux_a_addr,
+        out_forward_b => alu_data_mux_b_addr,
+        out_forward_d => alu_data_mux_d_addr,
         ctl_bubble => states_idalu_ctl_bubble,
         ctl_copy => states_idalu_ctl_copy,
         ctl_rst => states_idalu_ctl_rst,
@@ -439,9 +459,6 @@ begin
         out_rst_idalu => states_idalu_ctl_rst,
         out_rst_alumem => states_alumem_ctl_rst,
         out_rst_memwb => states_memwb_ctl_rst,
-        out_forward_alu_a => alu_data_mux_a_addr,
-        out_forward_alu_b => alu_data_mux_b_addr,
-        out_forward_alu_d => alu_data_mux_d_addr,
         out_predict_err => center_controllor_out_predict_err,
         out_predict_res => predict_in_predict_res,
         out_branch_alu_pc_imm => center_controllor_out_branch_alu_pc_imm,
