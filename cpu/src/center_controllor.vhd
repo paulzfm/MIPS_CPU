@@ -21,11 +21,11 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.constants.ALL;
 -- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
+-- arithmetic functions; with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
+-- any Xilinx primitives in this code..
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
@@ -406,14 +406,22 @@ begin
             out_idalu_alu_res_addr  <= "00";
         else
             case in_idalu_alu_op is
-                when ALU_ADD =>
-                    out_idalu_alu_res_addr <= "00";
-                when ALU_EQUAL_ZERO =>
-                    out_idalu_alu_res_addr <= "01";
-                when ALU_NOT_EQUAL_ZERO =>
-                    out_idalu_alu_res_addr <= "01";
-                when others =>
-                    out_idalu_alu_res_addr <= "10";  
+                when ALU_ADD => out_idalu_alu_res_addr <= "00";
+                when ALU_SUB => out_idalu_alu_res_addr <= "00";
+                when ALU_SLL => out_idalu_alu_res_addr <= "11";
+                when ALU_SRA => out_idalu_alu_res_addr <= "11";
+                when ALU_XOR => out_idalu_alu_res_addr <= "11";
+                when ALU_CMP => out_idalu_alu_res_addr <= "11";
+                when ALU_SIGNED_CMP => out_idalu_alu_res_addr <= "10";
+                when ALU_UNSIGNED_CMP => out_idalu_alu_res_addr <= "10";
+                when ALU_DATA_A => out_idalu_alu_res_addr <= "10";
+                when ALU_DATA_B => out_idalu_alu_res_addr <= "10";
+                when ALU_NOT => out_idalu_alu_res_addr <= "11";
+                when ALU_EQUAL_ZERO => out_idalu_alu_res_addr <= "01";
+                when ALU_NOT_EQUAL_ZERO => out_idalu_alu_res_addr <= "01";
+                when ALU_OR => out_idalu_alu_res_addr <= "10";
+                when ALU_AND => out_idalu_alu_res_addr <= "10";
+			 when others => null;
             end case;
         end if;
     end process;

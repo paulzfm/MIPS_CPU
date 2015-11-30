@@ -70,11 +70,11 @@ begin
                 -- ALU add
                 -- ATTENTION! unsigned!
                 out_alu_res <= in_data_a + in_data_b;
-            --when ALU_SUB =>
-            --    -- ALU sub
-            --    -- ATTENTION! unsigned!
-            --    -- out_alu_res <= sub16_res;
-            --    out_alu_res <= sub16_res;
+            when ALU_SUB =>
+                -- ALU sub
+                -- ATTENTION! unsigned!
+                -- out_alu_res <= sub16_res;
+                out_alu_res <= in_data_a - in_data_b;
             --when ALU_SLL =>
             --    -- ALU << data_a << data_b
             --    -- logic shift
@@ -152,7 +152,7 @@ begin
             --    when ALU_AND =>
             --    out_alu_res <= in_data_a and in_data_b;
             when others =>
-                out_alu_res <= (others => '0');
+                null;
         end case;
     end process;
 

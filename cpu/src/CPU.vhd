@@ -97,7 +97,7 @@ signal alu_data_mux_alu_mem_forward_data, alu_data_mux_mem_wb_forward_data,
 signal alu_data_mux_b_addr, alu_data_mux_d_addr : STD_LOGIC_VECTOR(1 downto 0);
 signal alu_data_mux_b_output, alu_data_mux_d_output: STD_LOGIC_VECTOR(15 downto 0);
 -- alu
-signal alu_out_alu_res, alu_out_alu_final_res, alu_add_out_alu_res, alu_equal_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
+signal alu_out_alu_res, alu_out_alu_final_res, alu_add_out_alu_res, alu_equal_out_alu_res, alu_res_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
 -- states alumem
 signal states_alumem_ctl_bubble, states_alumem_ctl_rst, states_alumem_ctl_copy : STD_LOGIC;
 signal states_alumem_out_pc, states_alumem_out_pc_inc, states_alumem_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
@@ -362,11 +362,17 @@ begin
         in_op => states_idalu_out_alu_op,
         out_alu_res => alu_equal_out_alu_res
     );
+    alu_res_instance : entity work.alu_res port map(
+        in_data_a => alu_data_mux_a_output,
+        in_data_b => alu_data_mux_b_output,
+        in_op => states_idalu_out_alu_op,
+        out_alu_res => alu_res_out_alu_res
+    );
     alu_data_res_mux : entity work.mux4 port map(
         input0 => alu_add_out_alu_res,
         input1 => alu_equal_out_alu_res,
         input2 => alu_out_alu_res,
-        input3 => ZERO_16,
+        input3 => alu_res_out_alu_res,
         addr => center_controllor_out_idalu_alu_res_addr,
         output => alu_out_alu_final_res
     );
