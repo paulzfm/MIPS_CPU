@@ -61,7 +61,7 @@ signal data_111 : std_logic_vector(15 DOWNTO 0);
 
 begin
 
-wr_data_count <= '1' & temp_count & rd_count;
+--wr_data_count <= '1' & temp_count & rd_count;
 out_empty <= empty;
 
 process(temp_count, rd_count)

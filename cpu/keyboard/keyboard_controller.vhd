@@ -284,8 +284,8 @@ fifo_keyboard_instance: entity work.FIFO_key port map(
     wr_en => '1',
     rd_en => rd_en,
     out_empty => fifo_out_empty,
-    dout => out_ascii,
-    wr_data_count => out_count
+    dout => out_ascii
+    --wr_data_count => out_count
 );
 
 end Behavioral;
