@@ -126,28 +126,22 @@ begin
     --end process;
 
     calc_predict_error:
-    process (rst, in_alu_equal_res, predict_res, in_idalu_is_branch_except_b)
+    process (in_alu_equal_res, predict_res, in_idalu_is_branch_except_b)
     begin
-        if (rst = '1')
-        then
-            predict_error <= '0';
-        else
+        
             if (predict_res /= in_alu_equal_res(0) and in_idalu_is_branch_except_b = '1')
             then
                 predict_error <= '1';
             else
                 predict_error <= '0';
             end if;
-        end if;
+        
     end process;
 
     calc_predict_res:
-    process (rst, clk, in_idalu_is_branch_except_b)
+    process (clk, in_idalu_is_branch_except_b)
     begin
-        if (rst = '1')
-        then
-            predict_res <= '0';
-        else
+        
             if (rising_edge(clk))
             then
                 if (in_idalu_is_branch_except_b = '1')
@@ -155,34 +149,28 @@ begin
                     predict_res <= in_alu_equal_res(0);
                 end if;
             end if;
-        end if;
+        
     end process;
 
     calc_out_pc_wr:
-    process (rst, is_alumem_lwsw_instruction, is_alu_lw)
+    process (is_alumem_lwsw_instruction, is_alu_lw)
     begin
-        if (rst = '1')
-        then
-            out_pc_wr <= '1';
-        else
+        
             if (is_alu_lw = '1' or is_alumem_lwsw_instruction = '1')
             then
                 out_pc_wr <= '0';
             else
                 out_pc_wr <= '1';
             end if;
-        end if;
+        
     end process;
 
     calc_is_alu_lw:
-    process (rst, in_idalu_rc, in_decode_ra, in_decode_rb,
+    process (in_idalu_rc, in_decode_ra, in_decode_rb,
         in_idalu_rd_mem, in_idalu_wr_mem, in_alu_add_res, in_decode_is_branch_except_b)
     variable reg_same : STD_LOGIC;
     begin
-        if (rst = '1')
-        then
-            is_alu_lw <= '0';
-        else
+      
             reg_same := '0';
             if (in_idalu_rc = in_decode_ra or in_idalu_rc = in_decode_rb)
             then
@@ -197,36 +185,30 @@ begin
                 is_alu_lw <= '0';
             end if;
 
-        end if;
+        
     end process;
     calc_is_alumem_lwsw_instruction:
-    process (rst, in_alumem_wr_mem, in_alumem_rd_mem, in_alumem_alu_res)
+    process (in_alumem_wr_mem, in_alumem_rd_mem, in_alumem_alu_res)
     begin
-        if (rst = '1')
-        then
-            is_alumem_lwsw_instruction <= '0';
-        else
+        
             if ((in_alumem_wr_mem = '1' or in_alumem_rd_mem = '1') and in_alumem_alu_res(15) = '0')
             then
                 is_alumem_lwsw_instruction <= '1';
             else
                 is_alumem_lwsw_instruction <= '0';
             end if;
-        end if;
+        
     end process;
 
     calc_out_forward_alu_a:
-    process (rst, in_alumem_rc, in_idalu_ra,
+    process (in_alumem_rc, in_idalu_ra,
         in_alumem_alu_res_equal_rc, in_memwb_wr_reg, in_memwb_rc )
     begin
         -- 00 select origin A
         -- 01 select alu/memory data
         -- 10 select memory/wb data
 
-        if (rst = '1')
-        then
-            out_forward_alu_a <= "00";
-        else
+        
             if (in_alumem_rc = in_idalu_ra and in_alumem_alu_res_equal_rc = '1')
             then
                 out_forward_alu_a <= "01";
@@ -236,22 +218,19 @@ begin
             else
                 out_forward_alu_a <= "00";
             end if;
-        end if;
+        
     end process;
 
 
     calc_out_forward_alu_b:
-    process (rst, in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry,
+    process ( in_alumem_rc, in_idalu_rb, in_idalu_use_imm_ry,
         in_memwb_wr_reg, in_alumem_alu_res_equal_rc, in_memwb_rc)
     begin
         -- 00 select origin A
         -- 01 select alu/memory data
         -- 10 select memory/wb data
         -- 11 select imm
-        if (rst = '1')
-        then
-            out_forward_alu_b <= "00";
-        else
+        
             if (in_idalu_use_imm_ry = '1')
             then
                 out_forward_alu_b <= "11";
@@ -264,21 +243,18 @@ begin
             else
                 out_forward_alu_b <= "00";
             end if;
-        end if;
+        
     end process;
 
     calc_out_forward_alu_d:
-    process (rst, in_alumem_rc, in_idalu_rd,
+    process (in_alumem_rc, in_idalu_rd,
         in_alumem_alu_res_equal_rc, in_memwb_wr_reg, in_memwb_rc)
     begin
         -- 00 select origin A
         -- 01 select alu/memory data
         -- 10 select memory/wb data
 
-        if (rst = '1')
-        then
-            out_forward_alu_d <= "00";
-        else
+        
             if (in_alumem_rc = in_idalu_rd and in_alumem_alu_res_equal_rc = '1')
             then
                 out_forward_alu_d <= "01";
@@ -288,61 +264,52 @@ begin
             else
                 out_forward_alu_d <= "00";
             end if;
-        end if;
+        
     end process;
 
     calc_out_bubble_ifid:
-    process (rst, is_alu_lw, in_decode_is_b, is_alumem_lwsw_instruction, in_decode_is_branch_except_b, in_decode_is_jump)
+    process (is_alu_lw, in_decode_is_b, is_alumem_lwsw_instruction, in_decode_is_branch_except_b, in_decode_is_jump)
     begin
-        if (rst = '1')
-        then
-            out_bubble_ifid <= '0';
-        else
+        
             out_bubble_ifid <= is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b or in_decode_is_jump) and is_alumem_lwsw_instruction);
-        end if;
+        
     end process;
 
     calc_out_bubble_idalu:
     process (rst)
     begin
-        if (rst = '1')
-        then
+        
             out_bubble_idalu <= '0';
-        else
-            out_bubble_idalu <= '0';
-        end if;
+        
     end process;
 
     calc_out_bubble_alu_mem:
     process (rst)
     begin
-        if (rst = '1')
-        then
+        --if (rst = '1')
+        --then
+        --    out_bubble_alumem <= '0';
+        --else
             out_bubble_alumem <= '0';
-        else
-            out_bubble_alumem <= '0';
-        end if;
+        --end if;
     end process;
 
     calc_out_bubble_mem_wb:
     process (rst)
     begin
-        if (rst = '1')
-        then
+        --if (rst = '1')
+        --then
+        --    out_bubble_memwb <= '0';
+        --else
             out_bubble_memwb <= '0';
-        else
-            out_bubble_memwb <= '0';
-        end if;
+        --end if;
     end process;
 
 
     calc_out_rst_ifid:
-    process (rst, is_alumem_lwsw_instruction, in_decode_is_b, in_decode_is_branch_except_b, in_decode_is_jump)
+    process (is_alumem_lwsw_instruction, in_decode_is_b, in_decode_is_branch_except_b, in_decode_is_jump)
     begin
-        if (rst = '1')
-        then
-            out_rst_ifid <= '0';
-        else
+        
             if (in_decode_is_b = '0' and in_decode_is_branch_except_b = '0' and in_decode_is_jump = '0')
             then
                 out_rst_ifid <= is_alumem_lwsw_instruction;
@@ -351,60 +318,45 @@ begin
                 -- change to bubble
                 out_rst_ifid <= '0';
             end if;
-        end if;
+        
     end process;
 
     calc_out_rst_idalu:
-    process (rst, predict_error, is_alu_lw, in_decode_is_b, 
+    process (predict_error, is_alu_lw, in_decode_is_b, 
         is_alumem_lwsw_instruction, in_decode_is_branch_except_b, in_decode_is_jump)
     begin
-        if (rst = '1')
-        then
-            out_rst_idalu <= '0';
-        else
+        
             out_rst_idalu <= predict_error or is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b or in_decode_is_jump) and is_alumem_lwsw_instruction);
-        end if;
+        
     end process;
 
     calc_out_rst_alu_mem:
     process (rst)
     begin
-        if (rst = '1')
-        then
+        
             out_rst_alumem <= '0';
-        else
-            out_rst_alumem <= '0';
-        end if;
+        
     end process;
 
     calc_out_rst_memwb:
     process (rst)
     begin
-        if (rst = '1')
-        then
+        
             out_rst_memwb <= '0';
-        else
-            out_rst_memwb <= '0';
-        end if;
+        
     end process;
 
     calc_out_branch_alu_pc_imm:
-    process (rst, in_alu_equal_res)
+    process (in_alu_equal_res)
     begin
-        if (rst = '1')
-        then
-            out_branch_alu_pc_imm <= '0';
-        else
+        
             out_branch_alu_pc_imm <= in_alu_equal_res(0);
-        end if;
+        
     end process;
 
-    process (rst, in_idalu_alu_op)
+    process (in_idalu_alu_op)
     begin
-        if (rst = '1')
-        then
-            out_idalu_alu_res_addr  <= "00";
-        else
+        
             case in_idalu_alu_op is
                 when ALU_ADD =>
                     out_idalu_alu_res_addr <= "00";
@@ -415,7 +367,7 @@ begin
                 when others =>
                     out_idalu_alu_res_addr <= "10";  
             end case;
-        end if;
+        
     end process;
 
 end Behavioral;
