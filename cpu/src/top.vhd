@@ -66,7 +66,7 @@ signal cpu_out_mem_data, cpu_out_mem_addr : STD_LOGIC_VECTOR(15 downto 0);
 signal cpu_in_mem_data, cpu_in_instruction_data : STD_LOGIC_VECTOR(15 downto 0);
 -- debug
 signal debug_out_cpu, debug_out_mem : STD_LOGIC_VECTOR(15 downto 0);
-
+signal ta, tb, tc, td, clk_40 : STD_LOGIC;
 
 begin
 cpu_instance : entity work.cpu port map(
@@ -134,17 +134,26 @@ memory_controller_instance : entity work.memory_controller port map(
         input => real_clk,
         output => cpu_clk
     );
-
-    divider1 : entity work.divider port map (
-        input => clk_50,
-        output => real_clk
-    );
+	 
+--    divider1 : entity work.divider port map (
+--        input => clk_50,
+--        output => real_clk
+--    );
 
     -- divider1 : entity work.divider1 port map (
     --     en => not clk,
     --     clk => clk_50,
     --     clk_1hz => real_clk
     -- );
+	 real_clk <= clk_40;
+	 divider222 : entity work.divider20 PORT MAP(
+		CLKIN_IN => clk_50,
+		CLKFX_OUT => clk_40,
+		CLKIN_IBUFG_OUT => ta,
+		CLK0_OUT => tb,
+		CLK2X_OUT => td
+	);
+
 
     output_debug : process (debug_control_ins)
     begin

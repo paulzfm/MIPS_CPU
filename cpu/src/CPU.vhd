@@ -350,13 +350,13 @@ begin
         in_op => states_idalu_out_alu_op,
         out_alu_res => alu_out_alu_res
     );
-    alu_add_instance : entity work.ALU port map(
+    alu_add_instance : entity work.alu_adds port map(
         in_data_a => alu_data_mux_a_output,
         in_data_b => alu_data_mux_b_output,
         in_op => states_idalu_out_alu_op,
         out_alu_res => alu_add_out_alu_res
     );
-    alu_equal_instance : entity work.ALU port map(
+    alu_equal_instance : entity work.alu_equal port map(
         in_data_a => alu_data_mux_a_output,
         in_data_b => alu_data_mux_b_output,
         in_op => states_idalu_out_alu_op,
