@@ -170,7 +170,7 @@ begin
             --when ALU_AND =>
             --    out_alu_res <= in_data_a and in_data_b;
             when others =>
-                null;
+                out_alu_res <= "0000000000000000";
         end case;
     end process;
 
