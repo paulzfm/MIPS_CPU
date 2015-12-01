@@ -49,6 +49,7 @@ entity center_controllor is
            out_is_alumem_lwsw_instruction : out STD_LOGIC;
            out_is_alu_lw : out STD_LOGIC;
            out_idalu_alu_res_addr : out STD_LOGIC_VECTOR(1 downto 0);
+           out_brk_state : out STD_LOGIC_VECTOR(2 downto 0);
            in_decode_ra  : in  STD_LOGIC_VECTOR (3 downto 0);
            in_decode_rb  : in  STD_LOGIC_VECTOR (3 downto 0);
            in_decode_is_jump : in STD_LOGIC;
@@ -153,10 +154,12 @@ begin
     
     out_predict_res <= if_id_predict_res;
     out_predict_err <= predict_error;
+    
 
     --debug
     out_is_alumem_lwsw_instruction <= is_alumem_lwsw_instruction;
     out_is_alu_lw <= is_alu_lw;
+    out_brk_state <= brk_state;
 
     --calc_is_alumem_swlw_instruction:
     --process (rst, in_alumem_wr_mem, in_alumem_alu_res, in_alumem_rd_mem)
