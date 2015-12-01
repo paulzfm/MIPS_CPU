@@ -575,8 +575,16 @@ begin
                 when "011" => --loop state
                     brk_jump <= '0';
                     if (is_doing_brk = '0') then
-                        brk_state <= "000";
+                        brk_state <= "100";
                     end if;
+                when "100" => --wait 1
+                    brk_state <= "101";
+                when "101" => --wait 2
+                    brk_state <= "110";
+                when "110" => --wait 3
+                    brk_state <= "111";
+                when "111" => --wait 4
+                    brk_state <= "000";
                 when others =>
                     brk_state <= "000";
             end case;

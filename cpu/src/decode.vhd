@@ -63,7 +63,6 @@ signal signal_imm_8to16 : STD_LOGIC_VECTOR(15 downto 0);
 signal signal_imm_11to16 : STD_LOGIC_VECTOR(15 downto 0);
 
 begin
-    out_brk_return <= '0';
     ra <= "0" & in_instruction(10 downto 8);
     rb <= "0" & in_instruction(7 downto 5);
     rc <= "0" & in_instruction(4 downto 2);
@@ -659,8 +658,18 @@ begin
                 out_alumem_alu_res_equal_rc <= '0';--forward
                 out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
         end case;
+        
     end process;
 
+    process(instruction_op)
+    begin
+        case (instruction_op) is
+            when BRK_RETURN =>
+                out_brk_return <= '1';
+            when others => 
+                out_brk_return <= '0';
+        end case;
+    end process;
 
 end Behavioral;
 
