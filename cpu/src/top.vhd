@@ -33,6 +33,9 @@ entity top is
     Port ( clk : in  STD_LOGIC;
            clk_50 : in STD_LOGIC;
            rst : in  STD_LOGIC;
+           --keyboard
+           datain,clkin,fclk,rst_in: in std_logic;
+           
            serial_data_ready : in STD_LOGIC;
            serial_tbre: in  STD_LOGIC;
            serial_tsre: in  STD_LOGIC;
@@ -67,8 +70,22 @@ signal cpu_in_mem_data, cpu_in_instruction_data : STD_LOGIC_VECTOR(15 downto 0);
 -- debug
 signal debug_out_cpu, debug_out_mem : STD_LOGIC_VECTOR(15 downto 0);
 signal ta, tb, tc, td, clk_40 : STD_LOGIC;
+--keyboard
+signal kb_in_rd_en, kb_in_rd_clk, kb_out_brk : STD_LOGIC;
+signal kb_out_ascii : STD_LOGIC_VECTOR(7 downto 0);
 
 begin
+keyboard_instance : entity work.keyboard_top port map (
+        datain => datain, 
+        clkin => clkin, 
+        fclk => fclk, 
+        rst_in => rst_in, 
+        rd_en => kb_in_rd_en, 
+        rd_clk => kb_in_rd_clk, 
+        out_brk => kb_out_brk, 
+        out_ascii => kb_out_ascii
+     );
+
 cpu_instance : entity work.cpu port map(
         clk => cpu_clk,
         rst => not rst,
@@ -81,7 +98,7 @@ cpu_instance : entity work.cpu port map(
         in_instruction_data => cpu_in_instruction_data,
         debug => debug_out_cpu,
         debug_control_ins => debug_control_ins,
-        in_brk_come => '0'
+        in_brk_come => kb_out_brk
     );
 
 memory_controller_instance : entity work.memory_controller port map(

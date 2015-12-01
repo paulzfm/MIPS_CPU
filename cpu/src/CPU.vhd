@@ -672,7 +672,7 @@ begin
             when "01001000" =>
                 debug <= center_controllor_debug_predict_res(15 downto 0);
             when "01001001" =>
-                debug <= ZERO_15 & center_controllor_debug_predict_res(16);
+                debug <= ZERO_14 & in_brk_come & center_controllor_debug_predict_res(16);
             when others =>
                 null;
         end case;

@@ -63,6 +63,7 @@ signal signal_imm_8to16 : STD_LOGIC_VECTOR(15 downto 0);
 signal signal_imm_11to16 : STD_LOGIC_VECTOR(15 downto 0);
 
 begin
+    out_brk_return <= '0';
     ra <= "0" & in_instruction(10 downto 8);
     rb <= "0" & in_instruction(7 downto 5);
     rc <= "0" & in_instruction(4 downto 2);
