@@ -66,10 +66,18 @@ signal cpu_out_mem_data, cpu_out_mem_addr : STD_LOGIC_VECTOR(15 downto 0);
 signal cpu_in_mem_data, cpu_in_instruction_data : STD_LOGIC_VECTOR(15 downto 0);
 -- debug
 signal debug_out_cpu, debug_out_mem : STD_LOGIC_VECTOR(15 downto 0);
-
+-- keyboard
+signal kb_data : STD_LOGIC_VECTOR(15 downto 0);
+signal kb_clk, kb_en : STD_LOGIC;
+-- vga
+signal vga_data : STD_LOGIC_VECTOR (15 downto 0);
+signal vga_addr : STD_LOGIC_VECTOR (14 downto 0);
+signal vga_offset : STD_LOGIC_VECTOR (14 downto 0);
+signal vga_data_clk : STD_LOGIC;
+signal vga_offset_clk : STD_LOGIC;
 
 begin
-cpu_instance : entity work.cpu port map(
+    cpu_instance : entity work.cpu port map(
         clk => cpu_clk,
         rst => not rst,
         out_mem_rdn => cpu_out_mem_rdn,
@@ -83,7 +91,7 @@ cpu_instance : entity work.cpu port map(
         debug_control_ins => debug_control_ins
     );
 
-memory_controller_instance : entity work.memory_controller port map(
+    memory_controller_instance : entity work.memory_controller port map(
         clk => real_clk,
         rst => rst,
         in_pc_addr => cpu_out_pc,
@@ -114,10 +122,18 @@ memory_controller_instance : entity work.memory_controller port map(
         serial_data_ready => serial_data_ready,
         serial_tbre => serial_tbre,
         serial_tsre => serial_tsre,
-
-        -- debug
-        debug_in => debug_control_ins(3 downto 0),
-        debug_out => debug_out_mem
+        
+        -- vga ports
+        vga_data => vga_data,
+        vga_addr => vga_addr,
+        vga_offset => vga_offset,
+        vga_data_clk => vga_data_clk,
+        vga_offset_clk => vga_offset_clk,
+        
+        -- keyboard ports
+        kb_data => kb_data,
+        kb_clk => kb_clk,
+        kb_en => kb_en
     );
 
     disp1 : entity work.display7 port map (
@@ -150,7 +166,6 @@ memory_controller_instance : entity work.memory_controller port map(
     begin
         case debug_control_ins(15) is
             when '0' => debug <= debug_out_cpu;
-            when '1' => debug <= debug_out_mem;
             when others => null;
         end case;
     end process;
