@@ -40,7 +40,8 @@ entity CPU is
            in_mem_data : in STD_LOGIC_VECTOR(15 downto 0);
            in_instruction_data : in STD_LOGIC_VECTOR(15 downto 0);
            debug : out STD_LOGIC_VECTOR(15 downto 0);
-           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0)
+           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0);
+           in_brk_come : in STD_LOGIC
         );
 end CPU;
 
@@ -119,6 +120,11 @@ signal center_controllor_out_branch_alu_pc_imm : STD_LOGIC;
 signal out_is_alumem_lwsw_instruction : STD_LOGIC;
 signal out_is_alu_lw : STD_LOGIC;
 signal center_controllor_out_idalu_alu_res_addr : STD_LOGIC_VECTOR(1 downto 0);
+-- brk
+signal center_controllor_out_brk_jump_pc : STD_LOGIC_VECTOR(15 downto 0);
+signal center_controllor_out_brk_jump : STD_LOGIC;
+signal pc_s_inc_imm_or_brk_jump_pc : STD_LOGIC_VECTOR(15 downto 0);
+signal decode_out_brk_return : STD_LOGIC;
 
 begin
     out_pc <= pc_output;
@@ -164,8 +170,15 @@ begin
     );
     -- mux2 input pc_s+1 pc_s+1+imm
     pc_yes_error_mux2_instance : entity work.mux2 port map(
+        input0 => pc_s_inc_imm,
+        input1 => center_controllor_out_brk_jump_pc,
+        addr => center_controllor_out_brk_jump,
+        output => pc_s_inc_imm_or_brk_jump_pc
+	 );
+    -- mux2 input pc_s+1 pc_s+1+imm
+    pc_yes_error_mux2_instance : entity work.mux2 port map(
         input0 => states_idalu_out_pc_inc,
-        input1 => pc_s_inc_imm,
+        input1 => pc_s_inc_imm_or_brk_jump_pc,
         addr => center_controllor_out_branch_alu_pc_imm,
         output => pc_yes_error
 	 );
@@ -209,7 +222,9 @@ begin
         out_ctl_is_branch_except_b => decode_out_ctl_is_branch_except_b,
         out_use_imm => decode_out_use_imm,
         out_alumem_alu_res_equal_rc => decode_out_alumem_alu_res_equal_rc,
-        out_memwb_wb_alu_mem => decode_out_memwb_wb_alu_mem
+        out_memwb_wb_alu_mem => decode_out_memwb_wb_alu_mem,
+        
+        out_brk_return => decode_out_brk_return
     );
 
     extend_instance : entity work.extend port map(
@@ -479,6 +494,14 @@ begin
         in_memwb_rc => states_memwb_out_rc,
         in_memwb_wr_reg => registers_wr,
         in_key_interrupt => '0',
+        
+        --brk port
+        in_brk_come => in_brk_come,
+        in_ifid_pc => states_ifid_out_pc,
+        in_idalu_pc => states_idalu_out_pc,
+        in_brk_return => decode_out_brk_return,
+        out_brk_jump_pc => center_controllor_out_brk_jump_pc,
+        out_brk_jump => center_controllor_out_brk_jump,
 
         clk => clk,
         rst => rst

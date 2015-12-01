@@ -80,7 +80,8 @@ entity center_controllor is
            in_ifid_pc : in STD_LOGIC_VECTOR(15 downto 0);
            in_idalu_pc : in STD_LOGIC_VECTOR(15 downto 0);
            in_brk_return :  in STD_LOGIC;
-           out_jump_pc : out STD_LOGIC_VECTOR(15 downto 0);
+           out_brk_jump_pc : out STD_LOGIC_VECTOR(15 downto 0);
+           out_brk_jump : out STD_LOGIC;
 
 
            clk : in  STD_LOGIC;
@@ -119,6 +120,9 @@ signal is_alumem_lwsw_instruction : STD_LOGIC;
      --end
 
 begin
+    --brk
+    out_brk_jump <= brk_jump;
+    
     out_predict_res <= predict_res;
     out_predict_err <= predict_error;
 
@@ -418,7 +422,7 @@ begin
         elsif (clk'event and clk = '1')then
             if (in_brk_return = '1') then
                 brk_jump <= '1';
-                out_jump_pc <= brk_return_addr;
+                out_brk_jump_pc <= brk_return_addr;
             else
                 case brk_state is
                 when "000" => --init state
@@ -439,7 +443,7 @@ begin
                     brk_pc_wr <= '1';
                     brk_rst <= '0';
                     brk_jump <= '1';
-                    out_jump_pc <= x"3000";
+                    out_brk_jump_pc <= x"3000";
                 when "011" => --loop state
                     brk_jump <= '0';
                     if (is_doing_brk = '0') then
