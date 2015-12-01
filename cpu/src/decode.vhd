@@ -48,7 +48,8 @@ entity decode is
            out_ctl_is_b : out STD_LOGIC;--b
            out_ctl_is_branch_except_b : out STD_LOGIC;--branch
            out_alumem_alu_res_equal_rc : out STD_LOGIC;--forward
-           out_memwb_wb_alu_mem : out STD_LOGIC
+           out_memwb_wb_alu_mem : out STD_LOGIC;
+           out_brk_return : out STD_LOGIC
         );
 end decode;
 

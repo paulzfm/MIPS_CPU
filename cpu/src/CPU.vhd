@@ -120,14 +120,19 @@ signal center_controllor_out_branch_alu_pc_imm : STD_LOGIC;
 signal out_is_alumem_lwsw_instruction : STD_LOGIC;
 signal out_is_alu_lw : STD_LOGIC;
 signal center_controllor_out_idalu_alu_res_addr : STD_LOGIC_VECTOR(1 downto 0);
+signal center_controllor_debug_predict_pc_addr0, center_controllor_debug_predict_pc_addr1, center_controllor_debug_predict_pc_addr2
+: STD_LOGIC_VECTOR(15 downto 0);
+signal center_controllor_debug_predict_res : STD_LOGIC_VECTOR(16 downto 0);
 -- brk
 signal center_controllor_out_brk_jump_pc : STD_LOGIC_VECTOR(15 downto 0);
 signal center_controllor_out_brk_jump : STD_LOGIC;
 signal pc_s_inc_imm_or_brk_jump_pc : STD_LOGIC_VECTOR(15 downto 0);
 signal decode_out_brk_return : STD_LOGIC;
 
+
+
 begin
-    decode_out_brk_return <= '0';
+    
     out_pc <= pc_output;
     pc_instance : entity work.pc port map(
         clk => clk,
@@ -170,7 +175,7 @@ begin
         output => pc_no_error
     );
     -- mux2 input pc_s+1 pc_s+1+imm
-    pc_yes_error_mux2_instance : entity work.mux2 port map(
+    pc_yes_brk_mux2_instance : entity work.mux2 port map(
         input0 => pc_s_inc_imm,
         input1 => center_controllor_out_brk_jump_pc,
         addr => center_controllor_out_brk_jump,
@@ -504,6 +509,11 @@ begin
         out_brk_jump_pc => center_controllor_out_brk_jump_pc,
         out_brk_jump => center_controllor_out_brk_jump,
 
+        debug_predict_pc_addr0 => center_controllor_debug_predict_pc_addr0,
+        debug_predict_pc_addr1 => center_controllor_debug_predict_pc_addr1,
+        debug_predict_pc_addr2 => center_controllor_debug_predict_pc_addr2,
+        debug_predict_res => center_controllor_debug_predict_res,
+
         clk => clk,
         rst => rst
      );
@@ -653,6 +663,16 @@ begin
                 debug <= ZERO_15 & states_memwb_out_memwb_wb_alu_mem;
             when "01000100" =>
                 debug <= ZERO_13 & states_ifid_ctl_rst & states_ifid_ctl_copy & states_ifid_ctl_bubble;
+            when "01000101" =>
+                debug <= center_controllor_debug_predict_pc_addr0;
+            when "01000110" =>
+                debug <= center_controllor_debug_predict_pc_addr1;
+            when "01000111" =>
+                debug <= center_controllor_debug_predict_pc_addr2;
+            when "01001000" =>
+                debug <= center_controllor_debug_predict_res(15 downto 0);
+            when "01001001" =>
+                debug <= ZERO_15 & center_controllor_debug_predict_res(16);
             when others =>
                 null;
         end case;

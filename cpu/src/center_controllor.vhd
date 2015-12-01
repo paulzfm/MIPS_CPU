@@ -83,6 +83,8 @@ entity center_controllor is
            out_brk_jump_pc : out STD_LOGIC_VECTOR(15 downto 0);
            out_brk_jump : out STD_LOGIC;
 
+           debug_predict_pc_addr0, debug_predict_pc_addr1, debug_predict_pc_addr2 : out STD_LOGIC_VECTOR(15 downto 0);
+           debug_predict_res : out STD_LOGIC_VECTOR(16 downto 0);
 
            clk : in  STD_LOGIC;
            rst : in STD_LOGIC);
@@ -109,7 +111,6 @@ signal id_alu_predict_pc_choose1 : STD_LOGIC;
 signal id_alu_predict_pc_choose2 : STD_LOGIC;
 signal id_alu_predict_res : STD_LOGIC;
 signal id_alu_predict_match : STD_LOGIC_VECTOR(2 downto 0);
-
 signal if_id_predict_pc_choose0 : STD_LOGIC;
 signal if_id_predict_pc_choose1 : STD_LOGIC;
 signal if_id_predict_pc_choose2 : STD_LOGIC;
@@ -138,7 +139,16 @@ signal is_alumem_lwsw_instruction : STD_LOGIC;
      --end
 
 begin
-    --brk
+    debug_predict_pc_addr0 <= predict_pc_addr0;
+    debug_predict_pc_addr1 <= predict_pc_addr1;
+    debug_predict_pc_addr2 <= predict_pc_addr2;
+    debug_predict_res <= predict_pc_res0 & predict_pc_res1 & predict_pc_res2 
+        & id_alu_predict_pc_choose0 & id_alu_predict_pc_choose1 & 
+        id_alu_predict_pc_choose2 & id_alu_predict_res & id_alu_predict_match & 
+        if_id_predict_pc_choose0 & if_id_predict_pc_choose1 & if_id_predict_pc_choose2 & 
+        if_id_predict_res & if_id_predict_match;
+
+--brk
     out_brk_jump <= brk_jump;
     
     out_predict_res <= if_id_predict_res;

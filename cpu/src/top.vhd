@@ -141,19 +141,19 @@ memory_controller_instance : entity work.memory_controller port map(
 --        output => real_clk
 --    );
 
-    -- divider1 : entity work.divider1 port map (
-    --     en => not clk,
-    --     clk => clk_50,
-    --     clk_1hz => real_clk
-    -- );
-	 real_clk <= clk_40;
-	 divider222 : entity work.divider20 PORT MAP(
-		CLKIN_IN => clk_50,
-		CLKFX_OUT => clk_40,
-		CLKIN_IBUFG_OUT => ta,
-		CLK0_OUT => tb,
-		CLK2X_OUT => td
-	);
+     divider1 : entity work.divider1 port map (
+         en => not clk,
+         clk => clk_50,
+         clk_1hz => real_clk
+     );
+--	 real_clk <= clk_40;
+--	 divider222 : entity work.divider20 PORT MAP(
+--		CLKIN_IN => clk_50,
+--		CLKFX_OUT => clk_40,
+--		CLKIN_IBUFG_OUT => ta,
+--		CLK0_OUT => tb,
+--		CLK2X_OUT => td
+--	);
 
 
     output_debug : process (debug_control_ins)
