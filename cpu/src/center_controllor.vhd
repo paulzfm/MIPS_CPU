@@ -95,6 +95,22 @@ signal predict_res : STD_LOGIC;
 -- will output to out_predict_error as a control signal.
 signal predict_error : STD_LOGIC;
 
+signal predict_pc_addr0 : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
+signal predict_pc_addr1 : STD_LOGIC_VECTOR(15 downto 0) := "1111111111111110";
+signal predict_pc_addr2 : STD_LOGIC_VECTOR(15 downto 0) := "1111111111111111";
+signal predict_pc_res0 : STD_LOGIC;
+signal predict_pc_res1 : STD_LOGIC;
+signal predict_pc_res2 : STD_LOGIC;
+signal id_alu_predict_pc_choose0 : STD_LOGIC;
+signal id_alu_predict_pc_choose1 : STD_LOGIC;
+signal id_alu_predict_pc_choose2 : STD_LOGIC;
+signal id_alu_predict_res : STD_LOGIC;
+
+signal if_id_predict_pc_choose0 : STD_LOGIC;
+signal if_id_predict_pc_choose1 : STD_LOGIC;
+signal if_id_predict_pc_choose2 : STD_LOGIC;
+signal if_id_predict_res : STD_LOGIC;
+
 -- is_alu_lw means that decode contains a instruction that will use register
 -- and idalu contains a lw instruction with same register.
 -- is_alu_lw also contains this situation that the idalu contains a lwsw and
@@ -117,7 +133,7 @@ signal is_alumem_lwsw_instruction : STD_LOGIC;
      --end
 
 begin
-    out_predict_res <= predict_res;
+    out_predict_res <= id_alu_predict_res;
     out_predict_err <= predict_error;
 
     --debug
@@ -140,11 +156,87 @@ begin
     --    end if;
     --end process;
 
+    process (in_idalu_pc, predict_pc_addr0, predict_pc_addr1, predict_pc_addr2)
+    begin
+        if (in_idalu_pc = predict_pc_addr0)
+        then
+            id_alu_predict_pc_choose0 <= '1';
+        else
+            id_alu_predict_pc_choose0 <= '0';
+        end if;
+        if (in_idalu_pc = predict_pc_addr1)
+        then
+            id_alu_predict_pc_choose1 <= '1';
+        else
+            id_alu_predict_pc_choose1 <= '0';
+        end if;
+        if (in_idalu_pc = predict_pc_addr2)
+        then
+            id_alu_predict_pc_choose2 <= '1';
+        else
+            id_alu_predict_pc_choose2 <= '0';
+        end if;
+    end process;
+
+    process (in_ifid_pc, predict_pc_addr0, predict_pc_addr1, predict_pc_addr2)
+    begin
+        if (in_ifid_pc = predict_pc_addr0)
+        then
+            if_id_predict_pc_choose0 <= '1';
+        else
+            if_id_predict_pc_choose0 <= '0';
+        end if;
+        if (in_ifid_pc = predict_pc_addr1)
+        then
+            if_id_predict_pc_choose1 <= '1';
+        else
+            if_id_predict_pc_choose1 <= '0';
+        end if;
+        if (in_ifid_pc = predict_pc_addr2)
+        then
+            if_id_predict_pc_choose2 <= '1';
+        else
+            if_id_predict_pc_choose2 <= '0';
+        end if;
+    end process;
+
+
+    process (if_id_predict_pc_choose2, if_id_predict_pc_choose1, if_id_predict_pc_choose0,
+        predict_pc_res0, predict_pc_res1, predict_pc_res2)
+    begin
+        case (if_id_predict_pc_choose2 & if_id_predict_pc_choose1 & if_id_predict_pc_choose0) is
+            when "001" =>
+                if_id_predict_res <= predict_pc_res0;
+            when "010" =>
+                if_id_predict_res <= predict_pc_res1;
+            when "100" =>
+                if_id_predict_res <= predict_pc_res2;
+            when others =>
+                if_id_predict_res <= '1';
+        end case;
+    end process;
+
+    process (id_alu_predict_pc_choose2, id_alu_predict_pc_choose1, id_alu_predict_pc_choose0,
+        predict_pc_res0, predict_pc_res1, predict_pc_res2)
+    begin
+        case (id_alu_predict_pc_choose2 & id_alu_predict_pc_choose1 & id_alu_predict_pc_choose0) is
+            when "001" =>
+                id_alu_predict_res <= predict_pc_res0;
+            when "010" =>
+                id_alu_predict_res <= predict_pc_res1;
+            when "100" =>
+                id_alu_predict_res <= predict_pc_res2;
+            when others =>
+                id_alu_predict_res <= '1';
+        end case;
+    end process;
+
+
     calc_predict_error:
-    process (in_alu_equal_res, predict_res, in_idalu_is_branch_except_b)
+    process (in_alu_equal_res, id_alu_predict_res, in_idalu_is_branch_except_b)
     begin
         
-            if (predict_res /= in_alu_equal_res(0) and in_idalu_is_branch_except_b = '1')
+            if (id_alu_predict_res /= in_alu_equal_res(0) and in_idalu_is_branch_except_b = '1')
             then
                 predict_error <= '1';
             else
@@ -156,12 +248,28 @@ begin
     calc_predict_res:
     process (clk, in_idalu_is_branch_except_b)
     begin
-        
             if (rising_edge(clk))
             then
                 if (in_idalu_is_branch_except_b = '1')
                 then
-                    predict_res <= in_alu_equal_res(0);
+                    if (predict_error = '1')
+                    then
+                        case id_alu_predict_pc_choose2 & id_alu_predict_pc_choose1 & id_alu_predict_pc_choose0
+                            when "001" =>
+                                predict_pc_res0 <= not predict_pc_res0;
+                            when "010" =>
+                                predict_pc_res1 <= not predict_pc_res1;
+                            when "100" =>
+                                predict_pc_res2 <= not predict_pc_res2;
+                            when others =>
+                                predict_pc_res0 <= predict_pc_res1;
+                                predict_pc_res1 <= predict_pc_res2;
+                                predict_pc_res2 <= not id_alu_predict_res;
+                                predict_pc_addr0 <= predict_pc_addr1;
+                                predict_pc_addr1 <= predict_pc_addr2;
+                                predict_pc_addr2 <= in_idalu_pc;
+                        end case;
+                    end if;
                 end if;
             end if;
         
