@@ -34,7 +34,7 @@ entity top is
            clk_50 : in STD_LOGIC;
            rst : in  STD_LOGIC;
            --keyboard
-           datain,clkin,fclk,rst_in: in std_logic;
+           datain,clkin: in std_logic;
            
            serial_data_ready : in STD_LOGIC;
            serial_tbre: in  STD_LOGIC;
@@ -78,8 +78,8 @@ begin
 keyboard_instance : entity work.keyboard_top port map (
         datain => datain, 
         clkin => clkin, 
-        fclk => fclk, 
-        rst_in => rst_in, 
+        fclk => clk_50, 
+        rst_in => not rst, 
         rd_en => kb_in_rd_en, 
         rd_clk => kb_in_rd_clk, 
         out_brk => kb_out_brk, 
