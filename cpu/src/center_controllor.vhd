@@ -79,6 +79,8 @@ entity center_controllor is
            in_brk_come : in STD_LOGIC; -- key FIFO send to me   1 = come    0 = none
            in_ifid_pc : in STD_LOGIC_VECTOR(15 downto 0);
            in_idalu_pc : in STD_LOGIC_VECTOR(15 downto 0);
+           in_brk_return :  in STD_LOGIC;
+           out_jump_pc : out STD_LOGIC_VECTOR(15 downto 0);
 
 
            clk : in  STD_LOGIC;
@@ -281,9 +283,9 @@ begin
         
             if (is_alu_lw = '1' or is_alumem_lwsw_instruction = '1')
             then
-                out_pc_wr <= '0';
+                out_pc_wr <= ('0' and brk_pc_wr);
             else
-                out_pc_wr <= '1';
+                out_pc_wr <= ('1' and brk_pc_wr);
             end if;
         
     end process;
@@ -435,11 +437,11 @@ begin
         
             if (in_decode_is_b = '0' and in_decode_is_branch_except_b = '0' and in_decode_is_jump = '0')
             then
-                out_rst_ifid <= is_alumem_lwsw_instruction;
+                out_rst_ifid <= (is_alumem_lwsw_instruction or brk_rst);
             else
                 -- in_decode_is_b = '1'
                 -- change to bubble
-                out_rst_ifid <= '0';
+                out_rst_ifid <= ('0' or brk_rst);
             end if;
         
     end process;
@@ -449,7 +451,7 @@ begin
         is_alumem_lwsw_instruction, in_decode_is_branch_except_b, in_decode_is_jump)
     begin
         
-            out_rst_idalu <= predict_error or is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b or in_decode_is_jump) and is_alumem_lwsw_instruction);
+            out_rst_idalu <= brk_rst or predict_error or is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b or in_decode_is_jump) and is_alumem_lwsw_instruction);
         
     end process;
 
@@ -457,7 +459,7 @@ begin
     process (rst)
     begin
         
-            out_rst_alumem <= '0';
+            out_rst_alumem <= ('0' or brk_rst);
         
     end process;
 
@@ -493,22 +495,20 @@ begin
         
     end process;
 	 
-	 --brk process
+	 --brk process   in_brk_return
 	 process(rst,clk, is_doing_brk)
-     variable count : INTEGER RANGE 0 TO 127;
 	 begin
         if (rst = '1') then
             is_doing_brk <= '0';
         elsif (clk'event and clk = '1')then
-            if (count = 0) then
+            if (is_doing_brk = '0') then
                 if (in_brk_come = '1') then
-                    count := 127;
                     is_doing_brk <= '1';
-                else
+                end if;
+            else--if (is_doing_brk = '1') then
+                if (in_brk_return = '1') then
                     is_doing_brk <= '0';
                 end if;
-            else
-                count := count - 1;
             end if;
         end if;
 	 end process;
@@ -524,7 +524,11 @@ begin
             brk_rst <= '0';
             brk_jump <= '0';
         elsif (clk'event and clk = '1')then
-            case brk_state is
+            if (in_brk_return = '1') then
+                brk_jump <= '1';
+                out_jump_pc <= brk_return_addr;
+            else
+                case brk_state is
                 when "000" => --init state
                     if (is_doing_brk = '1') then
                         brk_state <= "001";
@@ -543,6 +547,7 @@ begin
                     brk_pc_wr <= '1';
                     brk_rst <= '0';
                     brk_jump <= '1';
+                    out_jump_pc <= x"3000";
                 when "011" => --loop state
                     brk_jump <= '0';
                     if (is_doing_brk = '0') then
@@ -551,6 +556,7 @@ begin
                 when others =>
                     brk_state <= "000";
             end case;
+            end if;
         end if;
 	 end process;
 
