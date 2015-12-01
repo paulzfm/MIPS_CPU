@@ -80,7 +80,8 @@ cpu_instance : entity work.cpu port map(
         in_mem_data => cpu_in_mem_data,
         in_instruction_data => cpu_in_instruction_data,
         debug => debug_out_cpu,
-        debug_control_ins => debug_control_ins
+        debug_control_ins => debug_control_ins,
+        in_brk_come => '0'
     );
 
 memory_controller_instance : entity work.memory_controller port map(

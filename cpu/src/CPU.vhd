@@ -127,6 +127,7 @@ signal pc_s_inc_imm_or_brk_jump_pc : STD_LOGIC_VECTOR(15 downto 0);
 signal decode_out_brk_return : STD_LOGIC;
 
 begin
+    decode_out_brk_return <= '0';
     out_pc <= pc_output;
     pc_instance : entity work.pc port map(
         clk => clk,
