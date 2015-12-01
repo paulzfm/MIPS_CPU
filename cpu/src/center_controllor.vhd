@@ -175,9 +175,9 @@ begin
         
             if (is_alu_lw = '1' or is_alumem_lwsw_instruction = '1')
             then
-                out_pc_wr <= '0';
+                out_pc_wr <= ('0' and brk_pc_wr);
             else
-                out_pc_wr <= '1';
+                out_pc_wr <= ('1' and brk_pc_wr);
             end if;
         
     end process;
@@ -329,11 +329,11 @@ begin
         
             if (in_decode_is_b = '0' and in_decode_is_branch_except_b = '0' and in_decode_is_jump = '0')
             then
-                out_rst_ifid <= is_alumem_lwsw_instruction;
+                out_rst_ifid <= (is_alumem_lwsw_instruction or brk_rst);
             else
                 -- in_decode_is_b = '1'
                 -- change to bubble
-                out_rst_ifid <= '0';
+                out_rst_ifid <= ('0' or brk_rst);
             end if;
         
     end process;
@@ -343,7 +343,7 @@ begin
         is_alumem_lwsw_instruction, in_decode_is_branch_except_b, in_decode_is_jump)
     begin
         
-            out_rst_idalu <= predict_error or is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b or in_decode_is_jump) and is_alumem_lwsw_instruction);
+            out_rst_idalu <= brk_rst or predict_error or is_alu_lw or ((in_decode_is_b or in_decode_is_branch_except_b or in_decode_is_jump) and is_alumem_lwsw_instruction);
         
     end process;
 
@@ -351,7 +351,7 @@ begin
     process (rst)
     begin
         
-            out_rst_alumem <= '0';
+            out_rst_alumem <= ('0' or brk_rst);
         
     end process;
 
