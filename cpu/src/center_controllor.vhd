@@ -74,6 +74,11 @@ entity center_controllor is
            in_memwb_rc : in STD_LOGIC_VECTOR(3 downto 0);
            in_memwb_wr_reg : in STD_LOGIC;
            in_key_interrupt : in  STD_LOGIC;
+           
+           --brk port
+           in_brk_come : in STD_LOGIC; -- key FIFO send to me   1 = come    0 = none
+           in_ifid_pc : in STD_LOGIC_VECTOR(15 downto 0);
+           in_idalu_pc : in STD_LOGIC_VECTOR(15 downto 0);
 
 
            clk : in  STD_LOGIC;
@@ -101,6 +106,16 @@ signal is_alumem_lwsw_instruction : STD_LOGIC;
 -- is_alumem_swlw_instruction will return weather alumem contain a
 -- sw to instruction memory
 -- signal is_alumem_swlw_instruction : STD_LOGIC;
+
+     --brk signal
+     signal is_doing_brk : STD_LOGIC;
+     signal brk_pc_wr : STD_LOGIC;
+     signal brk_rst : STD_LOGIC;
+     signal brk_jump : STD_LOGIC;
+     signal brk_state : STD_LOGIC_VECTOR(2 downto 0);
+     signal brk_return_addr : STD_LOGIC_VECTOR(15 downto 0);
+     --end
+
 begin
     out_predict_res <= predict_res;
     out_predict_err <= predict_error;
@@ -369,5 +384,66 @@ begin
             end case;
         
     end process;
+	 
+	 --brk process
+	 process(rst,clk, is_doing_brk)
+     variable count : INTEGER RANGE 0 TO 127;
+	 begin
+        if (rst = '1') then
+            is_doing_brk <= '0';
+        elsif (clk'event and clk = '1')then
+            if (count = 0) then
+                if (in_brk_come = '1') then
+                    count := 127;
+                    is_doing_brk <= '1';
+                else
+                    is_doing_brk <= '0';
+                end if;
+            else
+                count := count - 1;
+            end if;
+        end if;
+	 end process;
+     
+     --brk_pc_wr 
+     --brk_rst
+     
+     process(rst,clk, is_doing_brk)
+	 begin
+        if (rst = '1') then
+            brk_state <= "000";
+            brk_pc_wr <= '1';
+            brk_rst <= '0';
+            brk_jump <= '0';
+        elsif (clk'event and clk = '1')then
+            case brk_state is
+                when "000" => --init state
+                    if (is_doing_brk = '1') then
+                        brk_state <= "001";
+                        brk_pc_wr <= '0';
+                        brk_pc_rst <= '1';
+                        if (in_idalu_pc = "0000000000000000") then
+                            brk_return_addr <= in_ifid_pc;
+                        else
+                            brk_return_addr <= in_idalu_pc;
+                        end if;
+                    end if;
+                when "001" => --1 step state
+                    brk_state <= "010";
+                when "010" => --2 step state   --this time, the step registers are empty
+                    brk_state <= "011";
+                    brk_pc_wr <= '1';
+                    brk_rst <= '0';
+                    brk_jump <= '1';
+                when "011" => --loop state
+                    brk_jump <= '0';
+                    if (is_doing_brk = '0') then
+                        brk_state <= "000";
+                    end if;
+                when others =>
+                    brk_state <= "000";
+            end case;
+        end if;
+	 end process;
 
 end Behavioral;
