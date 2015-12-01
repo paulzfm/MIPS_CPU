@@ -79,7 +79,7 @@ keyboard_instance : entity work.keyboard_top port map (
         datain => datain, 
         clkin => clkin, 
         fclk => clk_50, 
-        rst_in => not rst, 
+        rst_in => rst, 
         rd_en => kb_in_rd_en, 
         rd_clk => kb_in_rd_clk, 
         out_brk => kb_out_brk, 
