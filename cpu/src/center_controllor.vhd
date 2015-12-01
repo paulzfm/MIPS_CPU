@@ -86,6 +86,7 @@ entity center_controllor is
 
            debug_predict_pc_addr0, debug_predict_pc_addr1, debug_predict_pc_addr2 : out STD_LOGIC_VECTOR(15 downto 0);
            debug_predict_res : out STD_LOGIC_VECTOR(16 downto 0);
+           debug_is_doing_brk : out STD_LOGIC;
 
            clk : in  STD_LOGIC;
            rst : in STD_LOGIC);
@@ -140,6 +141,8 @@ signal is_alumem_lwsw_instruction : STD_LOGIC;
      --end
 
 begin
+    debug_is_doing_brk <= is_doing_brk;
+    
     debug_predict_pc_addr0 <= predict_pc_addr0;
     debug_predict_pc_addr1 <= predict_pc_addr1;
     debug_predict_pc_addr2 <= predict_pc_addr2;
@@ -153,7 +156,7 @@ begin
     out_brk_jump <= brk_jump;
     
     out_predict_res <= if_id_predict_res;
-    out_predict_err <= predict_error;
+    out_predict_err <= (predict_error or brk_jump);
     
 
     --debug
@@ -496,7 +499,7 @@ begin
     process (in_alu_equal_res)
     begin
         
-            out_branch_alu_pc_imm <= in_alu_equal_res(0);
+            out_branch_alu_pc_imm <= (in_alu_equal_res(0) or brk_jump);
         
     end process;
 

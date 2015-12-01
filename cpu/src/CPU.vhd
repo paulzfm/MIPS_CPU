@@ -129,6 +129,7 @@ signal center_controllor_out_brk_jump : STD_LOGIC;
 signal pc_s_inc_imm_or_brk_jump_pc : STD_LOGIC_VECTOR(15 downto 0);
 signal decode_out_brk_return : STD_LOGIC;
 signal debug_center_out_brk_state : STD_LOGIC_VECTOR(2 downto 0);
+signal debug_center_out_is_doing_brk : STD_LOGIC;
 
 
 
@@ -515,6 +516,7 @@ begin
         debug_predict_pc_addr2 => center_controllor_debug_predict_pc_addr2,
         debug_predict_res => center_controllor_debug_predict_res,
         out_brk_state => debug_center_out_brk_state,
+        debug_is_doing_brk => debug_center_out_is_doing_brk,
 
         clk => clk,
         rst => rst
@@ -674,7 +676,9 @@ begin
             when "01001000" =>
                 debug <= center_controllor_debug_predict_res(15 downto 0);
             when "01001001" =>
-                debug <= ZERO_12 & debug_center_out_brk_state & in_brk_come;
+                debug <= ZERO_10 & center_controllor_out_brk_jump & debug_center_out_is_doing_brk & debug_center_out_brk_state & in_brk_come;
+            when "01001010" =>
+                debug <= center_controllor_out_brk_jump_pc;
             when others =>
                 null;
         end case;
