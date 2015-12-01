@@ -1,20 +1,20 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    19:35:26 12/01/2015 
--- Design Name: 
--- Module Name:    vga - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+-- Company:
+-- Engineer:
 --
--- Dependencies: 
+-- Create Date:    19:35:26 12/01/2015
+-- Design Name:
+-- Module Name:    vga - Behavioral
+-- Project Name:
+-- Target Devices:
+-- Tool versions:
+-- Description:
 --
--- Revision: 
+-- Dependencies:
+--
+-- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments: 
+-- Additional Comments:
 --
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -67,7 +67,7 @@ begin
         pixel => pixel(0),
         offset => offset
     );
-    
+
     vga_ram : entity work.vga_ram port map (
         clka => vga_data_clk,
         wea => "1",
@@ -78,5 +78,11 @@ begin
         doutb => pixel
     );
 
-end Behavioral;
+    update_offset : process (vga_offset_clk)
+    begin
+        if rising_edge(vga_offset_clk) then
+            offset <= vga_offset;
+        end if;
+    end process;
 
+end Behavioral;

@@ -48,7 +48,6 @@ architecture Behavioral of vga_controller is
     signal y: STD_LOGIC_VECTOR (8 downto 0) := (others => '0');
     signal hs1, vs1: STD_LOGIC;
     signal r1, g1, b1: STD_LOGIC_VECTOR (0 to 2);
-    signal p, reset : STD_LOGIC;
     signal curr_offset : STD_LOGIC_VECTOR (18 downto 0) := (others => '0');
 begin
     out_hs : process (clk, rst)
@@ -112,14 +111,21 @@ begin
     begin
         if rst = '1' then
             y <= (others => '0');
-            curr_offset <= offset & x"0";
         elsif rising_edge(clk) and x = 799 then
             if y = 524 then
 		    	y <= (others => '0');
-                curr_offset <= offset & x"0";
 		   	else
 		    	y <= y + 1;
 		   	end if;
+        end if;
+    end process;
+    
+    update_offset : process (clk, rst)
+    begin
+        if rst = '1' then
+            curr_offset <= offset & x"0";
+        elsif rising_edge(clk) and x = 799 and y = 524 then
+            curr_offset <= offset & x"0";
         end if;
     end process;
 
