@@ -107,11 +107,13 @@ signal id_alu_predict_pc_choose0 : STD_LOGIC;
 signal id_alu_predict_pc_choose1 : STD_LOGIC;
 signal id_alu_predict_pc_choose2 : STD_LOGIC;
 signal id_alu_predict_res : STD_LOGIC;
+signal id_alu_predict_match : STD_LOGIC_VECTOR(2 downto 0);
 
 signal if_id_predict_pc_choose0 : STD_LOGIC;
 signal if_id_predict_pc_choose1 : STD_LOGIC;
 signal if_id_predict_pc_choose2 : STD_LOGIC;
 signal if_id_predict_res : STD_LOGIC;
+signal if_id_predict_match : STD_LOGIC_VECTOR(2 downto 0);
 
 -- is_alu_lw means that decode contains a instruction that will use register
 -- and idalu contains a lw instruction with same register.
@@ -135,7 +137,7 @@ signal is_alumem_lwsw_instruction : STD_LOGIC;
      --end
 
 begin
-    out_predict_res <= id_alu_predict_res;
+    out_predict_res <= if_id_predict_res;
     out_predict_err <= predict_error;
 
     --debug
@@ -202,11 +204,13 @@ begin
         end if;
     end process;
 
+    id_alu_predict_match <= id_alu_predict_pc_choose2 & id_alu_predict_pc_choose1 & id_alu_predict_pc_choose0;
+    if_id_predict_match <= if_id_predict_pc_choose2 & if_id_predict_pc_choose1 & if_id_predict_pc_choose0;
 
-    process (if_id_predict_pc_choose2, if_id_predict_pc_choose1, if_id_predict_pc_choose0,
+    process (if_id_predict_match,
         predict_pc_res0, predict_pc_res1, predict_pc_res2)
     begin
-        case (if_id_predict_pc_choose2 & if_id_predict_pc_choose1 & if_id_predict_pc_choose0) is
+        case (if_id_predict_match) is
             when "001" =>
                 if_id_predict_res <= predict_pc_res0;
             when "010" =>
@@ -218,10 +222,10 @@ begin
         end case;
     end process;
 
-    process (id_alu_predict_pc_choose2, id_alu_predict_pc_choose1, id_alu_predict_pc_choose0,
+    process (id_alu_predict_match,
         predict_pc_res0, predict_pc_res1, predict_pc_res2)
     begin
-        case (id_alu_predict_pc_choose2 & id_alu_predict_pc_choose1 & id_alu_predict_pc_choose0) is
+        case (id_alu_predict_match) is
             when "001" =>
                 id_alu_predict_res <= predict_pc_res0;
             when "010" =>
@@ -256,7 +260,7 @@ begin
                 then
                     if (predict_error = '1')
                     then
-                        case id_alu_predict_pc_choose2 & id_alu_predict_pc_choose1 & id_alu_predict_pc_choose0
+                        case (id_alu_predict_match) is
                             when "001" =>
                                 predict_pc_res0 <= not predict_pc_res0;
                             when "010" =>
@@ -533,7 +537,7 @@ begin
                     if (is_doing_brk = '1') then
                         brk_state <= "001";
                         brk_pc_wr <= '0';
-                        brk_pc_rst <= '1';
+                        brk_rst <= '1';
                         if (in_idalu_pc = "0000000000000000") then
                             brk_return_addr <= in_ifid_pc;
                         else
