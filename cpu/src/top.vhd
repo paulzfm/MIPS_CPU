@@ -190,16 +190,16 @@ cpu_instance : entity work.cpu port map(
         output => cpu_clk
     );
 	 
---    divider1 : entity work.divider port map (
---        input => clk_50,
---        output => real_clk
---    );
+    divider1 : entity work.divider port map (
+        input => clk_50,
+        output => real_clk
+    );
 
-     divider1 : entity work.divider1 port map (
-         en => not clk,
-         clk => clk_50,
-         clk_1hz => real_clk
-     );
+--     divider1 : entity work.divider1 port map (
+--         en => not clk,
+--         clk => clk_50,
+--         clk_1hz => real_clk
+--     );
 --	 real_clk <= clk_40;
 --	 divider222 : entity work.divider20 PORT MAP(
 --		CLKIN_IN => clk_50,
@@ -210,11 +210,5 @@ cpu_instance : entity work.cpu port map(
 --	);
 
 
-    output_debug : process (debug_control_ins)
-    begin
-        case debug_control_ins(15) is
-            when '0' => debug <= debug_out_cpu;
-            when others => null;
-        end case;
-    end process;
+    debug <= debug_out_cpu;
 end Behavioral;
