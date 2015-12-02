@@ -1,20 +1,20 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    16:24:48 11/21/2015 
--- Design Name: 
--- Module Name:    decode - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+-- Company:
+-- Engineer:
 --
--- Dependencies: 
+-- Create Date:    16:24:48 11/21/2015
+-- Design Name:
+-- Module Name:    decode - Behavioral
+-- Project Name:
+-- Target Devices:
+-- Tool versions:
+-- Description:
 --
--- Revision: 
+-- Dependencies:
+--
+-- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments: 
+-- Additional Comments:
 --
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -67,7 +67,7 @@ begin
     rb <= "0" & in_instruction(7 downto 5);
     rc <= "0" & in_instruction(4 downto 2);
     instruction_op <= in_instruction(15 downto 11);
-    
+
     --imm n to 16
     signal_imm_3to16 <= "00000000000"&in_instruction(4 downto 2)&"00";
     signal_imm_4to16 <= "000000000000"&in_instruction(3 downto 0);
@@ -77,7 +77,7 @@ begin
     ----
 
     process (in_instruction, ra, rb, rc, in_pc_inc, instruction_op,
-        signal_imm_3to16, signal_imm_4to16, signal_imm_5to16, 
+        signal_imm_3to16, signal_imm_4to16, signal_imm_5to16,
         signal_imm_8to16, signal_imm_11to16)
     begin
         case (instruction_op) is
@@ -119,9 +119,9 @@ begin
                out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
             when INSTRUCTION_ADDSP =>
                 -- 01100
-                case (in_instruction(10 downto 8)) is 
+                case (in_instruction(10 downto 8)) is
                     when "011" =>
-                       -- ADDSP 
+                       -- ADDSP
                        out_ra <= REG_SP;
                        out_rb <= REG_NULL;
                        out_rc <= REG_SP;
@@ -675,18 +675,17 @@ begin
                 out_alumem_alu_res_equal_rc <= '0';--forward
                 out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
         end case;
-        
+
     end process;
 
     process(instruction_op)
     begin
-        case (instruction_op) is
-            when BRK_RETURN =>
+        case (in_instruction) is
+            when x"FFFF" =>
                 out_brk_return <= '1';
-            when others => 
+            when others =>
                 out_brk_return <= '0';
         end case;
     end process;
 
 end Behavioral;
-
