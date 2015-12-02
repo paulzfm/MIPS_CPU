@@ -60,7 +60,7 @@ entity top is
            vga_vs : out  STD_LOGIC;
            vga_r : out  STD_LOGIC_VECTOR (0 to 2);
            vga_g : out  STD_LOGIC_VECTOR (0 to 2);
-           vga_b : out  STD_LOGIC_VECTOR (0 to 2)
+           vga_b : out  STD_LOGIC_VECTOR (0 to 2);
 
            debug : out STD_LOGIC_VECTOR(15 downto 0);
            debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0);
@@ -102,8 +102,8 @@ begin
     fifo1_data(15 downto 8) <= "00000000";
 
     keyboard_instance : entity work.keyboard_top port map (
-        datain => datain,
-        clkin => clkin,
+        datain => kb_data,
+        clkin => kb_clk,
         fclk => clk_50,
         rst_in => rst,
         rd_en => fifo1_rd_en,
