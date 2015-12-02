@@ -72,9 +72,10 @@ signal debug_out_cpu, debug_out_mem : STD_LOGIC_VECTOR(15 downto 0);
 signal ta, tb, tc, td, clk_40 : STD_LOGIC;
 --keyboard
 signal kb_in_rd_en, kb_in_rd_clk, kb_out_brk : STD_LOGIC;
-signal kb_out_ascii : STD_LOGIC_VECTOR(7 downto 0);
+signal kb_out_ascii : STD_LOGIC_VECTOR(15 downto 0);
 
 begin
+kb_out_ascii(15 downto 8) <= "00000000";
 keyboard_instance : entity work.keyboard_top port map (
         datain => datain, 
         clkin => clkin, 
@@ -83,7 +84,7 @@ keyboard_instance : entity work.keyboard_top port map (
         rd_en => kb_in_rd_en, 
         rd_clk => kb_in_rd_clk, 
         out_brk => kb_out_brk, 
-        out_ascii => kb_out_ascii
+        out_ascii => kb_out_ascii(7 downto 0)
      );
 
 cpu_instance : entity work.cpu port map(
@@ -133,9 +134,10 @@ memory_controller_instance : entity work.memory_controller port map(
         serial_tbre => serial_tbre,
         serial_tsre => serial_tsre,
 
-        -- debug
-        debug_in => debug_control_ins(3 downto 0),
-        debug_out => debug_out_mem
+        -- keyboard ports
+        kb_data => kb_out_ascii,
+        kb_clk => kb_in_rd_clk,
+        kb_en => kb_in_rd_en
     );
 
     disp1 : entity work.display7 port map (
