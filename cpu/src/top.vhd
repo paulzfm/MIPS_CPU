@@ -33,9 +33,12 @@ entity top is
     Port ( clk : in  STD_LOGIC;
            clk_50 : in STD_LOGIC;
            rst : in  STD_LOGIC;
-           --keyboard
-           datain,clkin: in std_logic;
-           
+
+           -- keyboard
+           kb_data : in STD_LOGIC;
+           kb_clk : in STD_LOGIC;
+
+           -- ram
            serial_data_ready : in STD_LOGIC;
            serial_tbre: in  STD_LOGIC;
            serial_tsre: in  STD_LOGIC;
@@ -51,6 +54,14 @@ entity top is
            ram2_addr : out  STD_LOGIC_VECTOR (17 downto 0);
            ram1_data : inout  STD_LOGIC_VECTOR (15 downto 0);
            ram2_data : inout  STD_LOGIC_VECTOR (15 downto 0);
+
+           -- vga
+           vga_hs : out  STD_LOGIC;
+           vga_vs : out  STD_LOGIC;
+           vga_r : out  STD_LOGIC_VECTOR (0 to 2);
+           vga_g : out  STD_LOGIC_VECTOR (0 to 2);
+           vga_b : out  STD_LOGIC_VECTOR (0 to 2)
+
            debug : out STD_LOGIC_VECTOR(15 downto 0);
            debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0);
            display1 : out STD_LOGIC_VECTOR(0 to 6);
@@ -88,19 +99,20 @@ signal kb_out_brk : STD_LOGIC;
 --signal kb_out_ascii : STD_LOGIC_VECTOR(15 downto 0);
 
 begin
-fifo1_data(15 downto 8) <= "00000000";
-keyboard_instance : entity work.keyboard_top port map (
-        datain => datain, 
-        clkin => clkin, 
-        fclk => clk_50, 
-        rst_in => rst, 
-        rd_en => fifo1_rd_en, 
-        rd_clk => real_clk, 
-        out_brk => kb_out_brk, 
+    fifo1_data(15 downto 8) <= "00000000";
+
+    keyboard_instance : entity work.keyboard_top port map (
+        datain => datain,
+        clkin => clkin,
+        fclk => clk_50,
+        rst_in => rst,
+        rd_en => fifo1_rd_en,
+        rd_clk => real_clk,
+        out_brk => kb_out_brk,
         out_ascii => fifo1_data(7 downto 0)
      );
 
-cpu_instance : entity work.cpu port map(
+     cpu_instance : entity work.cpu port map(
         clk => cpu_clk,
         rst => not rst,
         out_mem_rdn => cpu_out_mem_rdn,
@@ -164,7 +176,7 @@ cpu_instance : entity work.cpu port map(
         fifo2_is_empty => fifo2_is_empty
     );
 
-    fifo2 : entity work.fifo port map (
+    fifo2_instance : entity work.fifo port map (
         rst => not rst,
         wr_clk => real_clk,
         rd_clk => real_clk,
@@ -173,6 +185,19 @@ cpu_instance : entity work.cpu port map(
         din => fifo2_data_in,
         dout => fifo2_data_out,
         out_empty => fifo2_is_empty
+    );
+
+    vga_instance : entity work.vga port map (
+        clk => clk_50,
+        rst => rst,
+        vga_data => vga_data,
+        vga_addr => vga_addr,
+        vga_data_clk => vga_data_clk,
+        hs => vga_hs,
+        vs => vga_vs,
+        r => vga_r,
+        g => vga_g,
+        b => vga_b
     );
 
     disp1 : entity work.display7 port map (
@@ -189,7 +214,7 @@ cpu_instance : entity work.cpu port map(
         input => real_clk,
         output => cpu_clk
     );
-	 
+
     divider1 : entity work.divider port map (
         input => clk_50,
         output => real_clk
