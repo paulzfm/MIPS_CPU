@@ -122,6 +122,13 @@ enter_send_to_fifo2_loop:
     NOP
     ; reset number
 enter_send_to_fifo2_fin:
+    ; write an extra space
+    LI R0 0xBF
+    SLL R0 R0 0x0000
+    ADDIU R0 0x07
+    LI R5 0x20
+    SW R0 R5 0x0000
+    ; reset length c000
     LI R2 0x00
     LI R1 0xC0
     SLL R1 R1 0x0000
@@ -260,6 +267,20 @@ draw_char_loop:
     ; R3 R4 offset of pixis
     LI R3 0x00
     LI R4 0x00
+    MFPC R5
+    ADDIU R5 0x0002
+    B draw_pixis
+    NOP
+
+    LI R3 0x01
+    LI R4 0x01
+    MFPC R5
+    ADDIU R5 0x0002
+    B draw_pixis
+    NOP
+
+    LI R3 0x02
+    LI R4 0x02
     MFPC R5
     ADDIU R5 0x0002
     B draw_pixis
