@@ -1,3 +1,5 @@
+NOP
+NOP
 ; save system registers
 LI R7 0xBF
 SLL R7 R7 0x0000
@@ -40,7 +42,8 @@ char_function:
     LW R1 R1 0x0000
 
     ; R2 = 0xC001 start of keyboard buffer
-    MOVE R2 R1
+    LI R2 0xC0
+    SLL R2 R2 0x0000
     ADDIU R2 0x01
 
     ; R4 = R2 + R1 
@@ -88,7 +91,8 @@ enter_function:
     SLL R1 R1 0x0000
     LW R1 R1 0x0000
     ; R2 = 0xC001 start of keyboard buffer
-    MOVE R2 R1
+    LI R2 0xC0
+    SLL R2 R2 0x0000
     ADDIU R2 0x01
     ; R3 = offset of R2, init = 0, end = R1
     LI R3 0x00
@@ -162,30 +166,123 @@ add_row:
 calc_vga_addr_data:
     ; input R1 = col 0 - 639  R2 = row 0 - 479  
     ; output R3 = addr R4 = data should add 1 if want to the color is white
-    ; use R6 R7 no save
+    ; use R6 R7 save R6 bf30
+
+    LI R7 0xBF
+    SLL R7 R7 0x0000
+    ADDIU R7 0x30
+    SW R7 R6 0x0000
+
     ; R3 = (R1 * 480 + R2) / 8
     ; R3 = R1 * 60 + R2 / 8
     ; R4 = (R1 * 480 + R2) mod 8
     ; R4 = R2 mod 8
     
+    ; R7 = R2 / 8
     MOVE R7 R2
-    SRA R7 0x0000
-    SRA R7 0x0005
-    MOVE R6 
+    SRA R7 0x0003
+    ; R6 = 60 * R1
+    MOVE R6 R1
+    SLL R6 0x0002
+    ADDU R6 R7 R7 
+    SLL R6 0x0001
+    ADDU R6 R7 R7
+    SLL R6 0x0001
+    ADDU R6 R7 R7
+    SLL R6 0x0001
+    ADDU R6 R7 R7
+    ; R3 = R7
+    MOVE R3 R7
+
+    ; R7 = R2 mod 8
+    ; R6 = (R2 >> 3)  << 3
+    MOVE R7 R2
+    MOVE R6 R2
+    SRA R2 0x0003
+    SLL R2 0x0003
+    ; R7 = R7 - R6
+    SUBU R7 R6 R7
+    ; R4 = R7
+    MOVE R4 R7
+
+
+    LI R7 0xBF
+    SLL R7 R7 0x0000
+    ADDIU R7 0x30
+    LW R7 R6 0x0000
 
     JR R5
+
 draw_char_start:
-    ; R1 = data[0xC000] number of keyboard buffer
-    LI R1 0xC0
-    SLL R1 R1 0x0000
-    LW R1 R1 0x0000
-    ; R2 = 0xC001 start of keyboard buffer
-    MOVE R2 R1
-    ADDIU R2 0x01
+    ; R0 = data[0xC000] number of keyboard buffer
+    
+    ;  0xC001 start of keyboard buffer
+    ; LI R0 0xC0
+    ; SLL R0 R0 0x0000
+    ; ADDIU R0 0x01
+    ; R6 = offset = 0
+    LI R6 0x00
+
+    ; R1 = 0 - 639 init [10, 610) column
+    ; R2 = 0 - 479 init [450, 470) row
+    ; each symbol is 20 * 20
+    LI R1 0x0A
+    LI R2 0xE1
+    SLL R2 R2 0x0001
+
 
 draw_char_loop:
-    
+    LI R0 0xC0
+    SLL R0 R0 0x0000
+    LW R0 R0 0x0000
+    CMP R6 R0
+    BTNEZ prepare_exit
 
+    ; R3 R4 offset of pixis
+    LI R3 0x00
+    LI R4 0x00
+    MFPC R5
+    ADDIU R5 0x0002
+    B draw_pixis
+    
+    ADDIU R6 0x0001
+    ADDIU R1 0x0014
+    B draw_char_loop
+
+draw_pixis:
+    ; SAVE R1 R2 R5
+    ; USE R1 R2 R3 R4 R5 R7
+    ; change R7
+
+    LI R7 0xBF
+    SLL R7 R7 0x0000
+    ADDIU R7 0x40
+    SW R7 R1 0x0000
+    SW R7 R2 0x0001
+    SW R7 R5 0x0002
+
+
+    ADDU R1 R3 R1
+    ADDU R2 R4 R2
+    MFPC R5
+    ADDIU R5 0x0002
+    B calc_vga_addr_data
+    ADDIU R4 0x0001
+
+    LI R5 0xBF
+    SLL R5 R5 0x0000
+    ; R3 = addr
+    SW R5 R3 0x08
+    ; R4 = data
+    SW R5 R3 0x09
+
+
+    LI R7 0xBF
+    SLL R7 R7 0x0000
+    ADDIU R7 0x40
+    LW R7 R1 0x0000
+    LW R7 R2 0x0001
+    LW R7 R5 0x0002
 
 
 
