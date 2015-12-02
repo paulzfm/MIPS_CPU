@@ -571,7 +571,7 @@ begin
                     brk_pc_wr <= '1';
                     brk_rst <= '0';
                     brk_jump <= '1';
-                    out_brk_jump_pc <= x"0007";
+                    out_brk_jump_pc <= x"0200";
                 when "011" => --loop state
                     brk_jump <= '0';
                     if (is_doing_brk = '0') then
