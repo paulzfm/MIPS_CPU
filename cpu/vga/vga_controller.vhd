@@ -39,8 +39,8 @@ entity vga_controller is
            g : out  STD_LOGIC_VECTOR (0 to 2);
            b : out  STD_LOGIC_VECTOR (0 to 2);
            addr : out STD_LOGIC_VECTOR (18 downto 0);
-           pixel : in STD_LOGIC;
-           offset : in STD_LOGIC_VECTOR (14 downto 0));
+           --offset : in STD_LOGIC_VECTOR (14 downto 0);
+           pixel : in STD_LOGIC);
 end vga_controller;
 
 architecture Behavioral of vga_controller is
@@ -48,7 +48,7 @@ architecture Behavioral of vga_controller is
     signal y: STD_LOGIC_VECTOR (8 downto 0) := (others => '0');
     signal hs1, vs1: STD_LOGIC;
     signal r1, g1, b1: STD_LOGIC_VECTOR (0 to 2);
-    signal curr_offset : STD_LOGIC_VECTOR (18 downto 0) := (others => '0');
+    --signal curr_offset : STD_LOGIC_VECTOR (18 downto 0) := (others => '0');
 begin
     out_hs : process (clk, rst)
     begin
@@ -120,14 +120,14 @@ begin
         end if;
     end process;
     
-    update_offset : process (clk, rst)
-    begin
-        if rst = '1' then
-            curr_offset <= offset & x"0";
-        elsif rising_edge(clk) and x = 799 and y = 524 then
-            curr_offset <= offset & x"0";
-        end if;
-    end process;
+--    update_offset : process (clk, rst)
+--    begin
+--        if rst = '1' then
+--            curr_offset <= offset & x"0";
+--        elsif rising_edge(clk) and x = 799 and y = 524 then
+--            curr_offset <= offset & x"0";
+--        end if;
+--    end process;
 
     out_color : process (hs1, vs1, r1, g1, b1)
     begin
@@ -143,18 +143,18 @@ begin
         end if;
     end process;
 
-    --addr <= ((y * "101") & "0000000") + x + curr_offset;
+    addr <= ((y * "101") & "0000000") + x;
     
-    cal_addr : process (x, y)
-        variable tmp: STD_LOGIC_VECTOR (19 downto 0);
-    begin
-        tmp := ((y * "101") & "0000000") + x + ("0" & curr_offset);
-        if tmp >= 307200 then
-            addr <= tmp - 307200;
-        else
-            addr <= tmp(18 downto 0);
-        end if;
-    end process;
+--    cal_addr : process (x, y)
+--        variable tmp: STD_LOGIC_VECTOR (19 downto 0);
+--    begin
+--        tmp := ((y * "101") & "0000000") + x + ("0" & curr_offset);
+--        if tmp >= 307200 then
+--            addr <= tmp - 307200;
+--        else
+--            addr <= tmp(18 downto 0);
+--        end if;
+--    end process;
 
     out_pixel : process (clk, rst)
     begin

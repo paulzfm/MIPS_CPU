@@ -32,11 +32,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity vga is
     Port ( clk : in  STD_LOGIC; -- 50 MHz
            rst : in  STD_LOGIC;
-           vga_data : in  STD_LOGIC_VECTOR (15 downto 0);
-           vga_addr : in  STD_LOGIC_VECTOR (14 downto 0);
-           vga_offset : in  STD_LOGIC_VECTOR (14 downto 0);
-           vga_data_clk : in  STD_LOGIC;
-           vga_offset_clk : in  STD_LOGIC;
+           vga_data : in  STD_LOGIC_VECTOR (15 downto 0) := x"0000";
+           vga_addr : in  STD_LOGIC_VECTOR (14 downto 0) := "000" & x"000";
+           --vga_offset : in  STD_LOGIC_VECTOR (14 downto 0);
+           vga_data_clk : in  STD_LOGIC := '0';
+           --vga_offset_clk : in  STD_LOGIC;
            hs : out  STD_LOGIC;
            vs : out  STD_LOGIC;
            r : out  STD_LOGIC_VECTOR (0 to 2);
@@ -48,7 +48,7 @@ architecture Behavioral of vga is
     signal rd_addr: STD_LOGIC_VECTOR (18 downto 0);
     signal pixel: STD_LOGIC_VECTOR (0 downto 0);
     signal clk_25: STD_LOGIC;
-    signal offset: STD_LOGIC_VECTOR (14 downto 0);
+    --signal offset: STD_LOGIC_VECTOR (14 downto 0);
 begin
     divider : entity work.divider port map (
         input => clk,
@@ -64,8 +64,8 @@ begin
         g => g,
         b => b,
         addr => rd_addr,
-        pixel => pixel(0),
-        offset => offset
+        pixel => pixel(0)
+        --offset => offset
     );
 
     vga_ram : entity work.vga_ram port map (
@@ -78,11 +78,11 @@ begin
         doutb => pixel
     );
 
-    update_offset : process (vga_offset_clk)
-    begin
-        if rising_edge(vga_offset_clk) then
-            offset <= vga_offset;
-        end if;
-    end process;
+--    update_offset : process (vga_offset_clk)
+--    begin
+--        if rising_edge(vga_offset_clk) then
+--            offset <= vga_offset;
+--        end if;
+--    end process;
 
 end Behavioral;
