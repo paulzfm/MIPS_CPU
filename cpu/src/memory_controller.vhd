@@ -61,9 +61,17 @@ entity memory_controller is
            serial_tbre : in  STD_LOGIC;
            serial_tsre : in  STD_LOGIC;
 
-           -- debug
-           debug_in : in STD_LOGIC_VECTOR (3 downto 0);
-           debug_out : out STD_LOGIC_VECTOR (15 downto 0));
+           -- vga ports
+           vga_data : out STD_LOGIC_VECTOR (15 downto 0);
+           vga_addr : out STD_LOGIC_VECTOR (14 downto 0);
+           vga_offset : out STD_LOGIC_VECTOR (14 downto 0);
+           vga_data_clk : out STD_LOGIC := '0';
+           vga_offset_clk : out STD_LOGIC := '0';
+
+           -- keyboard ports
+           kb_data : in STD_LOGIC_VECTOR (15 downto 0);
+           kb_clk : out STD_LOGIC := '0';
+           kb_en : out STD_LOGIC);
 end memory_controller;
 
 architecture Behavioral of memory_controller is
@@ -121,7 +129,14 @@ begin
         serial_data_ready => serial_data_ready,
         serial_tbre => serial_tbre,
         serial_tsre => serial_tsre,
-        debug_info => info
+        vga_data => vga_data,
+        vga_addr => vga_addr,
+        vga_offset => vga_offset,
+        vga_data_clk => vga_data_clk,
+        vga_offset_clk => vga_offset_clk,
+        kb_data => kb_data,
+        kb_clk => kb_clk,
+        kb_en => kb_en
     );
 
     ram2 : entity work.ins_ram_controller port map (
@@ -139,14 +154,5 @@ begin
         ram2_addr => ram2_addr,
         ram2_data => ram2_data
     );
-
-    debug : process (debug_in)
-    begin
-        case debug_in is
-            when "0000" =>
-                debug_out <= x"00" & "000" & info;
-            when others => null;
-        end case;
-    end process;
 
 end Behavioral;

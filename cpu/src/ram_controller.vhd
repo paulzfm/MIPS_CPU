@@ -75,7 +75,7 @@ end ram_controller;
 architecture Behavioral of ram_controller is
     type state_type is (s_init, s_rd_ram, s_rd_serial, s_rd_serial_ctl,
                         s_wr_ram, s_wr_serial, s_empty, s_rd_kb, s_wr_vga_data,
-                        s_wr_vga_offset);
+                        s_wr_vga_offset, s_rd_kb_ctl);
     signal state: state_type;
     signal ctl: STD_LOGIC_VECTOR (3 downto 0);
     signal write_ready: STD_LOGIC;
