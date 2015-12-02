@@ -17,20 +17,21 @@ SW R7 R6 0x0006
 LI R7 0xBF
 SLL R7 R7 0x0000
 LW R7 R0 0x0004
+; LI R0 0x0A
 
 
 ; R1 = enter
 LI R1 0x0A
 ; cmp R0 and enter
 CMP R0 R1
-BTNEZ enter_function
-
+BTEQZ enter_function
+NOP
 ; R1 = slash
 LI R1 0x08
 ; cmp R0 and slash
 CMP R0 R1
-BTNEZ slash_function
-
+BTEQZ slash_function
+NOP
 
 
 char_function:
@@ -60,6 +61,7 @@ char_function:
 
 
     B enter_vga_flush
+    NOP
 
 slash_function:
     ; R1 = data[0xC000] number of keyboard buffer
@@ -74,15 +76,17 @@ slash_function:
 
     ; not equal R1 != 0
     BTEQZ enter_vga_flush
+    NOP
 
     ; R1 = R1 + 1
-    SUBIU R1 0x01
+    ADDIU R1 0xFF
     ; R5 = 0xC000
     LI R5 0xC0
     SLL R5 R5 0x0000
     SW R5 R1 0x0000
 
     B enter_vga_flush
+    NOP
 
 
 enter_function:
@@ -98,8 +102,9 @@ enter_function:
     LI R3 0x00
 
 enter_send_to_fifo2_loop:
-    CMP R3 R2
-    BTNEZ enter_vga_flush
+    CMP R3 R1
+    BTEQZ enter_send_to_fifo2_fin
+    NOP
     ; finish send to fifo2
 
     ; R4 = R2 + R3
@@ -114,6 +119,13 @@ enter_send_to_fifo2_loop:
     SW R0 R5 0x0000
     ADDIU R3 0x01
     B enter_send_to_fifo2_loop
+    NOP
+    ; reset number
+enter_send_to_fifo2_fin:
+    LI R2 0x00
+    LI R1 0xC0
+    SLL R1 R1 0x0000
+    SW R1 R2 0x00
 
 
 enter_vga_flush:
@@ -133,11 +145,11 @@ clear_vga_bottom:
     ; R5 = 610 0b1001100010
     LI R5 0x98
     SLL R5 R5 0x02
-    ADDIU R5 2
+    ADDIU R5 0x02
     ; R1 = R5 = 610 end
     CMP R1 R5
-    BTNEZ draw_char_start
-
+    BTEQZ draw_char_start
+    NOP
     ; R2 = 450
     LI R2 0xE1
     SLL R2 R2 0x0001
@@ -146,22 +158,25 @@ clear_column:
     MFPC R5
     ADDIU R5 0x0002
     B calc_vga_addr_data
+    NOP
     ; R5 = bf00
     LI R5 0xBF
     SLL R5 R5 0x0000
     ; R3 = addr
     SW R5 R3 0x08
     ; R4 = data
-    SW R5 R3 0x09
+    SW R5 R4 0x09
 
     ; R2 = R2 + 1 and cmp
     ADDIU R2 0x01
     ; R2 = R0 = 470
     CMP R2 R0
-    BTEQZ clear_column
+    BTNEZ clear_column
+    NOP
 add_row:
     ADDIU R1 0x01
     B clear_vga_bottom
+    NOP
 
 calc_vga_addr_data:
     ; input R1 = col 0 - 639  R2 = row 0 - 479  
@@ -180,16 +195,16 @@ calc_vga_addr_data:
     
     ; R7 = R2 / 8
     MOVE R7 R2
-    SRA R7 0x0003
+    SRA R7 R7 0x03
     ; R6 = 60 * R1
     MOVE R6 R1
-    SLL R6 0x0002
+    SLL R6 R6 0x0002
     ADDU R6 R7 R7 
-    SLL R6 0x0001
+    SLL R6 R6 0x0001
     ADDU R6 R7 R7
-    SLL R6 0x0001
+    SLL R6 R6 0x0001
     ADDU R6 R7 R7
-    SLL R6 0x0001
+    SLL R6 R6 0x0001
     ADDU R6 R7 R7
     ; R3 = R7
     MOVE R3 R7
@@ -198,10 +213,12 @@ calc_vga_addr_data:
     ; R6 = (R2 >> 3)  << 3
     MOVE R7 R2
     MOVE R6 R2
-    SRA R2 0x0003
-    SLL R2 0x0003
-    ; R7 = R7 - R6
+    SRA R6 R6 0x0003
+    SLL R6 R6 0x0003
+    ; R7 = (R7 - R6) << 13
     SUBU R7 R6 R7
+    SLL R7 R7 0x0000
+    SLL R7 R7 0x0005
     ; R4 = R7
     MOVE R4 R7
 
@@ -212,6 +229,7 @@ calc_vga_addr_data:
     LW R7 R6 0x0000
 
     JR R5
+    NOP
 
 draw_char_start:
     ; R0 = data[0xC000] number of keyboard buffer
@@ -236,7 +254,8 @@ draw_char_loop:
     SLL R0 R0 0x0000
     LW R0 R0 0x0000
     CMP R6 R0
-    BTNEZ prepare_exit
+    BTEQZ prepare_exit
+    NOP
 
     ; R3 R4 offset of pixis
     LI R3 0x00
@@ -244,10 +263,12 @@ draw_char_loop:
     MFPC R5
     ADDIU R5 0x0002
     B draw_pixis
+    NOP
     
     ADDIU R6 0x0001
     ADDIU R1 0x0014
     B draw_char_loop
+    NOP
 
 draw_pixis:
     ; SAVE R1 R2 R5
@@ -267,6 +288,7 @@ draw_pixis:
     MFPC R5
     ADDIU R5 0x0002
     B calc_vga_addr_data
+    NOP
     ADDIU R4 0x0001
 
     LI R5 0xBF
@@ -274,7 +296,7 @@ draw_pixis:
     ; R3 = addr
     SW R5 R3 0x08
     ; R4 = data
-    SW R5 R3 0x09
+    SW R5 R4 0x09
 
 
     LI R7 0xBF
@@ -283,6 +305,8 @@ draw_pixis:
     LW R7 R1 0x0000
     LW R7 R2 0x0001
     LW R7 R5 0x0002
+    JR R5
+    NOP
 
 
 
@@ -300,4 +324,3 @@ prepare_exit:
     LW R7 R6 0x0006
 
 
-IINT
