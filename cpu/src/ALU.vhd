@@ -81,10 +81,10 @@ begin
     variable all_zero : STD_LOGIC;
     begin
         case in_op is
-            when ALU_ADD =>
-                -- ALU add
-                -- ATTENTION! unsigned!
-                out_alu_res <= add16_res;
+            --when ALU_ADD =>
+            --    -- ALU add
+            --    -- ATTENTION! unsigned!
+            --    out_alu_res <= add16_res;
             when ALU_SUB =>
                 -- ALU sub
                 -- ATTENTION! unsigned!
@@ -160,7 +160,7 @@ begin
             when ALU_XOR =>
                 -- ALU data_a xor in_data_b
                 out_alu_res <= in_data_a xor in_data_b;
-				when ALU_OR =>
+			when ALU_OR =>
                 -- ALU data_a or in_data_b
                 out_alu_res <= in_data_a or in_data_b;
             when ALU_CMP =>
@@ -226,23 +226,23 @@ begin
             when ALU_NOT =>
                 -- not a
                 out_alu_res <= not(in_data_a);
-            when ALU_EQUAL_ZERO =>
-                -- data_a == zero => 00000000000001
-                all_zero := '0';
-                for i in 0 to 15
-                loop
-                    all_zero := all_zero or in_data_a(i);
-                end loop;
-                out_alu_res <= "000000000000000" & not(all_zero);
-            when ALU_NOT_EQUAL_ZERO =>
-                -- data_a != zero => 00000000000001
-                all_zero := '0';
-                for i in 0 to 15
-                loop
-                    all_zero := all_zero or in_data_a(i);
-                end loop;
-                out_alu_res <= "000000000000000" & (all_zero);
-				when ALU_AND =>
+    --        when ALU_EQUAL_ZERO =>
+    --            -- data_a == zero => 00000000000001
+    --            all_zero := '0';
+    --            for i in 0 to 15
+    --            loop
+    --                all_zero := all_zero or in_data_a(i);
+    --            end loop;
+    --            out_alu_res <= "000000000000000" & not(all_zero);
+    --        when ALU_NOT_EQUAL_ZERO =>
+    --            -- data_a != zero => 00000000000001
+    --            all_zero := '0';
+    --            for i in 0 to 15
+    --            loop
+    --                all_zero := all_zero or in_data_a(i);
+    --            end loop;
+    --            out_alu_res <= "000000000000000" & (all_zero);
+            when ALU_AND =>
                 out_alu_res <= in_data_a and in_data_b;
             when others =>
                 out_alu_res <= (others => '0');

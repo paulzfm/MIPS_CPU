@@ -33,6 +33,9 @@ entity top is
     Port ( clk : in  STD_LOGIC;
            clk_50 : in STD_LOGIC;
            rst : in  STD_LOGIC;
+           --keyboard
+           datain,clkin: in std_logic;
+           
            serial_data_ready : in STD_LOGIC;
            serial_tbre: in  STD_LOGIC;
            serial_tsre: in  STD_LOGIC;
@@ -66,6 +69,7 @@ signal cpu_out_mem_data, cpu_out_mem_addr : STD_LOGIC_VECTOR(15 downto 0);
 signal cpu_in_mem_data, cpu_in_instruction_data : STD_LOGIC_VECTOR(15 downto 0);
 -- debug
 signal debug_out_cpu, debug_out_mem : STD_LOGIC_VECTOR(15 downto 0);
+-- HEAD
 -- fifo1
 signal fifo1_data : STD_LOGIC_VECTOR(15 downto 0);
 signal fifo1_rd_en : STD_LOGIC;
@@ -77,9 +81,26 @@ signal fifo2_is_empty : STD_LOGIC;
 signal vga_data : STD_LOGIC_VECTOR (0 downto 0);
 signal vga_addr : STD_LOGIC_VECTOR (18 downto 0);
 signal vga_data_clk : STD_LOGIC;
+----
+signal ta, tb, tc, td, clk_40 : STD_LOGIC;
+--keyboard
+signal kb_out_brk : STD_LOGIC;
+--signal kb_out_ascii : STD_LOGIC_VECTOR(15 downto 0);
 
 begin
-    cpu_instance : entity work.cpu port map(
+fifo1_data(15 downto 8) <= "00000000";
+keyboard_instance : entity work.keyboard_top port map (
+        datain => datain, 
+        clkin => clkin, 
+        fclk => clk_50, 
+        rst_in => rst, 
+        rd_en => fifo1_rd_en, 
+        rd_clk => real_clk, 
+        out_brk => kb_out_brk, 
+        out_ascii => fifo1_data(7 downto 0)
+     );
+
+cpu_instance : entity work.cpu port map(
         clk => cpu_clk,
         rst => not rst,
         out_mem_rdn => cpu_out_mem_rdn,
@@ -90,7 +111,8 @@ begin
         in_mem_data => cpu_in_mem_data,
         in_instruction_data => cpu_in_instruction_data,
         debug => debug_out_cpu,
-        debug_control_ins => debug_control_ins
+        debug_control_ins => debug_control_ins,
+        in_brk_come => kb_out_brk
     );
 
     memory_controller_instance : entity work.memory_controller port map(
@@ -167,17 +189,26 @@ begin
         input => real_clk,
         output => cpu_clk
     );
+	 
+--    divider1 : entity work.divider port map (
+--        input => clk_50,
+--        output => real_clk
+--    );
 
-    divider1 : entity work.divider port map (
-        input => clk_50,
-        output => real_clk
-    );
+     divider1 : entity work.divider1 port map (
+         en => not clk,
+         clk => clk_50,
+         clk_1hz => real_clk
+     );
+--	 real_clk <= clk_40;
+--	 divider222 : entity work.divider20 PORT MAP(
+--		CLKIN_IN => clk_50,
+--		CLKFX_OUT => clk_40,
+--		CLKIN_IBUFG_OUT => ta,
+--		CLK0_OUT => tb,
+--		CLK2X_OUT => td
+--	);
 
-    -- divider1 : entity work.divider1 port map (
-    --     en => not clk,
-    --     clk => clk_50,
-    --     clk_1hz => real_clk
-    -- );
 
     output_debug : process (debug_control_ins)
     begin

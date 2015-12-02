@@ -36,12 +36,12 @@ entity divider1 is
 end divider1;
 
 architecture Behavioral of divider1 is
-    signal cnt : integer range 0 to 7 := 0;
+    signal cnt : integer range 0 to 12500000 := 0;
 begin
     process (clk)
     begin
         if rising_edge(clk) and en = '1' then
-            if cnt = 7 then
+            if cnt = 12500000 / 2 then
                 cnt <= 0;
             else
                 cnt <= cnt + 1;
@@ -53,7 +53,7 @@ begin
     begin
         if cnt = 0 then
             clk_1hz <= '1';
-        elsif cnt = 4 then
+        elsif cnt = 12500000 / 4 then
             clk_1hz <= '0';
         end if;
     end process;

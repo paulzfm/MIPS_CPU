@@ -40,7 +40,8 @@ entity CPU is
            in_mem_data : in STD_LOGIC_VECTOR(15 downto 0);
            in_instruction_data : in STD_LOGIC_VECTOR(15 downto 0);
            debug : out STD_LOGIC_VECTOR(15 downto 0);
-           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0)
+           debug_control_ins : in STD_LOGIC_VECTOR(15 downto 0);
+           in_brk_come : in STD_LOGIC
         );
 end CPU;
 
@@ -97,7 +98,7 @@ signal alu_data_mux_alu_mem_forward_data, alu_data_mux_mem_wb_forward_data,
 signal alu_data_mux_b_addr, alu_data_mux_d_addr : STD_LOGIC_VECTOR(1 downto 0);
 signal alu_data_mux_b_output, alu_data_mux_d_output: STD_LOGIC_VECTOR(15 downto 0);
 -- alu
-signal alu_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
+signal alu_out_alu_res, alu_out_alu_final_res, alu_add_out_alu_res, alu_equal_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
 -- states alumem
 signal states_alumem_ctl_bubble, states_alumem_ctl_rst, states_alumem_ctl_copy : STD_LOGIC;
 signal states_alumem_out_pc, states_alumem_out_pc_inc, states_alumem_out_alu_res : STD_LOGIC_VECTOR(15 downto 0);
@@ -118,8 +119,22 @@ signal center_controllor_out_predict_err : STD_LOGIC;
 signal center_controllor_out_branch_alu_pc_imm : STD_LOGIC;
 signal out_is_alumem_lwsw_instruction : STD_LOGIC;
 signal out_is_alu_lw : STD_LOGIC;
+signal center_controllor_out_idalu_alu_res_addr : STD_LOGIC_VECTOR(1 downto 0);
+signal center_controllor_debug_predict_pc_addr0, center_controllor_debug_predict_pc_addr1, center_controllor_debug_predict_pc_addr2
+: STD_LOGIC_VECTOR(15 downto 0);
+signal center_controllor_debug_predict_res : STD_LOGIC_VECTOR(16 downto 0);
+-- brk
+signal center_controllor_out_brk_jump_pc : STD_LOGIC_VECTOR(15 downto 0);
+signal center_controllor_out_brk_jump : STD_LOGIC;
+signal pc_s_inc_imm_or_brk_jump_pc : STD_LOGIC_VECTOR(15 downto 0);
+signal decode_out_brk_return : STD_LOGIC;
+signal debug_center_out_brk_state : STD_LOGIC_VECTOR(2 downto 0);
+signal debug_center_out_is_doing_brk : STD_LOGIC;
+
+
 
 begin
+    
     out_pc <= pc_output;
     pc_instance : entity work.pc port map(
         clk => clk,
@@ -162,9 +177,16 @@ begin
         output => pc_no_error
     );
     -- mux2 input pc_s+1 pc_s+1+imm
+    pc_yes_brk_mux2_instance : entity work.mux2 port map(
+        input0 => pc_s_inc_imm,
+        input1 => center_controllor_out_brk_jump_pc,
+        addr => center_controllor_out_brk_jump,
+        output => pc_s_inc_imm_or_brk_jump_pc
+	 );
+    -- mux2 input pc_s+1 pc_s+1+imm
     pc_yes_error_mux2_instance : entity work.mux2 port map(
         input0 => states_idalu_out_pc_inc,
-        input1 => pc_s_inc_imm,
+        input1 => pc_s_inc_imm_or_brk_jump_pc,
         addr => center_controllor_out_branch_alu_pc_imm,
         output => pc_yes_error
 	 );
@@ -208,7 +230,9 @@ begin
         out_ctl_is_branch_except_b => decode_out_ctl_is_branch_except_b,
         out_use_imm => decode_out_use_imm,
         out_alumem_alu_res_equal_rc => decode_out_alumem_alu_res_equal_rc,
-        out_memwb_wb_alu_mem => decode_out_memwb_wb_alu_mem
+        out_memwb_wb_alu_mem => decode_out_memwb_wb_alu_mem,
+        
+        out_brk_return => decode_out_brk_return
     );
 
     extend_instance : entity work.extend port map(
@@ -237,7 +261,7 @@ begin
     predict_in_jump_reg_data <= registers_data_a;
     predict_in_idalu_alu_res_equal_rc <= states_idalu_out_alumem_alu_res_equal_rc;
     predict_in_idalu_rc <= states_idalu_out_rc;
-    predict_in_alu_res <= alu_out_alu_res;
+    predict_in_alu_res <= alu_out_alu_final_res;
     predict_in_alumem_rc <= states_alumem_out_rc;
     predict_in_alumem_alu_res_equal_rc <= states_alumem_out_alumem_alu_res_equal_rc;
     predict_in_alumem_alu_res <= states_alumem_out_alu_res;
@@ -349,6 +373,26 @@ begin
         in_op => states_idalu_out_alu_op,
         out_alu_res => alu_out_alu_res
     );
+    alu_add_instance : entity work.alu_adds port map(
+        in_data_a => alu_data_mux_a_output,
+        in_data_b => alu_data_mux_b_output,
+        in_op => states_idalu_out_alu_op,
+        out_alu_res => alu_add_out_alu_res
+    );
+    alu_equal_instance : entity work.alu_equal port map(
+        in_data_a => alu_data_mux_a_output,
+        in_data_b => alu_data_mux_b_output,
+        in_op => states_idalu_out_alu_op,
+        out_alu_res => alu_equal_out_alu_res
+    );
+    alu_data_res_mux : entity work.mux4 port map(
+        input0 => alu_add_out_alu_res,
+        input1 => alu_equal_out_alu_res,
+        input2 => alu_out_alu_res,
+        input3 => ZERO_16,
+        addr => center_controllor_out_idalu_alu_res_addr,
+        output => alu_out_alu_final_res
+    );
 
     states_alumem_instance : entity work.states_alumem port map(
         clk => clk,
@@ -358,7 +402,7 @@ begin
         ctl_rst => states_alumem_ctl_rst,
         in_pc => states_idalu_out_pc,
         in_pc_inc => states_idalu_out_pc_inc,
-        in_alu_res => alu_out_alu_res,
+        in_alu_res => alu_out_alu_final_res,
         in_rc => states_idalu_out_rc,
         in_rd => states_idalu_out_rd,
         in_data_rd => alu_data_mux_d_output,
@@ -424,6 +468,7 @@ begin
         out_predict_err => center_controllor_out_predict_err,
         out_predict_res => predict_in_predict_res,
         out_branch_alu_pc_imm => center_controllor_out_branch_alu_pc_imm,
+        out_idalu_alu_res_addr => center_controllor_out_idalu_alu_res_addr,
         -- out_idalu_pc_inc => ,
         out_pc_wr => pc_wr,
 
@@ -443,8 +488,11 @@ begin
         in_idalu_rc => states_idalu_out_rc,
         in_idalu_rd => states_idalu_out_rd,
         in_idalu_use_imm_ry => states_idalu_out_use_imm,
+        in_idalu_alu_op => states_idalu_out_alu_op,
+
         -- in_idalu_pc_inc : in STD_LOGIC_VECTOR(15 downto 0);
-        in_alu_res => alu_out_alu_res,
+        in_alu_add_res => alu_add_out_alu_res,
+        in_alu_equal_res => alu_equal_out_alu_res,
         in_idalu_is_branch_except_b => states_idalu_out_is_branch_except_b,
         in_alumem_alu_res => states_alumem_out_alu_res,
         in_alumem_rc => states_alumem_out_rc,
@@ -454,6 +502,21 @@ begin
         in_memwb_rc => states_memwb_out_rc,
         in_memwb_wr_reg => registers_wr,
         in_key_interrupt => '0',
+        
+        --brk port
+        in_brk_come => in_brk_come,
+        in_ifid_pc => states_ifid_out_pc,
+        in_idalu_pc => states_idalu_out_pc,
+        in_brk_return => decode_out_brk_return,
+        out_brk_jump_pc => center_controllor_out_brk_jump_pc,
+        out_brk_jump => center_controllor_out_brk_jump,
+
+        debug_predict_pc_addr0 => center_controllor_debug_predict_pc_addr0,
+        debug_predict_pc_addr1 => center_controllor_debug_predict_pc_addr1,
+        debug_predict_pc_addr2 => center_controllor_debug_predict_pc_addr2,
+        debug_predict_res => center_controllor_debug_predict_res,
+        out_brk_state => debug_center_out_brk_state,
+        debug_is_doing_brk => debug_center_out_is_doing_brk,
 
         clk => clk,
         rst => rst
@@ -604,6 +667,18 @@ begin
                 debug <= ZERO_15 & states_memwb_out_memwb_wb_alu_mem;
             when "01000100" =>
                 debug <= ZERO_13 & states_ifid_ctl_rst & states_ifid_ctl_copy & states_ifid_ctl_bubble;
+            when "01000101" =>
+                debug <= center_controllor_debug_predict_pc_addr0;
+            when "01000110" =>
+                debug <= center_controllor_debug_predict_pc_addr1;
+            when "01000111" =>
+                debug <= center_controllor_debug_predict_pc_addr2;
+            when "01001000" =>
+                debug <= center_controllor_debug_predict_res(15 downto 0);
+            when "01001001" =>
+                debug <= ZERO_10 & center_controllor_out_brk_jump & debug_center_out_is_doing_brk & debug_center_out_brk_state & in_brk_come;
+            when "01001010" =>
+                debug <= center_controllor_out_brk_jump_pc;
             when others =>
                 null;
         end case;

@@ -48,7 +48,8 @@ entity decode is
            out_ctl_is_b : out STD_LOGIC;--b
            out_ctl_is_branch_except_b : out STD_LOGIC;--branch
            out_alumem_alu_res_equal_rc : out STD_LOGIC;--forward
-           out_memwb_wb_alu_mem : out STD_LOGIC
+           out_memwb_wb_alu_mem : out STD_LOGIC;
+           out_brk_return : out STD_LOGIC
         );
 end decode;
 
@@ -657,8 +658,18 @@ begin
                 out_alumem_alu_res_equal_rc <= '0';--forward
                 out_memwb_wb_alu_mem <= WB_ALU_MEM_ALU;
         end case;
+        
     end process;
 
+    process(instruction_op)
+    begin
+        case (instruction_op) is
+            when BRK_RETURN =>
+                out_brk_return <= '1';
+            when others => 
+                out_brk_return <= '0';
+        end case;
+    end process;
 
 end Behavioral;
 

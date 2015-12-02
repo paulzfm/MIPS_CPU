@@ -41,6 +41,8 @@ package constants is
     constant INSTRUCTION_SRA : STD_LOGIC_VECTOR(4 downto 0) := "00110"; -- 1
     constant INSTRUCTION_SW : STD_LOGIC_VECTOR(4 downto 0) := "11011";
     constant INSTRUCTION_SWSP : STD_LOGIC_VECTOR(4 downto 0) := "11010";
+    -- BRK INS
+    constant BRK_RETURN : STD_LOGIC_VECTOR(4 downto 0) := "11111";
 
     -- register address
     constant REG_SP : STD_LOGIC_VECTOR(3 downto 0) := "1000";
@@ -88,6 +90,8 @@ package constants is
     constant ZERO_14 : STD_LOGIC_VECTOR(13 downto 0) := "00000000000000";
     constant ZERO_13 : STD_LOGIC_VECTOR(12 downto 0) := "0000000000000";
     constant ZERO_12 : STD_LOGIC_VECTOR(11 downto 0) := "000000000000";
+    constant ZERO_11 : STD_LOGIC_VECTOR(10 downto 0) := "00000000000";
+    constant ZERO_10 : STD_LOGIC_VECTOR(9 downto 0) := "0000000000";
     constant ZERO_8 : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
     constant ZERO_5 : STD_LOGIC_VECTOR(4 downto 0) := "00000";
 
