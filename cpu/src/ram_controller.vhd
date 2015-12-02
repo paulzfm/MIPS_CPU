@@ -40,6 +40,7 @@ entity ram_controller is
            in_addr : in  STD_LOGIC_VECTOR (14 downto 0);
            in_data : in  STD_LOGIC_VECTOR (15 downto 0);
            out_data : out  STD_LOGIC_VECTOR (15 downto 0);
+           slow_clk : in STD_LOGIC;
 
            -- ram1 ports
            ram1_oe : out  STD_LOGIC;
@@ -118,14 +119,18 @@ begin
 
     transaction : process(clk, rst)
     begin
-        if rst = '1' then -- reset
-            state <= s_init;
-            serial_rdn <= '1';
-            serial_wrn <= '1';
-            ram1_oe <= '1';
-            ram1_we <= '1';
-            wr_addr_hi <= x"0000";
-        elsif falling_edge(clk) then -- transaction
+        if falling_edge(clk) then -- transaction
+            if rst = '1' then -- reset
+                serial_rdn <= '1';
+                serial_wrn <= '1';
+                ram1_oe <= '1';
+                ram1_we <= '1';
+                if slow_clk = '1' then
+                    state <= s_empty;
+                else
+                    state <= s_init;
+                end if;
+            else
             case state is
                 when s_init =>
                     if in_rd = '0' and in_wr = '0' then
@@ -254,6 +259,7 @@ begin
                     state <= s_init;
                 when others => null;
             end case;
+        end if;
         end if;
     end process;
 

@@ -39,6 +39,7 @@ entity memory_controller is
            in_wr : in  STD_LOGIC;
            out_data : out  STD_LOGIC_VECTOR (15 downto 0);
            out_pc_ins : out  STD_LOGIC_VECTOR (15 downto 0);
+           slow_clk : in STD_LOGIC;
 
            -- ram2 ports
            ram2_oe : out  STD_LOGIC;
@@ -142,7 +143,8 @@ begin
         fifo2_wr_en => fifo2_wr_en,
         fifo2_data_in => fifo2_data_in,
         fifo2_data_out => fifo2_data_out,
-        fifo2_is_empty => fifo2_is_empty
+        fifo2_is_empty => fifo2_is_empty,
+        slow_clk => slow_clk
     );
 
     ram2 : entity work.ins_ram_controller port map (
@@ -158,7 +160,8 @@ begin
         ram2_we => ram2_we,
         ram2_en => ram2_en,
         ram2_addr => ram2_addr,
-        ram2_data => ram2_data
+        ram2_data => ram2_data,
+        slow_clk => slow_clk
     );
 
 end Behavioral;

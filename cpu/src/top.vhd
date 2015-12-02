@@ -137,6 +137,7 @@ begin
         in_wr => cpu_out_mem_wrn,
         out_data => cpu_in_mem_data,
         out_pc_ins => cpu_in_instruction_data,
+        slow_clk => cpu_clk,
 
         -- ram2 ports
         ram2_oe => ram2_oe,

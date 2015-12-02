@@ -41,6 +41,7 @@ entity ins_ram_controller is
            in_pc_addr : in STD_LOGIC_VECTOR (14 downto 0);
            in_data : in  STD_LOGIC_VECTOR (15 downto 0);
            out_data : out  STD_LOGIC_VECTOR (15 downto 0);
+           slow_clk : in STD_LOGIC;
            ram2_oe : out  STD_LOGIC;
            ram2_we : out  STD_LOGIC;
            ram2_en : out  STD_LOGIC;
@@ -49,7 +50,7 @@ entity ins_ram_controller is
 end ins_ram_controller;
 
 architecture Behavioral of ins_ram_controller is
-    type state_type is (s_init, s_rd, s_wr, s_fetch);
+    type state_type is (s_init, s_rd, s_wr, s_fetch, s_empty);
     signal state: state_type;
 begin
     ram2_en <= '0';
@@ -57,9 +58,14 @@ begin
 
     transaction : process(clk, rst)
     begin
-        if rst = '1' then -- reset
-            state <= s_init;
-        elsif falling_edge(clk) then -- transaction
+        if falling_edge(clk) then -- transaction
+            if rst = '1' then -- reset
+                if slow_clk = '1' then
+                    state <= s_empty;
+                else
+                    state <= s_init;
+                end if;
+            else
             case state is
                 when s_init =>
                     ram2_we <= '1';
@@ -93,8 +99,11 @@ begin
                     ram2_oe <= '0';
                     ram2_addr <= "000" & in_pc_addr;
                     ram2_data <= (others => 'Z');
+                when s_empty =>
+                    state <= s_init;
                 when others => null;
             end case;
+        end if;
         end if;
     end process;
 end Behavioral;
