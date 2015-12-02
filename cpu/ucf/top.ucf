@@ -142,3 +142,21 @@ NET "display2[6]" LOC = B10;
 # PlanAhead Generated physical constraints
 
 NET "clk_50" LOC = B9;
+
+# keyboard
+NET "kb_data" LOC = V6;
+NET "kb_clk" LOC = U6;
+
+# vga
+NET "vga_hs" LOC = D6;
+NET "vga_vs" LOC = E6;
+
+NET "vga_b[0]" LOC = D5;
+NET "vga_b[1]" LOC = A6;
+NET "vga_b[2]" LOC = B6;
+NET "vga_g[0]" LOC = B4;
+NET "vga_g[1]" LOC = C4;
+NET "vga_g[2]" LOC = C5;
+NET "vga_r[0]" LOC = A7;
+NET "vga_r[1]" LOC = C3;
+NET "vga_r[2]" LOC = A4;
