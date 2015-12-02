@@ -558,11 +558,11 @@ begin
                         brk_state <= "001";
                         brk_pc_wr <= '0';
                         brk_rst <= '1';
-                        if (in_idalu_pc = "0000000000000000") then
-                            brk_return_addr <= in_ifid_pc;
-                        else
-                            brk_return_addr <= in_idalu_pc;
-                        end if;
+                        --if (in_idalu_pc = "0000000000000000") then
+                        --    brk_return_addr <= in_ifid_pc;
+                        --else
+                        --    brk_return_addr <= in_idalu_pc;
+                        --end if;
                     end if;
                 when "001" => --1 step state
                     brk_state <= "010";
@@ -571,7 +571,7 @@ begin
                     brk_pc_wr <= '1';
                     brk_rst <= '0';
                     brk_jump <= '1';
-                    out_brk_jump_pc <= x"3000";
+                    out_brk_jump_pc <= x"0007";
                 when "011" => --loop state
                     brk_jump <= '0';
                     if (is_doing_brk = '0') then
@@ -591,5 +591,18 @@ begin
             end if;
         end if;
 	 end process;
+     
+     process(clk, is_doing_brk)
+     begin
+        if (clk'event and clk = '0')then
+            if (brk_state = "001") then
+                if (in_idalu_pc = "0000000000000000") then
+                    brk_return_addr <= in_ifid_pc;
+                else
+                    brk_return_addr <= in_idalu_pc;
+                end if;
+            end if;
+        end if;
+     end process;
 
 end Behavioral;
