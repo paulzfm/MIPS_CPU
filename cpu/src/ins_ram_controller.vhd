@@ -57,7 +57,7 @@ begin
 
     transaction : process(clk, rst)
     begin
-        if rst = '0' then -- reset
+        if rst = '1' then -- reset
             state <= s_init;
         elsif falling_edge(clk) then -- transaction
             case state is

@@ -66,15 +66,17 @@ signal cpu_out_mem_data, cpu_out_mem_addr : STD_LOGIC_VECTOR(15 downto 0);
 signal cpu_in_mem_data, cpu_in_instruction_data : STD_LOGIC_VECTOR(15 downto 0);
 -- debug
 signal debug_out_cpu, debug_out_mem : STD_LOGIC_VECTOR(15 downto 0);
--- keyboard
-signal kb_data : STD_LOGIC_VECTOR(15 downto 0);
-signal kb_clk, kb_en : STD_LOGIC;
+-- fifo1
+signal fifo1_data : STD_LOGIC_VECTOR(15 downto 0);
+signal fifo1_rd_en : STD_LOGIC;
+-- fifo2
+signal fifo2_rd_en, fifo2_wr_en : STD_LOGIC;
+signal fifo2_data_in, fifo2_data_out : STD_LOGIC_VECTOR(15 downto 0);
+signal fifo2_is_empty : STD_LOGIC;
 -- vga
-signal vga_data : STD_LOGIC_VECTOR (15 downto 0);
-signal vga_addr : STD_LOGIC_VECTOR (14 downto 0);
-signal vga_offset : STD_LOGIC_VECTOR (14 downto 0);
+signal vga_data : STD_LOGIC_VECTOR (0 downto 0);
+signal vga_addr : STD_LOGIC_VECTOR (18 downto 0);
 signal vga_data_clk : STD_LOGIC;
-signal vga_offset_clk : STD_LOGIC;
 
 begin
     cpu_instance : entity work.cpu port map(
@@ -93,7 +95,7 @@ begin
 
     memory_controller_instance : entity work.memory_controller port map(
         clk => real_clk,
-        rst => rst,
+        rst => not rst,
         in_pc_addr => cpu_out_pc,
         in_ram_addr => cpu_out_mem_addr,
         in_data => cpu_out_mem_data,
@@ -122,18 +124,33 @@ begin
         serial_data_ready => serial_data_ready,
         serial_tbre => serial_tbre,
         serial_tsre => serial_tsre,
-        
+
         -- vga ports
         vga_data => vga_data,
         vga_addr => vga_addr,
-        vga_offset => vga_offset,
         vga_data_clk => vga_data_clk,
-        vga_offset_clk => vga_offset_clk,
-        
-        -- keyboard ports
-        kb_data => kb_data,
-        kb_clk => kb_clk,
-        kb_en => kb_en
+
+        -- fifo1 ports
+        fifo1_rd_en => fifo1_rd_en,
+        fifo1_data => fifo1_data,
+
+        -- fifo2 ports
+        fifo2_rd_en => fifo2_rd_en,
+        fifo2_wr_en => fifo2_wr_en,
+        fifo2_data_in => fifo2_data_in,
+        fifo2_data_out => fifo2_data_out,
+        fifo2_is_empty => fifo2_is_empty
+    );
+
+    fifo2 : entity work.fifo port map (
+        rst => not rst,
+        wr_clk => real_clk,
+        rd_clk => real_clk,
+        wr_en => fifo2_wr_en,
+        rd_en => fifo2_rd_en,
+        din => fifo2_data_in,
+        dout => fifo2_data_out,
+        out_empty => fifo2_is_empty
     );
 
     disp1 : entity work.display7 port map (

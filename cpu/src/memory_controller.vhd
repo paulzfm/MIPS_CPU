@@ -62,14 +62,12 @@ entity memory_controller is
            serial_tsre : in  STD_LOGIC;
 
            -- vga ports
-           vga_data : out STD_LOGIC_VECTOR (15 downto 0);
-           vga_addr : out STD_LOGIC_VECTOR (14 downto 0);
-           vga_offset : out STD_LOGIC_VECTOR (14 downto 0);
+           vga_data : out STD_LOGIC_VECTOR (0 downto 0);
+           vga_addr : out STD_LOGIC_VECTOR (18 downto 0);
            vga_data_clk : out STD_LOGIC := '0';
-           vga_offset_clk : out STD_LOGIC := '0';
 
            -- fifo1 ports
-           fifo1_rd_en : out STD_LOGIC;
+           fifo1_rd_en : out STD_LOGIC := '0';
            fifo1_data : in STD_LOGIC_VECTOR (15 downto 0);
 
            -- fifo2 ports
@@ -137,9 +135,7 @@ begin
         serial_tsre => serial_tsre,
         vga_data => vga_data,
         vga_addr => vga_addr,
-        vga_offset => vga_offset,
         vga_data_clk => vga_data_clk,
-        vga_offset_clk => vga_offset_clk,
         fifo1_rd_en => fifo1_rd_en,
         fifo1_data => fifo1_data,
         fifo2_rd_en => fifo2_rd_en,

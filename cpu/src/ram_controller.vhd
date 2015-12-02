@@ -56,12 +56,12 @@ entity ram_controller is
            serial_tsre : in  STD_LOGIC;
 
            -- vga ports
-           vga_data : out STD_LOGIC_VECTOR (15 downto 0);
-           vga_addr : out STD_LOGIC_VECTOR (15 downto 0);
+           vga_data : out STD_LOGIC_VECTOR (0 downto 0);
+           vga_addr : out STD_LOGIC_VECTOR (18 downto 0);
            vga_data_clk : out STD_LOGIC := '0';
 
            -- fifo1 ports
-           fifo1_rd_en : out STD_LOGIC;
+           fifo1_rd_en : out STD_LOGIC := '0';
            fifo1_data : in STD_LOGIC_VECTOR (15 downto 0);
 
            -- fifo2 ports
@@ -77,7 +77,7 @@ architecture Behavioral of ram_controller is
                         s_wr_ram, s_wr_serial, s_empty, s_wr_vga_data,
                         s_rd_fifo1, s_rd_fifo2, s_test_fifo2, s_wr_fifo2);
     signal state: state_type;
-    signal ctl: STD_LOGIC_VECTOR (4 downto 0);
+    signal ctl: STD_LOGIC_VECTOR (3 downto 0);
     signal write_ready: STD_LOGIC;
     signal wr_addr_hi: STD_LOGIC_VECTOR (15 downto 0) := x"0000"; -- vga addr
 begin
@@ -89,23 +89,21 @@ begin
     begin
         case in_addr is
             when "011" & x"F00" => -- is serial
-                ctl(4 downto 1) <= "0001";
+                ctl(3 downto 1) <= "001";
             when "011" & x"F01" => -- is serial control
-                ctl(4 downto 1) <= "0010";
-            when "011" & x"F04" => -- is fifo1 read
-                ctl(4 downto 1) <= "0100";
+                ctl(3 downto 1) <= "010";
+            when "011" & x"F04" => -- is fifo1
+                ctl(3 downto 1) <= "011";
             when "011" & x"F05" => -- is fifo2 test
-                ctl(4 downto 1) <= "1000";
+                ctl(3 downto 1) <= "100";
             when "011" & x"F06" => -- is fifo2 read
-                ctl(4 downto 1) <= "1001";
-            when "011" & x"F07" => -- is fifo2 write
-                ctl(4 downto 1) <= "1010";
+                ctl(3 downto 1) <= "101";
             when "011" & x"F08" => -- is vga addr
-                ctl(4 downto 1) <= "1100";
+                ctl(3 downto 1) <= "110";
             when "011" & x"F09" => -- is vga data
-                ctl(4 downto 1) <= "1101";
+                ctl(3 downto 1) <= "111";
             when others => -- is ram
-                ctl(4 downto 1) <= "0000";
+                ctl(3 downto 1) <= "000";
         end case;
     end process;
 
@@ -120,9 +118,13 @@ begin
 
     transaction : process(clk, rst)
     begin
-        if rst = '0' then -- reset
+        if rst = '1' then -- reset
             state <= s_init;
-            write_addr <= x"0000";
+            serial_rdn <= '1';
+            serial_wrn <= '1';
+            ram1_oe <= '1';
+            ram1_we <= '1';
+            wr_addr_hi <= x"0000";
         elsif falling_edge(clk) then -- transaction
             case state is
                 when s_init =>
@@ -168,7 +170,7 @@ begin
                                 ram1_serial_data <= x"00" & in_data(7 downto 0);
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
-                            when "0100" => -- read fifo1
+                            when "0110" => -- read fifo1
                                 state <= s_rd_fifo1;
                                 serial_rdn <= '1';
                                 serial_wrn <= '1';
@@ -181,14 +183,14 @@ begin
                                 serial_wrn <= '1';
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
-                            when "1001" => -- read fifo2
+                            when "1010" => -- read fifo2
                                 state <= s_rd_fifo2;
                                 serial_rdn <= '1';
                                 serial_wrn <= '1';
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
                                 fifo2_rd_en <= '1';
-                            when "1010" => -- write fifo2
+                            when "1011" => -- write fifo2
                                 state <= s_wr_fifo2;
                                 serial_rdn <= '1';
                                 serial_wrn <= '1';
@@ -196,14 +198,14 @@ begin
                                 ram1_we <= '1';
                                 fifo2_data_in <= in_data;
                                 fifo2_wr_en <= '1';
-                            when "1100" => -- write vga addr
+                            when "1101" => -- write vga addr
                                 state <= s_empty;
                                 serial_rdn <= '1';
                                 serial_wrn <= '1';
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
                                 wr_addr_hi <= in_data;
-                            when "1101" => -- write vga data
+                            when "1111" => -- write vga data
                                 state <= s_wr_vga_data;
                                 serial_rdn <= '1';
                                 serial_wrn <= '1';
