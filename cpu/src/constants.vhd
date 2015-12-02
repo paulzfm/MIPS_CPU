@@ -42,6 +42,7 @@ package constants is
     constant INSTRUCTION_SW : STD_LOGIC_VECTOR(4 downto 0) := "11011";
     constant INSTRUCTION_SWSP : STD_LOGIC_VECTOR(4 downto 0) := "11010";
     -- BRK INS
+    constant INSTRUCTION_MOVE : STD_LOGIC_VECTOR(4 downto 0) := "01111";
     constant BRK_RETURN : STD_LOGIC_VECTOR(4 downto 0) := "11111";
 
     -- register address
