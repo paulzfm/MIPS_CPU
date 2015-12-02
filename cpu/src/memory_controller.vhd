@@ -68,10 +68,16 @@ entity memory_controller is
            vga_data_clk : out STD_LOGIC := '0';
            vga_offset_clk : out STD_LOGIC := '0';
 
-           -- keyboard ports
-           kb_data : in STD_LOGIC_VECTOR (15 downto 0);
-           kb_clk : out STD_LOGIC := '0';
-           kb_en : out STD_LOGIC);
+           -- fifo1 ports
+           fifo1_rd_en : out STD_LOGIC;
+           fifo1_data : in STD_LOGIC_VECTOR (15 downto 0);
+
+           -- fifo2 ports
+           fifo2_rd_en : out STD_LOGIC := '0';
+           fifo2_wr_en : out STD_LOGIC := '0';
+           fifo2_data_in : out STD_LOGIC_VECTOR (15 downto 0);
+           fifo2_data_out : in STD_LOGIC_VECTOR (15 downto 0);
+           fifo2_is_empty : in STD_LOGIC);
 end memory_controller;
 
 architecture Behavioral of memory_controller is
@@ -134,9 +140,13 @@ begin
         vga_offset => vga_offset,
         vga_data_clk => vga_data_clk,
         vga_offset_clk => vga_offset_clk,
-        kb_data => kb_data,
-        kb_clk => kb_clk,
-        kb_en => kb_en
+        fifo1_rd_en => fifo1_rd_en,
+        fifo1_data => fifo1_data,
+        fifo2_rd_en => fifo2_rd_en,
+        fifo2_wr_en => fifo2_wr_en,
+        fifo2_data_in => fifo2_data_in,
+        fifo2_data_out => fifo2_data_out,
+        fifo2_is_empty => fifo2_is_empty
     );
 
     ram2 : entity work.ins_ram_controller port map (
