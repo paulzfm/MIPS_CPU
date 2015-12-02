@@ -44,8 +44,8 @@ ENTITY vga_ram IS
   PORT (
     clka : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(18 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     clkb : IN STD_LOGIC;
     addrb : IN STD_LOGIC_VECTOR(18 DOWNTO 0);
     doutb : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
@@ -58,8 +58,8 @@ COMPONENT wrapped_vga_ram
   PORT (
     clka : IN STD_LOGIC;
     wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    addra : IN STD_LOGIC_VECTOR(14 DOWNTO 0);
-    dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+    addra : IN STD_LOGIC_VECTOR(18 DOWNTO 0);
+    dina : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
     clkb : IN STD_LOGIC;
     addrb : IN STD_LOGIC_VECTOR(18 DOWNTO 0);
     doutb : OUT STD_LOGIC_VECTOR(0 DOWNTO 0)
@@ -69,7 +69,7 @@ END COMPONENT;
 -- Configuration specification
   FOR ALL : wrapped_vga_ram USE ENTITY XilinxCoreLib.blk_mem_gen_v7_3(behavioral)
     GENERIC MAP (
-      c_addra_width => 15,
+      c_addra_width => 19,
       c_addrb_width => 19,
       c_algorithm => 1,
       c_axi_id_width => 4,
@@ -97,17 +97,17 @@ END COMPONENT;
       c_has_softecc_input_regs_a => 0,
       c_has_softecc_output_regs_b => 0,
       c_init_file => "BlankString",
-      c_init_file_name => "vga_ram.mif",
+      c_init_file_name => "no_coe_file_loaded",
       c_inita_val => "0",
       c_initb_val => "0",
       c_interface_type => 0,
-      c_load_init_file => 1,
+      c_load_init_file => 0,
       c_mem_type => 1,
       c_mux_pipeline_stages => 0,
       c_prim_type => 1,
-      c_read_depth_a => 19200,
+      c_read_depth_a => 307200,
       c_read_depth_b => 307200,
-      c_read_width_a => 16,
+      c_read_width_a => 1,
       c_read_width_b => 1,
       c_rst_priority_a => "CE",
       c_rst_priority_b => "CE",
@@ -118,16 +118,16 @@ END COMPONENT;
       c_use_bram_block => 0,
       c_use_byte_wea => 0,
       c_use_byte_web => 0,
-      c_use_default_data => 0,
+      c_use_default_data => 1,
       c_use_ecc => 0,
       c_use_softecc => 0,
       c_wea_width => 1,
       c_web_width => 1,
-      c_write_depth_a => 19200,
+      c_write_depth_a => 307200,
       c_write_depth_b => 307200,
       c_write_mode_a => "WRITE_FIRST",
       c_write_mode_b => "WRITE_FIRST",
-      c_write_width_a => 16,
+      c_write_width_a => 1,
       c_write_width_b => 1,
       c_xdevicefamily => "spartan3e"
     );
