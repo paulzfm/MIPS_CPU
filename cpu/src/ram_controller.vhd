@@ -57,15 +57,19 @@ entity ram_controller is
 
            -- vga ports
            vga_data : out STD_LOGIC_VECTOR (15 downto 0);
-           vga_addr : out STD_LOGIC_VECTOR (14 downto 0);
-           vga_offset : out STD_LOGIC_VECTOR (14 downto 0);
+           vga_addr : out STD_LOGIC_VECTOR (15 downto 0);
            vga_data_clk : out STD_LOGIC := '0';
-           vga_offset_clk : out STD_LOGIC := '0';
 
-           -- keyboard ports
-           kb_data : in STD_LOGIC_VECTOR (15 downto 0);
-           kb_clk : out STD_LOGIC := '0';
-           kb_en : out STD_LOGIC);
+           -- fifo1 ports
+           fifo1_rd_en : out STD_LOGIC;
+           fifo1_data : in STD_LOGIC_VECTOR (15 downto 0);
+
+           -- fifo2 ports
+           fifo2_rd_en : out STD_LOGIC := '0';
+           fifo2_wr_en : out STD_LOGIC := '0';
+           fifo2_data_in : out STD_LOGIC_VECTOR (15 downto 0);
+           fifo2_data_out : in STD_LOGIC_VECTOR (15 downto 0);
+           fifo2_is_empty : in STD_LOGIC);
 end ram_controller;
 
 architecture Behavioral of ram_controller is
@@ -85,21 +89,23 @@ begin
     begin
         case in_addr is
             when "011" & x"F00" => -- is serial
-                ctl(3 downto 1) <= "001";
+                ctl(4 downto 1) <= "0001";
             when "011" & x"F01" => -- is serial control
-                ctl(3 downto 1) <= "010";
-            when "011" & x"F04" => -- is kb data
-                ctl(3 downto 1) <= "011";
-            when "011" & x"F05" => -- is kb control
-                ctl(3 downto 1) <= "100";
-            when "011" & x"F06" => -- is vga data
-                ctl(3 downto 1) <= "101";
-            when "011" & x"F07" => -- is vga addr
-                ctl(3 downto 1) <= "110";
-            when "011" & x"F08" => -- is vga offset
-                ctl(3 downto 1) <= "111";
+                ctl(4 downto 1) <= "0010";
+            when "011" & x"F04" => -- is fifo1 read
+                ctl(4 downto 1) <= "0100";
+            when "011" & x"F05" => -- is fifo2 test
+                ctl(4 downto 1) <= "1000";
+            when "011" & x"F06" => -- is fifo2 read
+                ctl(4 downto 1) <= "1001";
+            when "011" & x"F07" => -- is fifo2 write
+                ctl(4 downto 1) <= "1010";
+            when "011" & x"F08" => -- is vga addr
+                ctl(4 downto 1) <= "1100";
+            when "011" & x"F09" => -- is vga data
+                ctl(4 downto 1) <= "1101";
             when others => -- is ram
-                ctl(3 downto 1) <= "000";
+                ctl(4 downto 1) <= "0000";
         end case;
     end process;
 
@@ -162,57 +168,56 @@ begin
                                 ram1_serial_data <= x"00" & in_data(7 downto 0);
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
-                            when "0110" => -- read kb data
-                                state <= s_rd_kb;
+                            when "0100" => -- read fifo1
+                                state <= s_rd_fifo1;
                                 serial_rdn <= '1';
                                 serial_wrn <= '1';
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
-                                kb_clk <= '0';
-                                kb_en <= '1';
-                            when "1000" => -- read kb control
-                                state <= s_rd_kb_ctl;
+                                fifo1_rd_en <= '1';
+                            when "1000" => -- test fifo2
+                                state <= s_test_fifo2;
                                 serial_rdn <= '1';
                                 serial_wrn <= '1';
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
-                            when "1011" => -- write vga data
+                            when "1001" => -- read fifo2
+                                state <= s_rd_fifo2;
+                                serial_rdn <= '1';
+                                serial_wrn <= '1';
+                                ram1_oe <= '1';
+                                ram1_we <= '1';
+                                fifo2_rd_en <= '1';
+                            when "1010" => -- write fifo2
+                                state <= s_wr_fifo2;
+                                serial_rdn <= '1';
+                                serial_wrn <= '1';
+                                ram1_oe <= '1';
+                                ram1_we <= '1';
+                                fifo2_data_in <= in_data;
+                                fifo2_wr_en <= '1';
+                            when "1100" => -- write vga addr
+                                state <= s_empty;
+                                serial_rdn <= '1';
+                                serial_wrn <= '1';
+                                ram1_oe <= '1';
+                                ram1_we <= '1';
+                                wr_addr_hi <= in_data;
+                            when "1101" => -- write vga data
                                 state <= s_wr_vga_data;
                                 serial_rdn <= '1';
                                 serial_wrn <= '1';
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
                                 vga_data_clk <= '0';
-                                vga_data <= in_data;
-                                vga_addr <= write_addr(14 downto 0);
-                            when "1101" => -- write vga addr
-                                state <= s_empty;
-                                serial_rdn <= '1';
-                                serial_wrn <= '1';
-                                ram1_oe <= '1';
-                                ram1_we <= '1';
-                                write_addr <= in_data;
-                            when "1111" => -- write vga offset
-                                state <= s_wr_vga_offset;
-                                serial_rdn <= '1';
-                                serial_wrn <= '1';
-                                ram1_oe <= '1';
-                                ram1_we <= '1';
-                                vga_offset_clk <= '0';
-                                vga_offset <= in_data(14 downto 0);
+                                vga_data <= in_data(0 downto 0);
+                                vga_addr <= wr_addr_hi & in_data(15 downto 13);
                             when others => null;
                         end case;
                     end if;
                 when s_rd_serial_ctl =>
                     state <= s_init;
                     out_data <= (0 => write_ready, 1 => serial_data_ready, others => '0');
-                when s_rd_kb =>
-                    state <= s_init;
-                    out_data <= kb_data;
-                    kb_en <= '0';
-                when s_rd_kb_ctl =>
-                    state <= s_init;
-                    out_data <= kb_data;
                 when s_rd_serial =>
                     state <= s_init;
                     out_data <= ram1_serial_data;
@@ -226,12 +231,23 @@ begin
                 when s_wr_ram =>
                     state <= s_init;
                     ram1_we <= '0';
+                when s_rd_fifo1 =>
+                    state <= s_init;
+                    out_data <= fifo1_data;
+                    fifo1_rd_en <= '0';
+                when s_test_fifo2 =>
+                    state <= s_init;
+                    out_data <= (0 => fifo2_is_empty, others => '0');
+                when s_rd_fifo2 =>
+                    state <= s_init;
+                    out_data <= fifo2_data_out;
+                    fifo2_rd_en <= '0';
+                when s_wr_fifo2 =>
+                    state <= s_init;
+                    fifo2_wr_en <= '0';
                 when s_wr_vga_data =>
                     state <= s_init;
                     vga_data_clk <= '1';
-                when s_wr_vga_offset =>
-                    state <= s_init;
-                    vga_offset_clk <= '1';
                 when s_empty =>
                     state <= s_init;
                 when others => null;
