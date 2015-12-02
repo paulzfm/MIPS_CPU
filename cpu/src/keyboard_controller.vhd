@@ -108,6 +108,8 @@ begin
                 temp_ascii <= x"00";--space
             when x"5A" =>
                 temp_ascii <= x"0A";--enter
+            when x"66" =>
+                temp_ascii <= x"08";--backspace
             
             when x"1C" =>
                 temp_ascii <= x"61";
@@ -196,6 +198,8 @@ begin
                 temp_ascii <= x"00";--space
             when x"5A" =>
                 temp_ascii <= x"0A";--enter
+            when x"66" =>
+                temp_ascii <= x"08";--backspace
             
             when x"1C" =>
                 temp_ascii <= x"41";
