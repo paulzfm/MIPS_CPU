@@ -1,5 +1,4 @@
 NOP
-NOP
 ; save system registers
 LI R7 0xBF
 SLL R7 R7 0x0000
@@ -137,26 +136,29 @@ enter_send_to_fifo2_fin:
 
 enter_vga_flush:
     ; R1 = 0 - 639 init [10, 610) column
-    ; R2 = 0 - 479 init [450, 470) row
-    ; each symbol is 20 * 20
+    ; R2 = 0 - 479 init [450, 466) row
+    ; each symbol is 8 * 16
 
     ; R1 = 10
     LI R1 0x0A
 
-    ; R0 = 470
-    LI R0 0xEB
+    ; R0 = 466
+                            ;LI R0 0xEB
+                            LI R0 0xE9
     SLL R0 R0 0x01
+    
     
 
 clear_vga_bottom:
     ; R5 = 610 0b1001100010
-                        LI R5 0x0A
-                        ; SLL R5 R5 0x02
-                        ; ADDIU R5 0x02
+                        ; LI R5 0x0B
+                        LI R5 0x98
+                        SLL R5 R5 0x02
+                        ADDIU R5 0x02
                         ; R1 = R5 = 610 end
     CMP R1 R5
     BTEQZ draw_char_start
-    NOPss
+    NOP
     ; R2 = 450
     LI R2 0xE1
     SLL R2 R2 0x0001
@@ -172,7 +174,7 @@ clear_column:
     ; R3 = addr
     SW R5 R3 0x08
     ; R4 = data
-                                ADDIU R4 0x01
+                                ; ADDIU R4 0x01
     SW R5 R4 0x09
 
     ; R2 = R2 + 1 and cmp
@@ -196,31 +198,27 @@ calc_vga_addr_data:
     ADDIU R7 0x30
     SW R7 R6 0x0000
 
-    ; R3 = (R1 * 480 + R2) / 8
-    ; R3 = R1 * 60 + R2 / 8
-    ; R4 = (R1 * 480 + R2) mod 8
-    ; R4 = R2 mod 8
+    ; R3 = (R2 * 640 + R1) / 8
+    ; R3 = R2 * 80 + R1 / 8
+    ; R4 = (R2 * 640 + R1) mod 8
+    ; R4 = R1 mod 8
     
-    ; R7 = R2 / 8
-    MOVE R7 R2
+    ; R7 = R1 / 8
+    MOVE R7 R1
     SRA R7 R7 0x03
     ; R6 = 60 * R1
-    MOVE R6 R1
-    SLL R6 R6 0x0002
+    MOVE R6 R2
+    SLL R6 R6 0x0004
     ADDU R6 R7 R7 
-    SLL R6 R6 0x0001
-    ADDU R6 R7 R7
-    SLL R6 R6 0x0001
-    ADDU R6 R7 R7
-    SLL R6 R6 0x0001
+    SLL R6 R6 0x0002
     ADDU R6 R7 R7
     ; R3 = R7
     MOVE R3 R7
 
-    ; R7 = R2 mod 8
-    ; R6 = (R2 >> 3)  << 3
-    MOVE R7 R2
-    MOVE R6 R2
+    ; R7 = R1 mod 8
+    ; R6 = (R1 >> 3)  << 3
+    MOVE R7 R1
+    MOVE R6 R1
     SRA R6 R6 0x0003
     SLL R6 R6 0x0003
     ; R7 = (R7 - R6) << 13
@@ -262,7 +260,7 @@ draw_char_loop:
     SLL R0 R0 0x0000
     LW R0 R0 0x0000
     CMP R6 R0
-    BTEQZ prepare_exit
+    BTEQZ draw_reminder
     NOP
 
     ; R3 R4 offset of pixis
@@ -288,7 +286,8 @@ draw_char_loop:
     NOP
     
     ADDIU R6 0x0001
-    ADDIU R1 0x0014
+                        ; ADDIU R1 0x0014
+                        ADDIU R1 0x0008
     B draw_char_loop
     NOP
 
@@ -327,10 +326,27 @@ draw_pixis:
     LW R7 R1 0x0000
     LW R7 R2 0x0001
     LW R7 R5 0x0002
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
     JR R5
     NOP
 
-
+draw_reminder:
+    LI R0 0x00
+draw_reminder_loop:
+    MOVE R3 R0
+    LI R4 0x08
+    MFPC R5
+    ADDIU R5 0x0002
+    B draw_pixis
+    LI R5 0x08
+    CMP R5 R0
+    ADDIU R0 0x01
+    BTNEZ draw_reminder_loop
+    NOP
 
 prepare_exit:
     ; load system registers
@@ -346,3 +362,9 @@ prepare_exit:
     LW R7 R6 0x0006
 
 
+
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
