@@ -17,7 +17,7 @@ draw_triangle:
     MFPC R5
     ADDIU R5 0x3
     B draw_single_line
-    nop
+    NOP
 
     ADDIU R4 0x02
     ADD R4 R0
