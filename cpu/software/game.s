@@ -24,7 +24,7 @@ main:
     NOP
     ; R6 = 'l'
     ; R4 = bolder 4
-    LI R5 0x01
+    LI R5 0x00
     LI R4 0x02
     LI R6 0x6C
     CMP R6 R0
@@ -32,7 +32,7 @@ main:
     NOP
     ; R6 = 'L'
     ; R4 = bolder 10
-    LI R5 0x01
+    LI R5 0x00
     LI R4 0x05
     LI R6 0x4C
     CMP R6 R0
@@ -41,6 +41,8 @@ main:
 
     ; R6 = 'r'
     ; R4 = bolder 10
+
+
     LI R5 0x01
     LI R4 0x05
     LI R6 0x72
@@ -59,7 +61,7 @@ main:
 
     ; R6 = 't'
     ; R4 = bolder 10
-    LI R5 0x01
+    LI R5 0x10
     LI R4 0x05
     LI R6 0x74
     CMP R6 R0
@@ -68,7 +70,7 @@ main:
 
     ; R6 = 'T'
     ; R4 = bolder 10
-    LI R5 0x01
+    LI R5 0x10
     LI R4 0x05
     LI R6 0x54
     CMP R6 R0
@@ -174,7 +176,9 @@ read_int:
 
     loop_process_number:
         MFPC R1
-        ADDIU R1 0x0002
+        ADDIU R1 0x
+
+        0002
         B SCANF
         NOP
         LI R2 0x20
