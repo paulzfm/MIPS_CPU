@@ -97,20 +97,25 @@ signal ta, tb, tc, td, clk_40 : STD_LOGIC;
 --keyboard
 signal kb_out_brk : STD_LOGIC;
 --signal kb_out_ascii : STD_LOGIC_VECTOR(15 downto 0);
-
+signal zz : STD_LOGIC;
+signal zzz : STD_LOGIC_VECTOR(2 downto 0);
 begin
+	vga_hs <= zz;
+	vga_vs <= zz;
+	vga_r <= zzz;
+	vga_g <= zzz;
+	vga_b <= zzz;
     fifo1_data(15 downto 8) <= "00000000";
-
-    keyboard_instance : entity work.keyboard_top port map (
-        datain => kb_data,
-        clkin => kb_clk,
-        fclk => clk_50,
-        rst_in => rst,
-        rd_en => fifo1_rd_en,
-        rd_clk => real_clk,
-        out_brk => kb_out_brk,
-        out_ascii => fifo1_data(7 downto 0)
-     );
+--    keyboard_instance : entity work.keyboard_top port map (
+--        datain => kb_data,
+--        clkin => kb_clk,
+--        fclk => clk_50,
+--        rst_in => rst,
+--        rd_en => fifo1_rd_en,
+--        rd_clk => real_clk,
+--        out_brk => kb_out_brk,
+--        out_ascii => fifo1_data(7 downto 0)
+--     );
 
      cpu_instance : entity work.cpu port map(
         clk => cpu_clk,
@@ -188,18 +193,18 @@ begin
         out_empty => fifo2_is_empty
     );
 
-    vga_instance : entity work.vga port map (
-        clk => clk_50,
-        rst => rst,
-        vga_data => vga_data,
-        vga_addr => vga_addr,
-        vga_data_clk => vga_data_clk,
-        hs => vga_hs,
-        vs => vga_vs,
-        r => vga_r,
-        g => vga_g,
-        b => vga_b
-    );
+--    vga_instance : entity work.vga port map (
+--        clk => clk_50,
+--        rst => rst,
+--        vga_data => vga_data,
+--        vga_addr => vga_addr,
+--        vga_data_clk => vga_data_clk,
+--        hs => vga_hs,
+--        vs => vga_vs,
+--        r => vga_r,
+--        g => vga_g,
+--        b => vga_b
+--    );
 
     disp1 : entity work.display7 port map (
         input => cpu_out_pc(7 downto 4),
