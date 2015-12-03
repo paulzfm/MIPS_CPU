@@ -221,10 +221,12 @@ draw_single_line_point:
 
 
     draw_single_line_do_nothing:
+        LI R6 0x94
+        SLL R6 R6 0x0
+        SW R6 R1 0x1
+        SW R6 R2 0x2
         LI R6 0x93
         SLL R6 R6 0x0
-        ;SW R6 R1 0x6
-        ;SW R6 R2 0x7
         LW R6 R0 0x0
         LW R6 R1 0x1
         LW R6 R2 0x2
