@@ -150,13 +150,13 @@ enter_vga_flush:
 
 clear_vga_bottom:
     ; R5 = 610 0b1001100010
-    LI R5 0x98
-    SLL R5 R5 0x02
-    ADDIU R5 0x02
-    ; R1 = R5 = 610 end
+                        LI R5 0x0A
+                        ; SLL R5 R5 0x02
+                        ; ADDIU R5 0x02
+                        ; R1 = R5 = 610 end
     CMP R1 R5
     BTEQZ draw_char_start
-    NOP
+    NOPss
     ; R2 = 450
     LI R2 0xE1
     SLL R2 R2 0x0001
@@ -172,6 +172,7 @@ clear_column:
     ; R3 = addr
     SW R5 R3 0x08
     ; R4 = data
+                                ADDIU R4 0x01
     SW R5 R4 0x09
 
     ; R2 = R2 + 1 and cmp
