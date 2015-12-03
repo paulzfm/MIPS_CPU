@@ -105,7 +105,7 @@ begin
             when x"F0" =>
                 temp_ascii <= x"80";--1F BREAK
             when x"29" =>
-                temp_ascii <= x"00";--space
+                temp_ascii <= x"20";--space
             when x"5A" =>
                 temp_ascii <= x"0A";--enter
             when x"66" =>
@@ -195,7 +195,7 @@ begin
             when x"F0" =>
                 temp_ascii <= x"80";--1F BREAK
             when x"29" =>
-                temp_ascii <= x"00";--space
+                temp_ascii <= x"20";--space
             when x"5A" =>
                 temp_ascii <= x"0A";--enter
             when x"66" =>
