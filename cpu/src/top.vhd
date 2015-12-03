@@ -216,10 +216,10 @@ begin
         output => cpu_clk
     );
 
-    divider1 : entity work.divider port map (
-       input => clk_50,
-       output => real_clk
-    );
+--    divider1 : entity work.divider port map (
+--       input => clk_50,
+--       output => real_clk
+--    );
 
 --      divider1 : entity work.divider1 port map (
 --          en => not clk,
@@ -227,14 +227,14 @@ begin
 --          clk_1hz => real_clk
 --      );
 
---	 real_clk <= clk_40;
---	 divider222 : entity work.divider20 PORT MAP(
---		CLKIN_IN => clk_50,
---		CLKFX_OUT => clk_40,
---		CLKIN_IBUFG_OUT => ta,
---		CLK0_OUT => tb,
---		CLK2X_OUT => td
---	);
+	 real_clk <= clk_40;
+	 divider222 : entity work.divider20 PORT MAP(
+		CLKIN_IN => clk_50,
+		CLKFX_OUT => clk_40,
+		CLKIN_IBUFG_OUT => ta,
+		CLK0_OUT => tb,
+		CLK2X_OUT => td
+	);
 
 
     debug <= debug_out_cpu;
