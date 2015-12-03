@@ -1,10 +1,119 @@
 NOP
 NOP
+LI R0 0x3
 LI R1 0x50
 LI R2 0x50
-LI R3 0x10
-LI R4 0x0
-LI R5 0x0
+LI R3 0x70
+LI R4 0x2
+MFPC R5
+ADDIU R5 0x2
+B draw_complex_lines
+NOP
+NOP
+NOP
+LI R0 0x3
+LI R1 0x60
+LI R2 0xa0
+LI R3 0x50
+LI R4 0x2
+MFPC R5
+ADDIU R5 0x2
+B draw_complex_lines
+NOP
+NOP
+NOP
+NOP
+LI R0 0x3
+LI R1 0x40
+LI R2 0xf0
+LI R3 0x90
+LI R4 0x2
+MFPC R5
+ADDIU R5 0x2
+B draw_complex_lines
+NOP
+NOP
+NOP
+NOP
+LI R0 0x3
+LI R1 0xd8
+SLL R1 R1 0x1
+LI R2 0x50
+LI R3 0x60
+LI R4 0x2
+MFPC R5
+ADDIU R5 0x2
+B draw_complex_lines
+NOP
+NOP
+    LI R0 0x3
+    LI R1 0x75
+    SLL R1 R1 0x2
+    LI R2 0x50
+    LI R3 0xa0
+    LI R4 0x0
+    MFPC R5
+    ADDIU R5 0x2
+    B draw_complex_lines
+NOP
+NOP
+NOP
+NOP
+LI R0 0x3
+LI R1 0xe0
+SLL R1 R1 0x1
+LI R2 0xa0
+LI R3 0x50
+LI R4 0x2
+MFPC R5
+ADDIU R5 0x2
+B draw_complex_lines
+NOP
+NOP
+NOP
+    LI R0 0x3
+    LI R1 0x83
+    SLL R1 R1 0x2
+    ADDIU R1 0x2
+    LI R2 0xa0
+    LI R3 0x50
+    LI R4 0x0
+    MFPC R5
+    ADDIU R5 0x2
+    B draw_complex_lines
+NOP
+NOP
+NOP
+NOP
+LI R0 0x3
+LI R1 0xd0
+SLL R1 R1 0x1
+LI R2 0xf0
+LI R3 0x90
+LI R4 0x2
+MFPC R5
+ADDIU R5 0x2
+B draw_complex_lines
+NOP
+NOP
+NOP
+NOP
+LI R0 0x3
+LI R1 0xf0
+LI R2 0xf0
+LI R3 0x90
+LI R4 0x2
+MFPC R5
+ADDIU R5 0x2
+B draw_triangle
+NOP
+NOP
+NOP
+NOP
+NOP
+B 0xBE
+NOP
+
 
 draw_triangle:
     ;R1 = col   

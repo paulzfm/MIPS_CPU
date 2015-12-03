@@ -21,6 +21,9 @@ draw_complex_lines:
     SW R6 R4 0x04
     SW R6 R5 0x05
     SW R6 R0 0x00
+    
+    
+    
 
 draw_complex_lines_line:
     NOP

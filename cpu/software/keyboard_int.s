@@ -104,6 +104,11 @@ slash_function:
 
 
 enter_function:
+    LI R0 0xBC
+    SLL R0 R0 0x0000
+    LI R5 0x25
+    SW R0 R5 0x00
+    
     ; R1 = data[0xC000] number of keyboard buffer
     LI R1 0xC0
     SLL R1 R1 0x0000
@@ -125,6 +130,13 @@ enter_send_to_fifo2_loop:
     ADDU R2 R3 R4
     ; R5 = data[R4] = data[R2 + R3]
     LW R4 R5 0x0000
+    
+
+    LI R0 0xBB
+    SLL R0 R0 0x0000
+    ADDU R0 R3 R0
+    SW R0 R5 0x00
+    
     ; R0 = bf07
     LI R0 0xBF
     SLL R0 R0 0x0000
@@ -137,11 +149,11 @@ enter_send_to_fifo2_loop:
     ; reset number
 enter_send_to_fifo2_fin:
     ; write an extra space
-    LI R0 0xBF
-    SLL R0 R0 0x0000
-    ADDIU R0 0x07
-    LI R5 0x20
-    SW R0 R5 0x0000
+    ;LI R0 0xBF
+    ;SLL R0 R0 0x0000
+    ;ADDIU R0 0x07
+    ;LI R5 0x20
+    ;SW R0 R5 0x0000
     ; reset length c000
     LI R2 0x00
     LI R1 0xC0
