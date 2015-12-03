@@ -97,7 +97,7 @@ begin
                 ctl(3 downto 1) <= "011";
             when "011" & x"F05" => -- is fifo2 test
                 ctl(3 downto 1) <= "100";
-            when "011" & x"F06" => -- is fifo2
+            when ("011" & x"F06") | ("011" & x"F07")  => -- is fifo2
                 ctl(3 downto 1) <= "101";
             when "011" & x"F08" => -- is vga addr
                 ctl(3 downto 1) <= "110";
