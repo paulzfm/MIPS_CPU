@@ -69,7 +69,7 @@ begin
     instruction_op <= in_instruction(15 downto 11);
     
     --imm n to 16
-    signal_imm_3to16 <= "00000000000"&in_instruction(4 downto 2)&"00";
+    signal_imm_3to16 <= "0000000000000"&in_instruction(4 downto 2);
     signal_imm_4to16 <= "000000000000"&in_instruction(3 downto 0);
     signal_imm_5to16 <= "00000000000"&in_instruction(4 downto 0);
     signal_imm_8to16 <= "00000000"&in_instruction(7 downto 0);
