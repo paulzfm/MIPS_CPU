@@ -73,7 +73,7 @@ entity memory_controller is
 
            -- fifo2 ports
            fifo2_rd_en : out STD_LOGIC := '0';
-           fifo2_wr_en : out STD_LOGIC := '0';
+           fifo2_wr_clk : out STD_LOGIC := '0';
            fifo2_data_in : out STD_LOGIC_VECTOR (15 downto 0);
            fifo2_data_out : in STD_LOGIC_VECTOR (15 downto 0);
            fifo2_is_empty : in STD_LOGIC);
@@ -140,7 +140,7 @@ begin
         fifo1_rd_en => fifo1_rd_en,
         fifo1_data => fifo1_data,
         fifo2_rd_en => fifo2_rd_en,
-        fifo2_wr_en => fifo2_wr_en,
+        fifo2_wr_clk => fifo2_wr_clk,
         fifo2_data_in => fifo2_data_in,
         fifo2_data_out => fifo2_data_out,
         fifo2_is_empty => fifo2_is_empty,

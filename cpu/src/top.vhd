@@ -85,7 +85,7 @@ signal debug_out_cpu, debug_out_mem : STD_LOGIC_VECTOR(15 downto 0);
 signal fifo1_data : STD_LOGIC_VECTOR(15 downto 0);
 signal fifo1_rd_en : STD_LOGIC;
 -- fifo2
-signal fifo2_rd_en, fifo2_wr_en : STD_LOGIC;
+signal fifo2_rd_en, fifo2_wr_clk : STD_LOGIC;
 signal fifo2_data_in, fifo2_data_out : STD_LOGIC_VECTOR(15 downto 0);
 signal fifo2_is_empty : STD_LOGIC;
 -- vga
@@ -171,7 +171,7 @@ begin
 
         -- fifo2 ports
         fifo2_rd_en => fifo2_rd_en,
-        fifo2_wr_en => fifo2_wr_en,
+        fifo2_wr_clk => fifo2_wr_clk,
         fifo2_data_in => fifo2_data_in,
         fifo2_data_out => fifo2_data_out,
         fifo2_is_empty => fifo2_is_empty
@@ -179,9 +179,9 @@ begin
 
     fifo2_instance : entity work.fifo port map (
         rst => not rst,
-        wr_clk => real_clk,
+        wr_clk => fifo2_wr_clk,
         rd_clk => real_clk,
-        wr_en => fifo2_wr_en,
+        wr_en => '1',
         rd_en => fifo2_rd_en,
         din => fifo2_data_in,
         dout => fifo2_data_out,
@@ -217,15 +217,16 @@ begin
     );
 
     divider1 : entity work.divider port map (
-        input => clk_50,
-        output => real_clk
+       input => clk_50,
+       output => real_clk
     );
 
---     divider1 : entity work.divider1 port map (
---         en => not clk,
---         clk => clk_50,
---         clk_1hz => real_clk
---     );
+    --  divider1 : entity work.divider1 port map (
+    --      en => not clk,
+    --      clk => clk_50,
+    --      clk_1hz => real_clk
+    --  );
+
 --	 real_clk <= clk_40;
 --	 divider222 : entity work.divider20 PORT MAP(
 --		CLKIN_IN => clk_50,

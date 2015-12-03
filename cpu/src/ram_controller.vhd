@@ -67,7 +67,7 @@ entity ram_controller is
 
            -- fifo2 ports
            fifo2_rd_en : out STD_LOGIC := '0';
-           fifo2_wr_en : out STD_LOGIC := '0';
+           fifo2_wr_clk : out STD_LOGIC := '0';
            fifo2_data_in : out STD_LOGIC_VECTOR (15 downto 0);
            fifo2_data_out : in STD_LOGIC_VECTOR (15 downto 0);
            fifo2_is_empty : in STD_LOGIC);
@@ -97,7 +97,7 @@ begin
                 ctl(3 downto 1) <= "011";
             when "011" & x"F05" => -- is fifo2 test
                 ctl(3 downto 1) <= "100";
-            when "011" & x"F06" => -- is fifo2 read
+            when "011" & x"F06" => -- is fifo2
                 ctl(3 downto 1) <= "101";
             when "011" & x"F08" => -- is vga addr
                 ctl(3 downto 1) <= "110";
@@ -202,7 +202,7 @@ begin
                                 ram1_oe <= '1';
                                 ram1_we <= '1';
                                 fifo2_data_in <= in_data;
-                                fifo2_wr_en <= '1';
+                                fifo2_wr_clk <= '0';
                             when "1101" => -- write vga addr
                                 state <= s_empty;
                                 serial_rdn <= '1';
@@ -251,7 +251,7 @@ begin
                     fifo2_rd_en <= '0';
                 when s_wr_fifo2 =>
                     state <= s_init;
-                    fifo2_wr_en <= '0';
+                    fifo2_wr_clk <= '1';
                 when s_wr_vga_data =>
                     state <= s_init;
                     vga_data_clk <= '1';
