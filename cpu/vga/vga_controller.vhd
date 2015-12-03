@@ -132,7 +132,7 @@ begin
     out_color : process (hs1, vs1, r1, g1, b1)
     begin
         if hs1 = '1' and vs1 = '1' then
-            -- white or black
+            -- blue or black
             r <= r1;
             g <= g1;
             b <= b1;
@@ -167,7 +167,7 @@ begin
                 if pixel = '0' then
                     r1 <= "000";
                     g1 <= "000";
-                    b1 <= "000";
+                    b1 <= "111";
                 else
                     r1 <= "111";
                     g1 <= "111";
