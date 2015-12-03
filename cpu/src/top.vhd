@@ -239,7 +239,7 @@ begin
 		CLKIN_IBUFG_OUT => ta,
 		CLK0_OUT => tb,
 		CLK2X_OUT => td
-	);
+	); 
 
 
     debug <= debug_out_cpu;
