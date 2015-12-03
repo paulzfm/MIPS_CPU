@@ -548,7 +548,7 @@ begin
             brk_rst <= '0';
             brk_jump <= '0';
         elsif (clk'event and clk = '1')then
-            if (in_brk_return = '1') then
+            if ((in_brk_return and is_doing_brk) = '1') then
                 brk_jump <= '1';
                 out_brk_jump_pc <= brk_return_addr;
             else

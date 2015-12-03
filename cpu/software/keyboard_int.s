@@ -1,3 +1,18 @@
+
+		
+    NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    NOP
+    NOP
+    NOP
 NOP
 ; save system registers
 LI R7 0xBF
@@ -16,7 +31,7 @@ SW R7 R6 0x0006
 LI R7 0xBF
 SLL R7 R7 0x0000
 LW R7 R0 0x0004
-; LI R0 0x0A
+; LI R0 0x3A
 
 
 ; R1 = enter
@@ -142,16 +157,16 @@ enter_vga_flush:
     ; R1 = 10
     LI R1 0x0A
 
-    ; R0 = 466
-                            ;LI R0 0xEB
-                            LI R0 0xE9
+    ; R0 = 466 + 2
+                            ;LI R0 0xE2
+                            LI R0 0xEA
     SLL R0 R0 0x01
     
     
 
 clear_vga_bottom:
     ; R5 = 610 0b1001100010
-                        ; LI R5 0x0B
+                        ;LI R5 0x0B
                         LI R5 0x98
                         SLL R5 R5 0x02
                         ADDIU R5 0x02
@@ -174,7 +189,7 @@ clear_column:
     ; R3 = addr
     SW R5 R3 0x08
     ; R4 = data
-                                ; ADDIU R4 0x01
+                                ;ADDIU R4 0x01
     SW R5 R4 0x09
 
     ; R2 = R2 + 1 and cmp
@@ -255,42 +270,136 @@ draw_char_start:
     SLL R2 R2 0x0001
 
 
-draw_char_loop:
-    LI R0 0xC0
-    SLL R0 R0 0x0000
-    LW R0 R0 0x0000
+draw_char_main_loop:
+    NOP
+    LI R4 0xC0
+    NOP
+    SLL R4 R4 0x0000
+    NOP
+    NOP
+    LW R4 R0 0x0000
     CMP R6 R0
     BTEQZ draw_reminder
     NOP
 
-    ; R3 R4 offset of pixis
-    LI R3 0x00
-    LI R4 0x00
+    ; R3 ascii of char
+    LI R4 0xC0
+    SLL R4 R4 0x00
+    ADDIU R4 0x01
+    ADDU R4 R6 R4
+    LW R4 R3 0x00 
+    
     MFPC R5
     ADDIU R5 0x0002
-    B draw_pixis
+    B draw_char
     NOP
 
-    LI R3 0x01
-    LI R4 0x01
-    MFPC R5
-    ADDIU R5 0x0002
-    B draw_pixis
+    
+    ADDIU R6 0x0001
+                        ; ADDIU R1 0x0014
+                        ADDIU R1 0x0008
+    B draw_char_main_loop
     NOP
 
-    LI R3 0x02
-    LI R4 0x02
+draw_char:
+    ; R1 R2 base point R3 ascii R5 return
+    ; R0 = row 
+    LI R7 0xBF
+    SLL R7 R7 0x0000
+    ADDIU R7 0x50
+    SW R7 R5 0x0005
+    SW R7 R3 0x0003
+    SW R7 R1 0x0001
+    SW R7 R2 0x0002
+    SW R7 R4 0x0004
+    SW R7 R6 0x0006
+    LI R0 0x00
+draw_char_loop:
+    ; R3 = ascii
+    LI R7 0xBF
+    SLL R7 R7 0x0000
+    ADDIU R7 0x50
+    LW R7 R3 0x0003
+    ; R1 = 0 - 15 R2 = real_row
+    LI R1 0x00
+    LW R7 R2 0x0002
+    ADDU R2 R0 R2
+    ; R6 = 00000 ascii 0000
+    MOVE R6 R3
+    SLL R6 R6 0x04
+    ; R7 = now row address
+    ADDU R6 R0 R7
+    LI R6 0x80
+    SLL R6 R6 0x00
+    ADDU R6 R7 R7
+    ; R6 = data
+    LW R7 R6 0x0000
+draw_char_row:
+    ; R1 = col
+    
+    
+    LI R5 0x80
+    AND R5 R6
+    BEQZ R5 dont_write
+    NOP
+    
+    ; R1 = R1 + base 1 
+    LI R7 0xBF
+    SLL R7 R7 0x0000
+    ADDIU R7 0x50
+    LW R7 R5 0x0001
+    ADDU R1 R5 R1
+                    LI R3 0x00
+                    LI R4 0x00
     MFPC R5
     ADDIU R5 0x0002
     B draw_pixis
     NOP
     
-    ADDIU R6 0x0001
-                        ; ADDIU R1 0x0014
-                        ADDIU R1 0x0008
-    B draw_char_loop
+    ; R1 = R1 - base 1 
+    LI R7 0xBF
+    SLL R7 R7 0x0000
+    ADDIU R7 0x50
+    LW R7 R5 0x0001
+    SUBU R1 R5 R1
+    
+dont_write:    
+    
+    ; next R1 col
+    ADDIU R1 0x01
+    
+    ; R7 = finish column
+    SLL R6 R6 0x01
+                                      LI R7 0x08
+                                      ;LI R7  0x02
+    CMP R7 R1
+    BTNEZ draw_char_row
     NOP
-
+    ; next row
+    ADDIU R0 0x01
+                                     LI R7 0x10
+                                    ;LI R7 0x02
+    CMP R0 R7
+    BTNEZ draw_char_loop
+    NOP
+    
+    
+    
+    LI R7 0xBF
+    SLL R7 R7 0x0000
+    ADDIU R7 0x50 
+    LW R7 R5 0x0005
+    LW R7 R3 0x0003
+    LW R7 R1 0x0001
+    LW R7 R2 0x0002
+    LW R7 R4 0x0004
+    LW R7 R6 0x0006
+    NOP
+    NOP
+    NOP
+    JR R5
+    NOP
+    
 draw_pixis:
     ; SAVE R1 R2 R5
     ; USE R1 R2 R3 R4 R5 R7
@@ -299,9 +408,12 @@ draw_pixis:
     LI R7 0xBF
     SLL R7 R7 0x0000
     ADDIU R7 0x40
-    SW R7 R1 0x0000
-    SW R7 R2 0x0001
-    SW R7 R5 0x0002
+    SW R7 R1 0x0001
+    SW R7 R2 0x0002
+    SW R7 R3 0x0003
+    SW R7 R4 0x0004
+    SW R7 R5 0x0005
+    SW R7 R6 0x0006
 
 
     ADDU R1 R3 R1
@@ -323,9 +435,12 @@ draw_pixis:
     LI R7 0xBF
     SLL R7 R7 0x0000
     ADDIU R7 0x40
-    LW R7 R1 0x0000
-    LW R7 R2 0x0001
-    LW R7 R5 0x0002
+    LW R7 R1 0x0001
+    LW R7 R2 0x0002
+    LW R7 R5 0x0005
+    LW R7 R3 0x0003
+    LW R7 R4 0x0004
+    LW R7 R6 0x0006
     NOP
     NOP
     NOP
@@ -338,10 +453,11 @@ draw_reminder:
     LI R0 0x00
 draw_reminder_loop:
     MOVE R3 R0
-    LI R4 0x08
+    LI R4 0x10
     MFPC R5
     ADDIU R5 0x0002
     B draw_pixis
+    NOP
     LI R5 0x08
     CMP R5 R0
     ADDIU R0 0x01
@@ -368,3 +484,65 @@ prepare_exit:
     NOP
     NOP
 	NOP
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+
+
+
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+
+
+
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    NOP
+    NOP
+    NOP
+	NOP
+    NOP
+    
+	
+
+
+
+
+	
