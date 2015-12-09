@@ -4,21 +4,9 @@
 \subsubsection{锁存单元}
     锁存单元包含if/id阶段，id/alu阶段，alu/mem阶段，mem/wb阶段四个大的锁存器，在上升沿触发。这几个锁存器的行为都受到中央控制单元的控制，中央控制单元可以命令其进行气泡的插入，以及重置功能。
     这四个部件的图以及具体信号如下。
-% \usepackage{tabulary}
-
-% \begin{tabulary}{0.7\textwidth}{|L|C|L|}
-%     \hline
-%     Short sentences      & \#  & Long sentences                                                 \\
-%     \hline
-%     This is short.       & 173 & This is much loooooooonger, because there are many more words.  \\
-%     \hline
-%     This is not shorter. & 317 & This is still loooooooonger, because there are many more words. \\
-%     \hline
-% \end{tabulary}  
 
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_0.png}
-    \fcaption{标题}
+    \includegraphics[height=10cm]{image/detail/detail_ifid.png}
 
     \begin{tabular}{|p{3.5cm}|p{11cm}|}
         \hline 信号 & 信号描述 \\
@@ -37,7 +25,60 @@
     \end{tabular}
 
 \end{center}
-    
+
+\begin{center}
+    \includegraphics[height=20cm]{image/detail/detail_idalu.png}
+
+    \begin{tabular}{|p{3.5cm}|p{11cm}|}
+        \hline 信号 & 信号描述 \\
+        \hline in\_ra  & 这是decode出来的alu操作数a的寄存器值，注意不是数值，会传递给中央控制单元进行旁路选择。 \\
+        % 用来传输给选择器最后送到alu进行计算
+        \hline in\_rb &  这是decode出来的alu操作数b的寄存器值，注意不是数值，会传递给中央控制单元进行旁路选择。\\
+        \hline in\_rc &  这是decode出来的alu操作数c的寄存器值，注意不是数值，会传递给中央控制单元进行旁路选择，也会传递给alumem锁存器。c的寄存器表示的
+        是写回的寄存器，非常重要，所以要一直往后传。\\
+        \hline in\_data\_a &  这是decode出来的alu操作数a的值，用来传输给选择器，（选择器可能会选择旁路），最后送到alu进行计算。 \\
+        \hline in\_data\_b &  这是decode出来的alu操作数b的值，用来传输给选择器，（选择器可能会选择旁路），最后送到alu进行计算。 \\\\
+        \hline in\_alu\_op &  这是alu的操作码，会传输给三个alu，具体内容请看alu部分。\\
+        \hline in\_pc &  表示下一条将要锁存的指令的pc。\\
+        \hline in\_pc\_inc &  表示下一条将要锁存的指令的pc+1。\\
+        \hline in\_imm &  表示下一条将要锁存的decode出来的立即数。\\
+        \hline in\_wr\_reg &  \\
+        \hline in\_wr\_mem &  \\
+        \hline in\_rd\_mem &  \\
+        \hline in\_use\_imm &  \\
+        \hline in\_alumem\_alu\_res\_equal\_rc &  \\
+        \hline in\_memwb\_wb\_alu\_mem &  \\
+        \hline in\_is\_branch\_except\_b &  \\
+        \hline ctl\_bubble &  \\
+        \hline ctl\_copy &  \\
+        \hline ctl\_rst &  \\
+        \hline clk &  \\
+        \hline rst &  \\
+        \hline out\_ra &  \\
+        \hline out\_rb &  \\
+        \hline out\_rc &  \\
+        \hline out\_rd &  \\
+        \hline out\_data\_a &  \\
+        \hline out\_data\_b &  \\
+        \hline out\_data\_d &  \\
+        \hline out\_alu\_op &  \\
+        \hline out\_pc &  \\
+        \hline out\_pc\_inc &  \\
+        \hline out\_imm &  \\
+        \hline out\_alumem\_alu\_res\_equal\_rc &  \\
+        \hline out\_memwb\_wb\_alu\_mem &  \\
+        \hline out\_is\_branch\_except\_b &  \\
+        \hline out\_wr\_reg &  \\
+        \hline out\_wr\_mem &  \\
+        \hline out\_rd\_mem &  \\
+        \hline out\_use\_imm &  \\
+        \hline
+    \end{tabular}
+
+\end{center}
+
+
+
 
 \subsubsection{PC锁存单元}
     PC锁存器，用来锁存PC，保证PC的改写受到中央控制部分的控制。我们规定在下降沿写入，组合逻辑输出。
