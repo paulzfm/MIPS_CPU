@@ -35,8 +35,7 @@
 \newcommand{\fref}[1]{\textbf{图 \ref{#1}}}
 \newcommand{\tref}[1]{\textbf{表 \ref{#1}}}
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}} % multiply lines in one grid
-
-
+\usepackage{longtable} % long table
 
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily}
@@ -57,27 +56,6 @@
 \begin{document}
 
 \maketitle
-
-\section{测试}
-
-% \begin{center}
-    % \includegraphics[width=7cm]{图片路径}
-    % \fcaption{标题}\label{引用}
-% \end{center}
-
-例子如\tref{ex}所示。
-
-\begin{center}
-    \tcaption{三线表格例子}\label{ex}
-    \begin{tabular}{ccc}
-        \toprule
-        标题1 & 标题2 & 标题3 \\
-        \midrule
-        第1行 & 0.9490 & 0.9821 \\
-        第2行 & 2.94 & 2.71 \\
-        \bottomrule
-    \end{tabular}
-\end{center}
 
 \input{introduction}
 \input{detail}

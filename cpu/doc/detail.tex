@@ -1,84 +1,96 @@
 \section{具体实现}
+
 \subsection{CPU模块}
-    CPU模块无可厚非是我们本次实现中最重要的一个模块，这个模块里面包含了非常多的原件，我们使用了如下组件来实现我们整个CPU。下面会一一列举。
+
+CPU模块无可厚非是我们本次实现中最重要的一个模块，这个模块里面包含了非常多的原件，我们使用了如下组件来实现我们整个CPU。下面会一一列举。
+
 \subsubsection{锁存单元}
-    锁存单元包含if/id阶段，id/alu阶段，alu/mem阶段，mem/wb阶段四个大的锁存器，在上升沿触发。这几个锁存器的行为都受到中央控制单元的控制，中央控制单元可以命令其进行气泡的插入，以及重置功能。
-    这四个部件的图以及具体信号如下。
+
+锁存单元包含if/id阶段，id/alu阶段，alu/mem阶段，mem/wb阶段四个大的锁存器，在上升沿触发。这几个锁存器的行为都受到中央控制单元的控制，中央控制单元可以命令其进行气泡的插入，以及重置功能。
+
+这四个部件的图如\fref{fig:ifid}-\fref{fig:idalu}所示，具体信号如\tref{table:ifid}-\tref{table:idalu}所示。
 
 \begin{center}
     \includegraphics[height=10cm]{image/detail/detail_ifid.png}
-
-    \begin{tabular}{|p{3.5cm}|p{11cm}|}
-        \hline 信号 & 信号描述 \\
-        \hline clk & cpu的时钟信号，上升沿的时候根据ctl\_bubble和ctl\_rst进行控制。如果ctl\_bubble和ctl\_rst均为低电平则进行锁存，将in\_pc, in\_pc\_inc, in\_instruction进行锁存并输出。 \\
-        \hline rst & 异步清空信号，由外部控制开关接入。 \\
-        \hline ctl\_bubble & 气泡控制信号，由中央控制单元给出，如果该信号为高电平则表示下一个时钟上升沿，输出数据保持不变，低电平则该控制无效。 \\
-        \hline ctl\_copy &  由中央控制单元给出，用来进行数据拷贝。\\
-        \hline ctl\_rst & 重置控制信号，由中央控制单元给出，如果如果该信号为高电平则表示下一个时钟输出清空即为一条NOP指令，低电平则该控制无效。 \\
-        \hline in\_pc & 表示下一条将要锁存的指令的pc。 \\
-        \hline in\_pc\_inc & 表示下一条将要锁存的指令的pc+1。 \\
-        \hline in\_instruction & 表示下一条将要锁存的指令内容 \\
-        \hline out\_pc & 表示已经锁存的指令的pc。 \\
-        \hline out\_pc\_inc & 表示已经锁存的指令的pc+1。 \\
-        \hline out\_instruction & 表示已经锁存的指令。 \\
-        \hline
-    \end{tabular}
-
+    \fcaption{IF/ID阶段锁存器设计图}\label{fig:ifid}
 \end{center}
 
 \begin{center}
-    \includegraphics[height=20cm]{image/detail/detail_idalu.png}
-
-    \begin{tabular}{|p{3.5cm}|p{11cm}|}
-        \hline 信号 & 信号描述 \\
-        \hline in\_ra  & 这是decode出来的alu操作数a的寄存器值，注意不是数值，会传递给中央控制单元进行旁路选择。 \\
-        % 用来传输给选择器最后送到alu进行计算
-        \hline in\_rb &  这是decode出来的alu操作数b的寄存器值，注意不是数值，会传递给中央控制单元进行旁路选择。\\
-        \hline in\_rc &  这是decode出来的alu操作数c的寄存器值，注意不是数值，会传递给中央控制单元进行旁路选择，也会传递给alumem锁存器。c的寄存器表示的
-        是写回的寄存器，非常重要，所以要一直往后传。\\
-        \hline in\_data\_a &  这是decode出来的alu操作数a的值，用来传输给选择器，（选择器可能会选择旁路），最后送到alu进行计算。 \\
-        \hline in\_data\_b &  这是decode出来的alu操作数b的值，用来传输给选择器，（选择器可能会选择旁路），最后送到alu进行计算。 \\\\
-        \hline in\_alu\_op &  这是alu的操作码，会传输给三个alu，具体内容请看alu部分。\\
-        \hline in\_pc &  表示下一条将要锁存的指令的pc。\\
-        \hline in\_pc\_inc &  表示下一条将要锁存的指令的pc+1。\\
-        \hline in\_imm &  表示下一条将要锁存的decode出来的立即数。\\
-        \hline in\_wr\_reg &  \\
-        \hline in\_wr\_mem &  \\
-        \hline in\_rd\_mem &  \\
-        \hline in\_use\_imm &  \\
-        \hline in\_alumem\_alu\_res\_equal\_rc &  \\
-        \hline in\_memwb\_wb\_alu\_mem &  \\
-        \hline in\_is\_branch\_except\_b &  \\
-        \hline ctl\_bubble &  \\
-        \hline ctl\_copy &  \\
-        \hline ctl\_rst &  \\
-        \hline clk &  \\
-        \hline rst &  \\
-        \hline out\_ra &  \\
-        \hline out\_rb &  \\
-        \hline out\_rc &  \\
-        \hline out\_rd &  \\
-        \hline out\_data\_a &  \\
-        \hline out\_data\_b &  \\
-        \hline out\_data\_d &  \\
-        \hline out\_alu\_op &  \\
-        \hline out\_pc &  \\
-        \hline out\_pc\_inc &  \\
-        \hline out\_imm &  \\
-        \hline out\_alumem\_alu\_res\_equal\_rc &  \\
-        \hline out\_memwb\_wb\_alu\_mem &  \\
-        \hline out\_is\_branch\_except\_b &  \\
-        \hline out\_wr\_reg &  \\
-        \hline out\_wr\_mem &  \\
-        \hline out\_rd\_mem &  \\
-        \hline out\_use\_imm &  \\
-        \hline
-    \end{tabular}
-
+    \tcaption{IF/ID阶段锁存器信号}\label{table:ifid}
+    \begin{longtable}{p{0.2\columnwidth}p{0.8\columnwidth}}
+        \toprule
+        信号 & 信号描述 \\
+        \midrule
+        clk & cpu的时钟信号，上升沿的时候根据ctl\_bubble和ctl\_rst进行控制。如果ctl\_bubble和ctl\_rst均为低电平则进行锁存，将in\_pc, in\_pc\_inc, in\_instruction进行锁存并输出。 \\
+        rst & 异步清空信号，由外部控制开关接入。 \\
+        ctl\_bubble & 气泡控制信号，由中央控制单元给出，如果该信号为高电平则表示下一个时钟上升沿，输出数据保持不变，低电平则该控制无效。 \\
+        ctl\_copy &  由中央控制单元给出，用来进行数据拷贝。\\
+        ctl\_rst & 重置控制信号，由中央控制单元给出，如果如果该信号为高电平则表示下一个时钟输出清空即为一条NOP指令，低电平则该控制无效。 \\
+        in\_pc & 表示下一条将要锁存的指令的pc。 \\
+        in\_pc\_inc & 表示下一条将要锁存的指令的pc+1。 \\
+        in\_instruction & 表示下一条将要锁存的指令内容 \\
+        out\_pc & 表示已经锁存的指令的pc。 \\
+        out\_pc\_inc & 表示已经锁存的指令的pc+1。 \\
+        out\_instruction & 表示已经锁存的指令。 \\
+        \bottomrule
+    \end{longtable}
 \end{center}
 
+\begin{center}
+    \includegraphics[height=10cm]{image/detail/detail_idalu.png}
+    \fcaption{ID/ALU阶段锁存器设计图}\label{fig:idalu}
+\end{center}
 
-
+\begin{center}
+    \tcaption{ID/ALU阶段锁存器信号}\label{table:idalu}
+    \begin{longtable}{p{0.2\columnwidth}p{0.8\columnwidth}}
+        \toprule
+        信号 & 信号描述 \\
+        \midrule
+        in\_ra  & 这是decode出来的alu操作数a的寄存器值，注意不是数值，会传递给中央控制单元进行旁路选择。 \\
+        % 用来传输给选择器最后送到alu进行计算
+        in\_rb &  这是decode出来的alu操作数b的寄存器值，注意不是数值，会传递给中央控制单元进行旁路选择。\\
+        in\_rc &  这是decode出来的alu操作数c的寄存器值，注意不是数值，会传递给中央控制单元进行旁路选择，也会传递给alumem锁存器。c的寄存器表示的
+        是写回的寄存器，非常重要，所以要一直往后传。\\
+        in\_data\_a &  这是decode出来的alu操作数a的值，用来传输给选择器，（选择器可能会选择旁路），最后送到alu进行计算。 \\
+        in\_data\_b &  这是decode出来的alu操作数b的值，用来传输给选择器，（选择器可能会选择旁路），最后送到alu进行计算。 \\\\
+        in\_alu\_op &  这是alu的操作码，会传输给三个alu，具体内容请看alu部分。\\
+        in\_pc &  表示下一条将要锁存的指令的pc。\\
+        in\_pc\_inc &  表示下一条将要锁存的指令的pc+1。\\
+        in\_imm &  表示下一条将要锁存的decode出来的立即数。\\
+        in\_wr\_reg &  \\
+        in\_wr\_mem &  \\
+        in\_rd\_mem &  \\
+        in\_use\_imm &  \\
+        in\_alumem\_alu\_res\_equal\_rc &  \\
+        in\_memwb\_wb\_alu\_mem &  \\
+        in\_is\_branch\_except\_b &  \\
+        ctl\_bubble &  \\
+        ctl\_copy &  \\
+        ctl\_rst &  \\
+        clk &  \\
+        rst &  \\
+        out\_ra &  \\
+        out\_rb &  \\
+        out\_rc &  \\
+        out\_rd &  \\
+        out\_data\_a &  \\
+        out\_data\_b &  \\
+        out\_data\_d &  \\
+        out\_alu\_op &  \\
+        out\_pc &  \\
+        out\_pc\_inc &  \\
+        out\_imm &  \\
+        out\_alumem\_alu\_res\_equal\_rc &  \\
+        out\_memwb\_wb\_alu\_mem &  \\
+        out\_is\_branch\_except\_b &  \\
+        out\_wr\_reg &  \\
+        out\_wr\_mem &  \\
+        out\_rd\_mem &  \\
+        out\_use\_imm &  \\
+        \bottomrule
+    \end{longtable}
+\end{center}
 
 \subsubsection{PC锁存单元}
     PC锁存器，用来锁存PC，保证PC的改写受到中央控制部分的控制。我们规定在下降沿写入，组合逻辑输出。
