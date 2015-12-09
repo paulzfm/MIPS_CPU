@@ -20,21 +20,21 @@
     \includegraphics[height=10cm]{image/detail/detail_0.png}
     \fcaption{标题}
 
-    \begin{tabulary}{1.0\textwidth}{|L|L|}
+    \begin{tabular}{|p{3.5cm}|p{11cm}|}
         \hline 信号 & 信号描述 \\
         \hline clk & cpu的时钟信号，上升沿的时候根据ctl\_bubble和ctl\_rst进行控制。如果ctl\_bubble和ctl\_rst均为低电平则进行锁存，将in\_pc, in\_pc\_inc, in\_instruction进行锁存并输出。 \\
-        \hline rst &  \\
-        \hline ctl\_bubble &  \\
-        \hline ctl\_copy &  \\
-        \hline ctl\_rst &  \\
-        \hline in\_pc &  \\
-        \hline in\_pc\_inc &  \\
-        \hline in\_instruction &  \\
-        \hline out\_pc &  \\
-        \hline out\_pc\_inc &  \\
-        \hline out\_instruction &  \\
+        \hline rst & 异步清空信号，由外部控制开关接入。 \\
+        \hline ctl\_bubble & 气泡控制信号，由中央控制单元给出，如果该信号为高电平则表示下一个时钟上升沿，输出数据保持不变，低电平则该控制无效。 \\
+        \hline ctl\_copy &  由中央控制单元给出，用来进行数据拷贝。\\
+        \hline ctl\_rst & 重置控制信号，由中央控制单元给出，如果如果该信号为高电平则表示下一个时钟输出清空即为一条NOP指令，低电平则该控制无效。 \\
+        \hline in\_pc & 表示下一条将要锁存的指令的pc。 \\
+        \hline in\_pc\_inc & 表示下一条将要锁存的指令的pc+1。 \\
+        \hline in\_instruction & 表示下一条将要锁存的指令内容 \\
+        \hline out\_pc & 表示已经锁存的指令的pc。 \\
+        \hline out\_pc\_inc & 表示已经锁存的指令的pc+1。 \\
+        \hline out\_instruction & 表示已经锁存的指令。 \\
         \hline
-    \end{tabulary}
+    \end{tabular}
 
 \end{center}
     
