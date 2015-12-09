@@ -1,3 +1,4 @@
+%!TEX program = xelatex
 \documentclass[11pt, a4paper]{article}
 
 \usepackage{amsmath}
@@ -35,12 +36,14 @@
 \newcommand{\tref}[1]{\textbf{表 \ref{#1}}}
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}} % multiply lines in one grid
 
+
+
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily}
 
 \usepackage{xcolor}
 \renewcommand{\r}{\color{red}}
-
+\usepackage{tabulary}
 % start of document
 \title{\textbf{MIPS-16E流水CPU实验报告}}
 \author{
@@ -77,6 +80,7 @@
 \end{center}
 
 \input{introduction}
+\input{detail}
 
 \end{document}
 % -----------------end------------------%
