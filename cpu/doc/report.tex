@@ -1,0 +1,82 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% fonts
+\usepackage{xeCJK}
+\setCJKmainfont[BoldFont=SimHei]{SimSun}
+\setCJKfamilyfont{hei}{SimHei}
+\setCJKfamilyfont{kai}{KaiTi}
+\setCJKfamilyfont{fang}{FangSong}
+\newcommand{\hei}{\CJKfamily{hei}}
+\newcommand{\kai}{\CJKfamily{kai}}
+\newcommand{\fang}{\CJKfamily{fang}}
+
+% style
+\usepackage[top=2.54cm, bottom=2.54cm, left=3.18cm, right=3.18cm]{geometry}
+\linespread{1.5}
+\usepackage{indentfirst}
+\parindent 2em
+\punctstyle{quanjiao}
+\renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
+
+% figures and tables
+\usepackage{graphicx}
+\usepackage[font={bf, footnotesize}, textfont=md]{caption}
+\makeatletter
+    \newcommand\fcaption{\def\@captype{figure}\caption}
+    \newcommand\tcaption{\def\@captype{table}\caption}
+\makeatother
+\usepackage{booktabs}
+\renewcommand\figurename{图}
+\renewcommand\tablename{表}
+\newcommand{\fref}[1]{\textbf{图 \ref{#1}}}
+\newcommand{\tref}[1]{\textbf{表 \ref{#1}}}
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}} % multiply lines in one grid
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily}
+
+\usepackage{xcolor}
+\renewcommand{\r}{\color{red}}
+
+% start of document
+\title{\textbf{MIPS-16E流水CPU实验报告}}
+\author{
+    \kai 钱迪晨 \quad 计35 \quad 2013011402 \\
+    \kai 叶子鹏 \quad 计35 \quad 2013011404 \\
+    \kai 朱俸民 \quad 计35 \quad 2012011894
+}
+\date{\kai\today}
+
+% -----------------start here------------------%
+\begin{document}
+
+\maketitle
+
+\section{测试}
+
+% \begin{center}
+    % \includegraphics[width=7cm]{图片路径}
+    % \fcaption{标题}\label{引用}
+% \end{center}
+
+例子如\tref{ex}所示。
+
+\begin{center}
+    \tcaption{三线表格例子}\label{ex}
+    \begin{tabular}{ccc}
+        \toprule
+        标题1 & 标题2 & 标题3 \\
+        \midrule
+        第1行 & 0.9490 & 0.9821 \\
+        第2行 & 2.94 & 2.71 \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+\input{introduction}
+
+\end{document}
+% -----------------end------------------%

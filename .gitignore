@@ -59,3 +59,13 @@ xst/work
 
 Thumbs.db
 .DS_Store
+
+#ignore LaTeX files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+
