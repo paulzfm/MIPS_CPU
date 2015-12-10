@@ -1,5 +1,5 @@
 %!TEX program = xelatex
-\documentclass[11pt, a4paper]{article}
+\documentclass[11pt, a4paper, titlepage]{article}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -43,6 +43,9 @@
 \usepackage{xcolor}
 \renewcommand{\r}{\color{red}}
 \usepackage{tabulary}
+\usepackage{url}
+\usepackage{hyperref}
+
 % start of document
 \title{\textbf{MIPS-16E流水CPU实验报告}}
 \author{
@@ -57,12 +60,23 @@
 
 \maketitle
 
+\renewcommand{\contentsname}{目录}
+\tableofcontents
+
+\newpage
+
 \input{introduction}
 \input{detail}
 \input{detail_memory}
 \input{extension}
 \input{testing}
 \input{story}
+
+\renewcommand{\refname}{参考资料}
+\begin{thebibliography}{9}
+    \bibitem{} 刘卫东，李山山，宋佳兴. 计算机硬件系统实验教程. 清华大学出版社，2013.
+    \bibitem{} \textit{Working with CORE Generator IP}.  \url{http://www.xilinx.com/support/documentation/sw_manuals/xilinx11/ise_c_using_coregen_ip.htm}.
+\end{thebibliography}
 
 \end{document}
 % -----------------end------------------%
