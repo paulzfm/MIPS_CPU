@@ -5,7 +5,7 @@
 CPU模块无可厚非是我们本次实现中最重要的一个模块，这个模块里面包含了非常多的原件，我们使用了如下组件来实现我们整个CPU。下面会一一列举。
 
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_cpu.png}
+    \includegraphics[width=14cm]{image/detail/detail_cpu.png}
     \fcaption{CPU结构图}\label{fig:cpu_structure}
 \end{center}
 
@@ -16,7 +16,7 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
 这四个部件的图如\fref{fig:ifid}-\fref{fig:idalu}所示，具体信号如\tref{table:ifid}-\tref{table:idalu}所示。
 
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_ifid.png}
+    \includegraphics[width=7cm]{image/detail/detail_ifid.png}
     \fcaption{IF/ID阶段锁存器设计图}\label{fig:ifid}
 \end{center}
 
@@ -42,7 +42,7 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
 \end{center}
 
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_idalu.png}
+    \includegraphics[width=8cm]{image/detail/detail_idalu.png}
     \fcaption{ID/ALU阶段锁存器设计图}\label{fig:idalu}
 \end{center}
 
@@ -98,7 +98,7 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
 \end{center}
 
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_alumem.png}
+    \includegraphics[width=8cm]{image/detail/detail_alumem.png}
     \fcaption{ALU/MEM阶段锁存器设计图}\label{fig:alumem}
 \end{center}
 
@@ -140,7 +140,7 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
 \end{center}
 
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_memwb.png}
+    \includegraphics[width=8cm]{image/detail/detail_memwb.png}
     \fcaption{MEM/WB阶段锁存器设计图}\label{fig:memwb}
 \end{center}
 
@@ -171,7 +171,7 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
     具体信号请看下表。
 
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_pc.png}
+    \includegraphics[width=6cm]{image/detail/detail_pc.png}
     \fcaption{PC锁存器}\label{fig:pc}
 \end{center}
 \begin{center}
@@ -191,7 +191,7 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
 
 下一条PC的选择是一个非常复杂的结构，具体的原理图如下。
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_pc_structure.png}
+    \includegraphics[width=14cm]{image/detail/detail_pc_structure.png}
     \fcaption{PC结构图}\label{fig:pcstructure}
 \end{center}
 具体而言，PC的选择由两条路线决定。
@@ -206,7 +206,7 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
     跳转单元，用来在decode阶段进行计算和控制跳转的目的地址，这里面有旁路来处理JR指令的数据冲突。
     具体信号请看下表。
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_predict.png}
+    \includegraphics[width=8cm]{image/detail/detail_predict.png}
     \fcaption{跳转单元}\label{fig:predict}
 \end{center}
 \begin{center}
@@ -244,7 +244,7 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
     寄存器堆用来输出寄存器的值，以及在时钟下降沿提供修改寄存器值的功能。
     具体信号请看下表。
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_register.png}
+    \includegraphics[width=6cm]{image/detail/detail_register.png}
     \fcaption{寄存器堆}\label{fig:register}
 \end{center}
 \begin{center}
@@ -279,11 +279,11 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
     具体内容请看下表。
 
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_alu.png}
-    \fcaption{算数逻辑单元}\label{fig:alu}
+    \includegraphics[width=6cm]{image/detail/detail_alu.png}
+    \fcaption{算术逻辑单元}\label{fig:alu}
 \end{center}
 \begin{center}
-    \tcaption{算数逻辑单元}\label{table:alu}
+    \tcaption{算术逻辑单元}\label{table:alu}
     \begin{longtable}{p{0.2\columnwidth}p{0.8\columnwidth}}
         \toprule
         信号 & 信号描述 \\
@@ -318,7 +318,7 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
         \item Alu\_adds支持加法，操作码为0000，为unsigned(A+B)。
         \item Alu支持减法，操作码为0001，为unsigned(A-B)。
         \item Alu支持逻辑左移，操作码为0011，为A<<B。
-        \item Alu支持算数右移，操作码为0100，为A>>B。
+        \item Alu支持算术右移，操作码为0100，为A>>B。
         \item Alu支持异或，操作码为0101，为A  xor  B。
         \item Alu支持比较，操作码为0110，为A  ==  B。
         \item Alu支持符号比较，操作码为0111，为A  <=  B。
@@ -338,7 +338,7 @@ Decode用于翻译指令，生成一系列数据，并将数据传输给alu的�
 具体信号请看下表。
 
 \begin{center}
-    \includegraphics[height=10cm]{image/detail/detail_decode.png}
+    \includegraphics[width=8cm]{image/detail/detail_decode.png}
     \fcaption{译码器}\label{fig:decode}
 \end{center}
 \begin{center}
@@ -373,7 +373,7 @@ Decode用于翻译指令，生成一系列数据，并将数据传输给alu的�
 \subsubsection{中央控制单元}
 中央控制单元是最复杂的单元，里面包含了分支预测，中断的处理，以及所有控制信号的生成。这里先给出所有中央控制单元的信号。
 \begin{center}
-    \includegraphics[height=25cm]{image/detail/detail_center_controllor.png}
+    \includegraphics[width=7.3cm]{image/detail/detail_center_controllor.png}
     \fcaption{中央控制单元}\label{fig:center_controllor}
 \end{center}
 \begin{center}
