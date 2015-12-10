@@ -11,9 +11,9 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
 
 \subsubsection{锁存单元}
 
-锁存单元包含if/id阶段，id/alu阶段，alu/mem阶段，mem/wb阶段四个大的锁存器，在上升沿触发。这几个锁存器的行为都受到中央控制单元的控制，中央控制单元可以命令其进行气泡的插入，以及重置功能。
+锁存单元包含IF/ID阶段，ID/ALU阶段，ALU/MEM阶段，MEM/WB阶段四个大的锁存器，在上升沿触发。这几个锁存器的行为都受到中央控制单元的控制，中央控制单元可以命令其进行气泡的插入，以及重置功能。
 
-这四个部件的图如\fref{fig:ifid}-\fref{fig:idalu}所示，具体信号如\tref{table:ifid}-\tref{table:idalu}所示。
+这四个部件的图如\fref{fig:ifid}-\fref{fig:memwb}所示，具体信号如\tref{table:ifid}-\tref{table:memwb}所示。
 
 \begin{center}
     \includegraphics[width=7cm]{image/detail/detail_ifid.png}
@@ -118,8 +118,6 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
         in\_wr\_mem &  表示下一条指令是否需要在memory阶段写内存。\\
         in\_rd\_mem &  表示下一条指令是否需要在memory阶段读内存。\\
         in\_alu\_res & 表示下一条指令alu得出的结果。\\
-
-
         in\_alumem\_alu\_  res\_equal\_rc & 表示下一条指令alu计算出的结果是否会在writeback阶段写回寄存器。这个信号也是为了帮助中央控制单元进行旁路控制。\\
         in\_memwb\_wb\_  alu\_mem & 表示下一条指令在writeback阶段写回的数据是memory阶段读出的数据，还是在alu阶段算出的结果。\\
         clk & cpu的时钟信号，上升沿的时候根据ctl\_bubble和ctl\_rst进行控制。如果ctl\_bubble和ctl\_rst均为低电平则进行锁存，将所有带有out前轴的信号对应的in信号锁存然后输出。\\
@@ -269,11 +267,11 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
 
 \subsubsection{ALU}
     我们的ALU有一点不同，我们使用了三个ALU。
-    Alu，Alu\_adds，Alu\_equal，分别是三个ALU。我们将ALU区分成三个的主要原因是为了减小延时。具体原因是因为Branch指令在ALU阶段受到数据冲突旁路的影响，可能导致延时非常大。而这里的瓶颈是中央控制单元的控制信号。
-    中央控制单元修改Alu的数据选择的信号的延迟会非常大，而这个操作主要过程如下。
+    ALU，ALU\_adds，ALU\_equal，分别是三个ALU。我们将ALU区分成三个的主要原因是为了减小延时。具体原因是因为Branch指令在ALU阶段受到数据冲突旁路的影响，可能导致延时非常大。而这里的瓶颈是中央控制单元的控制信号。
+    中央控制单元修改ALU的数据选择的信号的延迟会非常大，而这个操作主要过程如下。
     \begin{enumerate}
-        \item 中央控制单元由于受到memory和writeback阶段锁存的信号，修改Alu的data\_b的控制信号，也就是旁路的控制。
-        \item Alu进行计算，结果返回中央控制单元。
+        \item 中央控制单元由于受到memory和writeback阶段锁存的信号，修改ALU的data\_b的控制信号，也就是旁路的控制。
+        \item ALU进行计算，结果返回中央控制单元。
         \item 中央控制单元检查是否和分支预测出现错误如果出现错误修改控制信号。
     \end{enumerate}
     具体内容请看下表。
@@ -288,10 +286,10 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
         \toprule
         信号 & 信号描述 \\
         \midrule
-            in\_data\_a & alu的两个操作数之一。\\
-            in\_data\_b & alu的两个操作数之一。\\
-            in\_op & alu的操作码。\\
-            out\_alu\_res & alu计算的结果。\\
+            in\_data\_a & ALU的两个操作数之一。\\
+            in\_data\_b & ALU的两个操作数之一。\\
+            in\_op & ALU的操作码。\\
+            out\_alu\_res & ALU计算的结果。\\
         \bottomrule
     \end{longtable}
 \end{center}
@@ -299,39 +297,45 @@ CPU模块无可厚非是我们本次实现中最重要的一个模块，这个�
 
     为了处理数据冲突，in\_data\_a的输入是一个4选1的选择器，它有三种可能，控制信号由中央控制单元给出。
     \begin{enumerate}
-        \item 寄存器堆给出的值，也就是alu阶段锁存器里面的值。
-        \item memory阶段的alu计算结果，如果写回的寄存器和data\_a的寄存器一致的话。
-        \item writeback阶段的alu或者memory得到的结果，如果写回的寄存器和data\_a的寄存器一致的话。
+        \item 寄存器堆给出的值，也就是ALU阶段锁存器里面的值。
+        \item memory阶段的ALU计算结果，如果写回的寄存器和data\_a的寄存器一致的话。
+        \item writeback阶段的ALU或者memory得到的结果，如果写回的寄存器和data\_a的寄存器一致的话。
     \end{enumerate}
 
 
     同样，in\_data\_b的输入是一个4选1的选择器，它有四种可能，控制信号由中央控制单元给出。
     \begin{enumerate}
-        \item 寄存器堆给出的值，也就是alu阶段锁存器里面的值。
-        \item memory阶段的alu计算结果，如果写回的寄存器和data\_a的寄存器一致的话。
-        \item writeback阶段的alu或者memory得到的结果，如果写回的寄存器和data\_a的寄存器一致的话。
+        \item 寄存器堆给出的值，也就是ALU阶段锁存器里面的值。
+        \item memory阶段的ALU计算结果，如果写回的寄存器和data\_a的寄存器一致的话。
+        \item writeback阶段的ALU或者memory得到的结果，如果写回的寄存器和data\_a的寄存器一致的话。
         \item decode出来的立即数。
     \end{enumerate}
 
     ALU支持如下几种运算。
-    \begin{enumerate}
-        \item Alu\_adds支持加法，操作码为0000，为unsigned(A+B)。
-        \item Alu支持减法，操作码为0001，为unsigned(A-B)。
-        \item Alu支持逻辑左移，操作码为0011，为A<<B。
-        \item Alu支持算术右移，操作码为0100，为A>>B。
-        \item Alu支持异或，操作码为0101，为A  xor  B。
-        \item Alu支持比较，操作码为0110，为A  ==  B。
-        \item Alu支持符号比较，操作码为0111，为A  <=  B。
-        \item Alu支持无符号比较，操作码为0111，为unsigned(A)  <=  unsigned(B)。
-        \item Alu支持直接输出A，操作码为1000。
-        \item Alu支持直接输出B，操作码为1001。
-        \item Alu支持not，操作码为1010，为not  A。
-        \item Alu\_equal支持和0比操作，操作码为1011，为A == 0。
-        \item Alu\_equal支持和0比操作，操作码为1100，为A != 0。
-        \item Alu支持not，操作码为1010，为not  A。
-        \item Alu支持or，操作码为1011，为A  or  B。
-        \item Alu支持and，操作码为1100，为A  and  B。
-    \end{enumerate}
+    \begin{center}
+        \tcaption{ALU支持的运算}
+        \begin{longtable}{lll}
+            \toprule
+            操作码 & 运算 & 表达式 \\
+            \midrule
+            0000 & 加法 & $A+B$ \\
+            0001 & 减法 & $A-B$ \\
+            0010 & 逻辑左移 & $A<<B$ \\
+            0011 & 算术右移 & $A>>B$ \\
+            0100 & 逻辑异或 & $A \text{ xor } B$ \\
+            0101 & 相等比较 & $A=B$ \\
+            0110 & 符号比较 & $A \le B$ \\
+            0111 & 无符号比较 & $A \le B$ \\
+            1000 & 输出$A$ & $A$ \\
+            1001 & 输出$B$ & $B$ \\
+            1010 & 取反 & $\text{not } A$ \\
+            1011 & 等于0 & $A=0$ \\
+            1100 & 不等于0 & $A \not= 0$ \\
+            1101 & 逻辑或 & $A \text{ or } B$ \\
+            1110 & 逻辑与 & $A \text{ and } B$ \\
+            \bottomrule
+        \end{longtable}
+    \end{center}
 
 \subsubsection{译码器}
 Decode用于翻译指令，生成一系列数据，并将数据传输给alu的锁存器或者跳转的控制器。
@@ -398,13 +402,13 @@ Decode用于翻译指令，生成一系列数据，并将数据传输给alu的�
             in\_alu\_add\_res & 这个是alu\_adds的结果，用来进行是否读写instruction memory的判断，如果是instruction memory的话需要进行气泡的插入。\\
             in\_alu\_equal\_res & 个是alu\_equal的结果，用来校验branch指令的结果是不是和分支预测的结果一致。\\
             in\_idalu\_is\_  branch\_except\_b & 这个是alu阶段指令是不是branch指令，告诉中央控制单元是否进行分支预测的校验。\\
-            in\_alumem\_alu\_res & 这个是memory阶段alu的结果，用来帮助判断是否现在在读写instruction memory。\\
+            in\_alumem\_  alu\_res & 这个是memory阶段alu的结果，用来帮助判断是否现在在读写instruction memory。\\
             in\_alumem\_rc & 这个是memory阶段的rc，用来帮助判断alu两个数据a和b的旁路的选择。\\
             in\_alumem\_wr  \_mem & 这个是memory阶段是否写内存的控制信号，用来帮助判断是否现在在读写instruction memory。\\
             in\_alumem\_rd  \_mem & 这个是memory阶段是否读内存的控制信号，用来帮助判断是否现在在读写instruction memory。\\
             in\_alumem\_alu\_  res\_equal\_rc & 这个是memory阶段的alu的结果是否会被写回寄存器的控制信号，用来帮助判断alu两个数据a和b的旁路的选择。\\
             in\_memwb\_rc & 这个是writeback阶段写回寄存器的值，用来帮助判断alu两个数据a和b的旁路的选择。\\
-            in\_memwb\_wr\_reg & 这个是writeback阶段的alu或者memory的结果是否会被写回寄存器的控制信号，用来帮助判断alu两个数据a和b的旁路的选择。\\
+            in\_memwb\_wr\_  reg & 这个是writeback阶段的alu或者memory的结果是否会被写回寄存器的控制信号，用来帮助判断alu两个数据a和b的旁路的选择。\\
             in\_brk\_come & 这个是中断的开始信号，具体中断的处理方法见后面。\\
             in\_ifid\_pc & 这个是ifid锁存器的pc，用来进行中断的跳回地址的计算。\\
             in\_idalu\_pc & 这个是idalu锁存器的pc，用来进行中断的跳回地址的计算。\\
@@ -437,15 +441,15 @@ Decode用于翻译指令，生成一系列数据，并将数据传输给alu的�
 具体的比较方法是
 \begin{enumerate}
         \item 如果data\_b需要使用立即数，则控制选择立即数。
-        \item 如果第一条不符合在memory阶段，如果说Alu计算的结果是将要写回寄存器，并且写回的寄存器和当前alu阶段将要使用的寄存器值一样，则选择memory阶段Alu计算的结果。
+        \item 如果第一条不符合在memory阶段，如果说ALU计算的结果是将要写回寄存器，并且写回的寄存器和当前alu阶段将要使用的寄存器值一样，则选择memory阶段ALU计算的结果。
         \item 如果第一条第二条不符合，则如果在writeback阶段出现了和memory阶段一样的情况按照上述类似处理。
         \item 否则选取从寄存器堆里面获得的数据。
 \end{enumerate}
-而在跳转模块里面的流程修改为。
+而在跳转模块里面的流程修改为：
 \begin{enumerate}
-        \item 如果说Alu计算的结果是将要写回寄存器，并且jr的寄存器和当前alu阶段将要使用的寄存器值一样，则选择alu阶段Alu计算的结果。
-        \item 如果第一条不符合，且Alu计算的结果是将要写回寄存器，并且jr的寄存器和当前memory阶段将要使用的寄存器值一样，则选择alu阶段Alu计算的结果。
-        \item 如果如果第一条第二条不符合，且Alu或者memory的结果是将要写回寄存器，并且jr的寄存器和当前writeback阶段将要使用的寄存器值一样，则选择writeback阶段Alu或者memory的结果。
+        \item 如果说ALU计算的结果是将要写回寄存器，并且jr的寄存器和当前alu阶段将要使用的寄存器值一样，则选择alu阶段ALU计算的结果。
+        \item 如果第一条不符合，且ALU计算的结果是将要写回寄存器，并且jr的寄存器和当前memory阶段将要使用的寄存器值一样，则选择alu阶段ALU计算的结果。
+        \item 如果如果第一条第二条不符合，且ALU或者memory的结果是将要写回寄存器，并且jr的寄存器和当前writeback阶段将要使用的寄存器值一样，则选择writeback阶段ALU或者memory的结果。
         \item 否则选取从寄存器堆里面获得的数据。
 \end{enumerate}
 
@@ -458,7 +462,7 @@ Decode用于翻译指令，生成一系列数据，并将数据传输给alu的�
 更新则是在指令到了alu阶段，下降沿的时候触发更新。更新的方法为。
 \begin{enumerate}
         \item 如果在表中可以查到当前跳转的指令，则更新表中的答案。
-        \item 如果查不到则  表1  =  表2  表2  =  表3  表3  =  新的pc，更新表。
+        \item 如果查不到则表1  =  表2，表2  =  表3，表3  =  新的pc，更新表。
 \end{enumerate}
 这样我们实现了一个类似删除最旧表的优化，这样的效果非常好。
 
