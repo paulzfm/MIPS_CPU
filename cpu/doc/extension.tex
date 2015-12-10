@@ -6,7 +6,7 @@
 
 \begin{center}
     \includegraphics[height=10cm]{image/extension/tri.JPG}
-    \fcaption{漂亮的三角形阵}\label{fig:ifid}
+    \fcaption{漂亮的三角形阵}\label{fig:tri}
 \end{center}
 
 屏幕为像素映射。我们在片内开了一块等同于屏幕可显示像素数目大小的RAM作为我们的显存（使用ISE的IP核）。我们只需修改显存即可改变屏幕上的内容，由于片内存储空间不大，所以只能显示蓝白两色。
@@ -17,7 +17,7 @@
 
 \begin{center}
     \includegraphics[height=10cm]{image/extension/35.JPG}
-    \fcaption{软件中断和硬件中断的结合}\label{fig:ifid}
+    \fcaption{软件中断和硬件中断的结合}\label{fig:35}
 \end{center}
 
 键盘拥有2个队列：一个叫做键盘队列，给硬件中断；一个叫做软中断队列，给软件中断。键盘输入一个字符，由硬件转译成ASCII码输送给键盘队列，当队列非空并且当时不在执行中断时，发送一个硬件中断信号，执行硬件中断。由硬件中断负责把信息转译到软中断队列。
@@ -128,7 +128,7 @@ CPU通过总线来写显存。由于16位的字长不足以表示整个屏幕，
 
 \begin{center}
     \includegraphics[height=10cm]{image/extension/term}
-    \fcaption{扩展的Term}\label{fig:ifid}
+    \fcaption{扩展的Term}\label{fig:term}
 \end{center}
 
 \subsubsection{具体内容及实现}
@@ -139,6 +139,6 @@ CPU通过总线来写显存。由于16位的字长不足以表示整个屏幕，
     \item 中断的支持,对ERET的写入
 \end{enumerate}
 
-实现这个term的过程并不难，因为莱斯提供了term的源码，我们只需要在其A指令和U指令的模块中增加我们的指令即可。
+实现这个term的过程并不难，因为老师提供了term的源码，我们只需要在其A指令和U指令的模块中增加我们的指令即可。
 
 
