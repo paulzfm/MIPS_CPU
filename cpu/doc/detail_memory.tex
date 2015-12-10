@@ -92,7 +92,7 @@
         SRAM & 写 & OE置1，WE置1，数据线置待写入数据，地址线置待写入地址 & WE置0 \\
         串口控制 & 读 & - & 锁存输出的控制信号 \\
         串口数据 & 读 & rdn置0，wrn置1，数据线置高阻 & 锁存读出的数据，rdn置1 \\
-        % 串口数据 & 写 & - & rdn置0，wrn置0，数据线置待写入数据 & wrn置0 \\
+        串口数据 & 写 & rdn置0，wrn置0，数据线置待写入数据 & wrn置0 \\
         显存地址 & 写 & 锁存地址高16位 & - \\
         显存数据 & 写 & 准备地址和数据，开启写使能，写时钟置0 & 写时钟置1 \\
         FIFO测试 & 读 & - & 锁存输出的控制信号 \\
@@ -109,6 +109,7 @@
     \begin{longtable}{p{0.3\columnwidth}p{0.7\columnwidth}}
         \toprule
         信号 & 信号描述 \\
+        \midrule
         clk & 控制器时钟。 \\
         rst & 异步清空信号，由外部控制开关接入。 \\
         in\_pc\_addr & 指令地址。 \\
@@ -144,7 +145,6 @@
         fifo2\_data\_in & FIFO2写入数据。 \\
         fifo2\_data\_out & FIFO2读出数据。 \\
         fifo2\_is\_empty & FIFO2控制输入(是否为空)。 \\
-        \midrule
         \bottomrule
     \end{longtable}
 \end{center}
