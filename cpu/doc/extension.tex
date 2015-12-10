@@ -4,6 +4,11 @@
 
 \subsubsection{VGA像素映射的屏幕}
 
+\begin{center}
+    \includegraphics[height=10cm]{image/extension/tri.JPG}
+    \fcaption{漂亮的三角形阵}\label{fig:ifid}
+\end{center}
+
 屏幕为像素映射。我们在片内开了一块等同于屏幕可显示像素数目大小的RAM作为我们的显存（使用ISE的IP核）。我们只需修改显存即可改变屏幕上的内容，由于片内存储空间不大，所以只能显示蓝白两色。
 
 像素映射为我们的计算机增添了\textbf{通用性}。
@@ -110,8 +115,19 @@ CPU通过总线来写显存。由于16位的字长不足以表示整个屏幕，
     \item （暂未完成）完成一个画图程序，读入画图指令，解析成参数，传给画图函数实现画图的功能，由于时间紧张，汇编代码（1000+行）已经完成，然后没有调试完全，还不能工作。
 \end{enumerate}
 
-\subsubsection{定制的term}
+\subsection{定制的term}
 
-由于老师提供的term只支持基础指令，而我们需要调试也需要使用扩展的指令（包括要求的5条指令，以及支持我们中断的ERET指令）。实现这个term的过程并不难，因为莱斯提供了term的源码，我们只需要在其A指令和U指令的模块中增加我们的指令即可。
+\subsubsection{概述}
+由于老师提供的term只支持基础指令，而我们需要调试也需要使用扩展的指令。
+
+\subsubsection{具体内容及实现}
+我们自己的Term具备老师的Term的全部功能，除此以外，我们为它增添了新的特性，包括：
+\begin{enumerate}
+    \item 可以识别拓展的5条指令，包括NOT,BTNEZ,SLT,JALR,JRRA
+    \item 可以向RAM中写入拓展的5条指令，包括NOT,BTNEZ,SLT,JALR,JRRA
+    \item 中断的支持,对ERET的写入
+\end{enumerate}
+
+实现这个term的过程并不难，因为莱斯提供了term的源码，我们只需要在其A指令和U指令的模块中增加我们的指令即可。
 
 
