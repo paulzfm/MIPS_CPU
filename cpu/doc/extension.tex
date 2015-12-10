@@ -17,7 +17,7 @@
 
 \begin{center}
     \includegraphics[height=10cm]{image/extension/35.JPG}
-    \fcaption{漂亮的三角形阵}\label{fig:ifid}
+    \fcaption{软件中断和硬件中断的结合}\label{fig:ifid}
 \end{center}
 
 键盘拥有2个队列：一个叫做键盘队列，给硬件中断；一个叫做软中断队列，给软件中断。键盘输入一个字符，由硬件转译成ASCII码输送给键盘队列，当队列非空并且当时不在执行中断时，发送一个硬件中断信号，执行硬件中断。由硬件中断负责把信息转译到软中断队列。
@@ -125,6 +125,11 @@ CPU通过总线来写显存。由于16位的字长不足以表示整个屏幕，
 
 \subsubsection{概述}
 由于老师提供的term只支持基础指令，而我们需要调试也需要使用扩展的指令。
+
+\begin{center}
+    \includegraphics[height=10cm]{image/extension/term}
+    \fcaption{扩展的Term}\label{fig:ifid}
+\end{center}
 
 \subsubsection{具体内容及实现}
 我们自己的Term具备老师的Term的全部功能，除此以外，我们为它增添了新的特性，包括：
