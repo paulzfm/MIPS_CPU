@@ -352,19 +352,19 @@ Decode用于翻译指令，生成一系列数据，并将数据传输给alu的�
             out\_ra & 当前指令decode出来的寄存器a，用来进行alu计算。\\
             out\_rb & 当前指令decode出来的寄存器b，用来进行alu计算。\\
             out\_rc & 当前指令decode出来的寄存器c，当做目的寄存器，会在writeback里面进行写回。\\
-            out\_ctl\_write\_reg & 控制信号，如果是高电平则表示在writeback阶段需要对rc写回。\\
-            out\_ctl\_write\_mem & 控制信号，如果是高电平则表示在memory阶段需要写ram。\\
-            out\_ctl\_read\_mem & 控制信号，如果是高电平则表示在memory阶段需要读ram。\\
+            out\_ctl\_  write\_reg & 控制信号，如果是高电平则表示在writeback阶段需要对rc写回。\\
+            out\_ctl\_  write\_mem & 控制信号，如果是高电平则表示在memory阶段需要写ram。\\
+            out\_ctl\_  read\_mem & 控制信号，如果是高电平则表示在memory阶段需要读ram。\\
             out\_ctl\_alu\_op & alu阶段alu的操作码。\\
             out\_use\_imm & alu阶段，数据b是否使用立即数，这个信号是辅助中央控制单元进行控制的。\\
             out\_imm & 当前指令decode出来的立即数，需要经过extend模块进行扩展。\\
-            out\_ctl\_imm\_extend\_size & 控制信号，表示extend模块如何对立即数进行扩展，扩展立即数的大小。\\
-            out\_ctl\_imm\_extend\_type & 控制信号，表示extend模块如何对立即数进行扩展，扩展立即数是有符号还是无符号。\\
-            out\_ctl\_is\_jump & 控制指令，表示当前指令是不是j指令，传递到跳转模块。\\
-            out\_ctl\_is\_b & 控制指令，表示当前指令是不是b指令，传递到跳转模块。\\
-            out\_ctl\_is\_branch\_except\_b & 控制指令，表示当前指令是不是branch指令而不是b指令，传递到跳转模块和中央控制模块。\\
-            out\_alumem\_alu\_res\_equal\_rc & 控制信号，表示这条指令到memory阶段时候，alu的结果是不是会在writeback阶段写回寄存器c。这个信号是帮助中央控制单元进行旁路的控制的\\
-            out\_memwb\_wb\_alu\_mem & 控制信号，表示这条指令到writeback阶段时候，写回寄存器的数据是alu的结果还是访存的结果。\\
+            out\_ctl\_imm  \_extend\_size & 控制信号，表示extend模块如何对立即数进行扩展，扩展立即数的大小。\\
+            out\_ctl\_imm  \_extend\_type & 控制信号，表示extend模块如何对立即数进行扩展，扩展立即数是有符号还是无符号。\\
+            out\_ctl\_is  \_jump & 控制指令，表示当前指令是不是j指令，传递到跳转模块。\\
+            out\_ctl\_is  \_b & 控制指令，表示当前指令是不是b指令，传递到跳转模块。\\
+            out\_ctl\_is  \_branch\_except\_b & 控制指令，表示当前指令是不是branch指令而不是b指令，传递到跳转模块和中央控制模块。\\
+            out\_alumem\_  alu\_res\_equal\_rc & 控制信号，表示这条指令到memory阶段时候，alu的结果是不是会在writeback阶段写回寄存器c。这个信号是帮助中央控制单元进行旁路的控制的\\
+            out\_memwb\_wb  \_alu\_mem & 控制信号，表示这条指令到writeback阶段时候，写回寄存器的数据是alu的结果还是访存的结果。\\
             out\_brk\_return & 这是中断返回的控制信号，传递给中央控制单元进行pc的跳转控制。\\
         \bottomrule
     \end{longtable}
@@ -384,25 +384,25 @@ Decode用于翻译指令，生成一系列数据，并将数据传输给alu的�
         \midrule
             in\_decode\_ra & 这个是decode出来ra寄存器的值，这里如果发现decode出来的ra和已经在alu的指令有冲突，即alu的指令是lw，并且写回的寄存器是ra，那么这里会产生一系列控制，进行气泡的插入。\\
             in\_decode\_rb & 这个是decode出来rb寄存器的值，这里如果发现decode出来的rb和已经在alu的指令有冲突，即alu的指令是lw，并且写回的寄存器是ra，那么这里会产生一系列控制，进行气泡的插入。\\
-            in\_decode\_is\_jump & 这个信号表示decode出来的指令是不是jump指令，用处是，如果现在在memory阶段读写了instruction ram，则需要进行控制，控制的内容是保持ifid这个锁存器，并清除idalu的锁存器，具体原因是因为我们的设计导致读写instruction memory的时候pc给出的指令会出现错误，所以必须插气泡保证正确性。\\
-            in\_decode\_is\_branch\_except\_b & 这个信号表示decode出来的指令是不是branch指令，用处是，如果现在在memory阶段读写了instruction ram，则需要进行控制，控制的内容是保持ifid这个锁存器，并清除idalu的锁存器，具体原因是因为我们的设计导致读写instruction memory的时候pc给出的指令会出现错误，所以必须插气泡保证正确性。\\
-            in\_decode\_is\_b & 这个信号表示decode出来的指令是不是b指令，用处是，如果现在在memory阶段读写了instruction ram，则需要进行控制，控制的内容是保持ifid这个锁存器，并清除idalu的锁存器，具体原因是因为我们的设计导致读写instruction memory的时候pc给出的指令会出现错误，所以必须插气泡保证正确性。\\
+            in\_decode\_is  \_jump & 这个信号表示decode出来的指令是不是jump指令，用处是，如果现在在memory阶段读写了instruction ram，则需要进行控制，控制的内容是保持ifid这个锁存器，并清除idalu的锁存器，具体原因是因为我们的设计导致读写instruction memory的时候pc给出的指令会出现错误，所以必须插气泡保证正确性。\\
+            in\_decode\_is  \_branch\_except\_b & 这个信号表示decode出来的指令是不是branch指令，用处是，如果现在在memory阶段读写了instruction ram，则需要进行控制，控制的内容是保持ifid这个锁存器，并清除idalu的锁存器，具体原因是因为我们的设计导致读写instruction memory的时候pc给出的指令会出现错误，所以必须插气泡保证正确性。\\
+            in\_decode\_is  \_b & 这个信号表示decode出来的指令是不是b指令，用处是，如果现在在memory阶段读写了instruction ram，则需要进行控制，控制的内容是保持ifid这个锁存器，并清除idalu的锁存器，具体原因是因为我们的设计导致读写instruction memory的时候pc给出的指令会出现错误，所以必须插气泡保证正确性。\\
             in\_idalu\_rd\_mem & 这个信号是alu阶段的指令是在memory读内存，用来帮助进行气泡控制的计算。\\
             in\_idalu\_wr\_mem & 这个信号是alu阶段的指令是在memory写内存，用来帮助进行气泡控制的计算。\\
             in\_idalu\_ra & 这个信号是alu阶段的指令的ra值，用来计算旁路的选择器。\\
             in\_idalu\_rb & 这个信号是alu阶段的指令的rb值，用来计算旁路的选择器。\\
             in\_idalu\_rc & 这个信号是alu阶段的指令的rc值，用来计算旁路的选择器。\\
             in\_idalu\_rd & 这个信号是alu阶段的指令的rd值，用来计算旁路的选择器。\\
-            in\_idalu\_use\_imm\_ry & 这个是alu阶段的指令，在decode的时候生成的信号，用来告诉中央控制单元是否要使用立即数，如果使用，那么alu\_data\_b就是立即数的值而不是寄存器堆里面读出来的值了。\\
+            in\_idalu\_use\_ imm\_ry & 这个是alu阶段的指令，在decode的时候生成的信号，用来告诉中央控制单元是否要使用立即数，如果使用，那么alu\_data\_b就是立即数的值而不是寄存器堆里面读出来的值了。\\
             in\_idalu\_alu\_op & 这个是alu阶段的alu操作码，根据这个生成控制信号，控制三个alu的输出里面选择哪一个送到后续的模块里面。\\
             in\_alu\_add\_res & 这个是alu\_adds的结果，用来进行是否读写instruction memory的判断，如果是instruction memory的话需要进行气泡的插入。\\
             in\_alu\_equal\_res & 个是alu\_equal的结果，用来校验branch指令的结果是不是和分支预测的结果一致。\\
-            in\_idalu\_is\_branch\_except\_b & 这个是alu阶段指令是不是branch指令，告诉中央控制单元是否进行分支预测的校验。\\
+            in\_idalu\_is\_  branch\_except\_b & 这个是alu阶段指令是不是branch指令，告诉中央控制单元是否进行分支预测的校验。\\
             in\_alumem\_alu\_res & 这个是memory阶段alu的结果，用来帮助判断是否现在在读写instruction memory。\\ 
             in\_alumem\_rc & 这个是memory阶段的rc，用来帮助判断alu两个数据a和b的旁路的选择。\\
-            in\_alumem\_wr\_mem & 这个是memory阶段是否写内存的控制信号，用来帮助判断是否现在在读写instruction memory。\\
-            in\_alumem\_rd\_mem & 这个是memory阶段是否读内存的控制信号，用来帮助判断是否现在在读写instruction memory。\\
-            in\_alumem\_alu\_res\_equal\_rc & 这个是memory阶段的alu的结果是否会被写回寄存器的控制信号，用来帮助判断alu两个数据a和b的旁路的选择。\\
+            in\_alumem\_wr  \_mem & 这个是memory阶段是否写内存的控制信号，用来帮助判断是否现在在读写instruction memory。\\
+            in\_alumem\_rd  \_mem & 这个是memory阶段是否读内存的控制信号，用来帮助判断是否现在在读写instruction memory。\\
+            in\_alumem\_alu\_  res\_equal\_rc & 这个是memory阶段的alu的结果是否会被写回寄存器的控制信号，用来帮助判断alu两个数据a和b的旁路的选择。\\
             in\_memwb\_rc & 这个是writeback阶段写回寄存器的值，用来帮助判断alu两个数据a和b的旁路的选择。\\
             in\_memwb\_wr\_reg & 这个是writeback阶段的alu或者memory的结果是否会被写回寄存器的控制信号，用来帮助判断alu两个数据a和b的旁路的选择。\\
             in\_brk\_come & 这个是中断的开始信号，具体中断的处理方法见后面。\\
@@ -413,18 +413,18 @@ Decode用于翻译指令，生成一系列数据，并将数据传输给alu的�
             rst & 异步清空信号，由外部控制开关接入。\\
             out\_bubble\_ifid & 这个是ifid锁存器的气泡控制信号。\\
             out\_bubble\_idalu & 这个是idalu锁存器的气泡控制信号。\\
-            out\_bubble\_alumem & 这个是alumem锁存器的气泡控制信号。\\
-            out\_bubble\_memwb & 这个是memwb锁存器的气泡控制信号。\\
+            out\_bubble\_  alumem & 这个是alumem锁存器的气泡控制信号。\\
+            out\_bubble\_  memwb & 这个是memwb锁存器的气泡控制信号。\\
             out\_rst\_ifid & 这个是ifid锁存器的重置控制信号。\\
             out\_rst\_idalu & 这个是idalu锁存器的重置控制信号。\\
             out\_rst\_alumem & 这个是alumem锁存器的重置控制信号。\\
             out\_rst\_memwb & 这个是memwb锁存器的重置控制信号。\\
-            out\_forward\_alu\_a & 这个是alu阶段数据a的4选1的控制信号。\\
-            out\_forward\_alu\_b & 这个是alu阶段数据b的4选1的控制信号。\\
-            out\_forward\_alu\_d & 这个是alu阶段数据d的4选1的控制信号。\\
+            out\_forward\_  alu\_a & 这个是alu阶段数据a的4选1的控制信号。\\
+            out\_forward\_  alu\_b & 这个是alu阶段数据b的4选1的控制信号。\\
+            out\_forward\_  alu\_d & 这个是alu阶段数据d的4选1的控制信号。\\
             out\_predict\_err & 这个是pc模块里面最后一层2选1的控制信号，如果出现错误下一个pc则不由跳转模块决定，由中央控制模块决定，反之亦然。\\
             out\_predict\_res & 这个是输出给跳转单元的分支预测结果。\\
-            out\_branch\_alu\_pc\_imm & 这个是pc模块里面分支预测错误以后，alu阶段里面branch指令的立即数大小，用来进行新的pc的计算。\\
+            out\_branch\_  alu\_pc\_imm & 这个是pc模块里面分支预测错误以后，alu阶段里面branch指令的立即数大小，用来进行新的pc的计算。\\
             out\_pc\_wr & 这个是pc的写使能。\\
         \bottomrule
     \end{longtable}
