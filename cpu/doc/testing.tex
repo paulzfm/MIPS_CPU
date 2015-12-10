@@ -91,6 +91,32 @@
 
 \subsection{外设与中断测试}
 
+这部分我们采用了一个绘图程序用来展示VGA的像素映射功能与键盘输入功能。由于是硬件中断，我们可以发现在键盘输入后屏幕上会立即响应，同时已经绘制好的图形也不受影响。如\fref{fig:vga_keyboard}所示。
 
+\begin{center}
+    \includegraphics[width=13cm]{image/testing/vga_keyboard}
+    \fcaption{外设演示}\label{fig:vga_keyboard}
+\end{center}
 
-至此，我们所实现的所有30条指令以及自己扩展的\texttt{ERET}指令均通过了测试。
+键盘不仅可以输入，还可以按空格键清除输入的内容。
+
+\begin{center}
+    \includegraphics[width=13cm]{image/testing/clear}
+    \fcaption{按空格键清屏}
+\end{center}
+
+此外，键盘还支持大小写输入。即，键盘不仅能捕获到单个键，还能捕获到组合键，如输入大写的A则在按下SHIFT键同时按下A。
+
+\begin{center}
+    \includegraphics[width=13cm]{image/testing/case}
+    \fcaption{大小写字符均可输入}
+\end{center}
+
+当输入错误时还可以按退格键删除一个字符。
+
+\begin{center}
+    \includegraphics[width=13cm]{image/testing/backspace}
+    \fcaption{退格}
+\end{center}
+
+至此，我们实现的所有30条指令以及自己扩展的\texttt{ERET}指令均通过了测试。
