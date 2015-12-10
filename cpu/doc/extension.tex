@@ -14,6 +14,12 @@
 像素映射为我们的计算机增添了\textbf{通用性}。
 
 \subsubsection{键盘}
+
+\begin{center}
+    \includegraphics[height=10cm]{image/extension/35.JPG}
+    \fcaption{漂亮的三角形阵}\label{fig:ifid}
+\end{center}
+
 键盘拥有2个队列：一个叫做键盘队列，给硬件中断；一个叫做软中断队列，给软件中断。键盘输入一个字符，由硬件转译成ASCII码输送给键盘队列，当队列非空并且当时不在执行中断时，发送一个硬件中断信号，执行硬件中断。由硬件中断负责把信息转译到软中断队列。
 
 \begin{enumerate}
